@@ -4,6 +4,8 @@ module.exports = {
     '@react-native',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     'prettier', // prettier와 충돌 방지: extends 마지막 줄 유지
   ],
   plugins: ['import', '@typescript-eslint', 'react-hooks', 'prettier'],
@@ -34,6 +36,8 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-explicit-any': 'warn',
+    'import/namespace': 'off',
+    'import/no-named-as-default': 'off',
 
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-debugger': 'error',

@@ -1,5 +1,6 @@
-import {Text} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+const unusedVariable = 123;
 
 const StoreHomeScreen = () => {
   return (

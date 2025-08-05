@@ -1,5 +1,8 @@
 const loggedOutNavigations = {
   LOGIN: 'Login',
+  SIGNUP_TYPE: 'SignupType',
+  USER_SIGNUP: 'UserSignup',
+  SELLER_SIGNUP: 'SellerSignup',
 } as const;
 
 const userNavigations = {

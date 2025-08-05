@@ -1,9 +1,22 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import Kakao from '@/assets/icons/kakao.svg';
+import { loggedOutNavigations } from '@/constants/navigations';
+import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+
+type NavigationProp = StackNavigationProp<LoggedOutStackParamList, 'SignupType'>;
 
 const LoginScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
+
+  const handlePressSignup = () => {
+    navigation.navigate(loggedOutNavigations.SIGNUP_TYPE);
+  };
+
   return (
     <LinearGradient
       colors={['#88DE46', '#02B856']}
@@ -31,6 +44,14 @@ const LoginScreen = () => {
             <View style={styles.kakaoIcon} />
           </View>
         </View>
+
+        {/* TODO: 테스트 코드 추후 삭제 */}
+        <View style={{ flexDirection: 'row', gap: 15, paddingHorizontal: 30 }}>
+          <TouchableOpacity onPress={handlePressSignup}>
+            <Text>{'Test: 회원가입 유형 선택'}</Text>
+          </TouchableOpacity>
+        </View>
+        {/* TODO: 테스트 코드 추후 삭제 */}
       </SafeAreaView>
     </LinearGradient>
   );
@@ -86,7 +107,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   btnContainer: {
-    marginHorizontal: 30,
+    marginHorizontal: 27,
     height: 45,
     backgroundColor: '#FEE500',
     borderRadius: 8,

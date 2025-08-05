@@ -1,7 +1,7 @@
 import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import RootNavigator from '@/navigations/root/RootNavigator';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 const AppTheme = {
   ...DefaultTheme,

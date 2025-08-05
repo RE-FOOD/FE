@@ -32,6 +32,7 @@
     "react-native-reanimated": "^3.14.0",
     "react-native-safe-area-context": "^5.0.0",
     "react-native-screens": "^4.4.0",
+    "react-native-shadow-2": "^7.1.2",
     "react-native-svg": "^15.12.1"
   },
   "devDependencies": {
@@ -48,6 +49,7 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^8.19.0",
     "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^3.6.0",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "jest": "^29.6.3",

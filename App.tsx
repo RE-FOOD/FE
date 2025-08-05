@@ -1,5 +1,5 @@
 import React from 'react';
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import RootNavigator from '@/navigations/root/RootNavigator';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 

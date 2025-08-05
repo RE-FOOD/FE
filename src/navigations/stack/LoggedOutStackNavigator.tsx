@@ -1,6 +1,6 @@
 import React from 'react';
-import {loggedOutNavigations} from '@/constants/navigations';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { loggedOutNavigations } from '@/constants/navigations';
 import LoginScreen from '@/screens/auth/LoginScreen';
 
 export type LoggedOutStackParamList = {

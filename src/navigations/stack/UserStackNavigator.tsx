@@ -1,10 +1,10 @@
 import React from 'react';
-import {userNavigations} from '@/constants/navigations';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigatorScreenParams } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import UserBottomTabsNavigator, {
   UserBottomTabsParamList,
 } from '../bottomTabs/UserBottomTabsNavigator';
-import {NavigatorScreenParams} from '@react-navigation/native';
+import { userNavigations } from '@/constants/navigations';
 
 export type UserStackParamList = {
   UserTabs: NavigatorScreenParams<UserBottomTabsParamList>;
@@ -23,7 +23,7 @@ function UserStackNavigator() {
       <Stack.Screen
         name="UserTabs"
         component={UserBottomTabsNavigator}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

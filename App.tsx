@@ -2,8 +2,6 @@ import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import RootNavigator from '@/navigations/root/RootNavigator';
 
-const huskyTest = 123;
-
 const AppTheme = {
   ...DefaultTheme,
 };

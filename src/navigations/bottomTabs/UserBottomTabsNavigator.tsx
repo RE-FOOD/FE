@@ -4,12 +4,12 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 // import {UserStackParamList} from '../stack/UserStackNavigator';
-import {userNavigations} from '@/constants/navigations';
-import MapHomeScreen from '@/screens/map/mapHomeScreen';
-import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
-import LikeHomeScreen from '@/screens/like/LikeHomeScreen';
+import { userNavigations } from '@/constants/navigations';
 import HistoryHomeScreen from '@/screens/history/HistoryHomeScreen';
+import LikeHomeScreen from '@/screens/like/LikeHomeScreen';
+import MapHomeScreen from '@/screens/map/mapHomeScreen';
 import MypageHomeScreen from '@/screens/mypage/mypageHomeScreen';
+import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
 
 // interface UserBottomTabsNavigatorProps {
 //   navigation: BottomTabNavigationProp<UserStackParamList>;
@@ -31,27 +31,27 @@ function UserBottomTabsNavigator() {
       <Tab.Screen
         name={userNavigations.STORE_HOME}
         component={StoreHomeScreen}
-        options={{title: '홈'}}
+        options={{ title: '홈' }}
       />
       <Tab.Screen
         name={userNavigations.MAP_HOME}
         component={MapHomeScreen}
-        options={{title: '주변가게'}}
+        options={{ title: '주변가게' }}
       />
       <Tab.Screen
         name={userNavigations.LIKE_HOME}
         component={LikeHomeScreen}
-        options={{title: '찜'}}
+        options={{ title: '찜' }}
       />
       <Tab.Screen
         name={userNavigations.HISTORY_HOME}
         component={HistoryHomeScreen}
-        options={{title: '주문내역'}}
+        options={{ title: '주문내역' }}
       />
       <Tab.Screen
         name={userNavigations.MYPAGE_HOME}
         component={MypageHomeScreen}
-        options={{title: 'MY'}}
+        options={{ title: 'MY' }}
       />
     </Tab.Navigator>
   );

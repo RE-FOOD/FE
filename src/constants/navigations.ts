@@ -10,4 +10,4 @@ const userNavigations = {
   MYPAGE_HOME: 'MypageHome',
 } as const;
 
-export {loggedOutNavigations, userNavigations};
+export { loggedOutNavigations, userNavigations };

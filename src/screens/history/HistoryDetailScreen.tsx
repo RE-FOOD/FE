@@ -1,21 +1,31 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { RouteProp } from '@react-navigation/native';
 import { colors } from '@/constants/colors';
+import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
-const HistoryDetailScreen = () => {
+type OrderDetailProp = RouteProp<UserStackParamList, 'OrderDetail'>;
+
+type Props = {
+  route: OrderDetailProp;
+};
+
+const HistoryDetailScreen = ({ route }: Props) => {
+  const { orderId, menu, store, date } = route.params;
+
   const order = [
     {
-      orderId: 1,
-      storeName: '대장 샐러드',
+      orderId: orderId,
+      storeName: store,
       orderNumber: '1234',
-      orderDate: '2025.07.28',
+      orderDate: date,
     },
   ];
-  const menu = [
+  const menuInfo = [
     {
       menuId: 1,
-      menuName: '닭가슴살 샐러드',
+      menuName: menu,
       amount: '6',
       price: '63,000',
       discount: '30%',
@@ -40,19 +50,20 @@ const HistoryDetailScreen = () => {
       time: '17시 30분',
     },
   ];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.menuInfoContainer}>
         <View style={styles.menuInnerContainer}>
           {order.map((item) => (
             <View key={item.orderId} style={styles.menuOrderContainer}>
-              <Text style={styles.blackBoldText_13}>{item.storeName}</Text>
+              <Text style={styles.blackBoldText_13}>{store}</Text>
               <Text style={styles.grayRegularText}>주문 번호: {item.orderNumber}</Text>
               <Text style={styles.grayRegularText}>주문 일시: {item.orderDate}</Text>
             </View>
           ))}
           <View style={styles.horizontalLine} />
-          {menu.map((item) => (
+          {menuInfo.map((item) => (
             <View key={item.menuId} style={styles.menuPictureContainer}>
               <View style={styles.picture} />
               <View style={styles.menuPictureTextContainer}>
@@ -95,7 +106,7 @@ const HistoryDetailScreen = () => {
                 <Text style={styles.blackRegularText}>신용카드</Text>
                 <Text style={styles.greenRegularText_11}>{item.card} 승인</Text>
                 <Text style={styles.blackRegularText}>{item.total}원</Text>
-                <Text style={styles.blackRegularText}>2025-03-25 12:23</Text>
+                <Text style={styles.blackRegularText}>{date}</Text>
               </View>
             </View>
           ))}

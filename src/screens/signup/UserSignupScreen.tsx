@@ -7,10 +7,13 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DaumPostcode from './DaumPostcode';
 import NicknameInput from '@/components/signup/NicknameInput';
 import PhoneNumberInput from '@/components/signup/PhoneNumberInput';
 import { colors } from '@/constants/colors';
+import { DaumPostcodeData } from '@/types/postcode';
 
 const UserSignupScreen = () => {
   const [nickname, setNickname] = useState('');
@@ -23,6 +26,9 @@ const UserSignupScreen = () => {
   const [tel2, setTel2] = useState('');
   const [telPrefix, setTelPrefix] = useState('010');
   const [telError, setTelError] = useState('');
+
+  const [region, setRegion] = useState('');
+  const [isPostcodeMode, setIsPostcodeMode] = useState(false);
 
   const isPhoneValid = useCallback(() => {
     return tel1.length === 4 && tel2.length === 4;
@@ -86,48 +92,80 @@ const UserSignupScreen = () => {
     const _phoneNumber = `${telPrefix}${tel1}${tel2}`;
   };
 
+  const handleDaumPostcode = (data: DaumPostcodeData) => {
+    const fullAddress = data.address;
+    setRegion(fullAddress);
+    setIsPostcodeMode(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.contentContainer}
-      >
-        <View style={styles.boxContainer}>
-          <View style={{ gap: 7 }}>
-            <Text style={styles.title}>닉네임</Text>
-            <Text style={styles.subTitle}>마이페이지에서 수정할 수 있어요</Text>
-          </View>
+      {isPostcodeMode ? (
+        <DaumPostcode onSubmit={handleDaumPostcode} />
+      ) : (
+        <>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={styles.contentContainer}
+          >
+            <View style={styles.boxContainer}>
+              <View style={{ gap: 7 }}>
+                <Text style={styles.title}>닉네임</Text>
+                <Text style={styles.subTitle}>마이페이지에서 수정할 수 있어요</Text>
+              </View>
 
-          <NicknameInput
-            nickname={nickname}
-            onChangeNickname={setNickname}
-            onCheckNickname={checkNickname}
-            nicknameStatus={nicknameStatus}
-            nicknameErrorVisible={nicknameErrorVisible}
-            setNicknameStatus={setNicknameStatus}
-            setNicknameErrorVisible={setNicknameErrorVisible}
-          />
-        </View>
+              <NicknameInput
+                nickname={nickname}
+                onChangeNickname={setNickname}
+                onCheckNickname={checkNickname}
+                nicknameStatus={nicknameStatus}
+                nicknameErrorVisible={nicknameErrorVisible}
+                setNicknameStatus={setNicknameStatus}
+                setNicknameErrorVisible={setNicknameErrorVisible}
+              />
+            </View>
 
-        <View style={styles.boxContainer}>
-          <Text style={styles.title}>휴대전화</Text>
-          <PhoneNumberInput
-            telPrefix={telPrefix}
-            tel1={tel1}
-            tel2={tel2}
-            onTelPrefixChange={setTelPrefix}
-            onTel1Change={setTel1}
-            onTel2Change={setTel2}
-            telError={telError}
-          />
-        </View>
-      </KeyboardAvoidingView>
-      <TouchableOpacity
-        style={[styles.signupBtn, { backgroundColor: allValid ? colors.GREEN : '#D4D4D4' }]}
-        onPress={handleSignup}
-      >
-        <Text style={styles.signupText}>회원가입 완료</Text>
-      </TouchableOpacity>
+            <View style={styles.boxContainer}>
+              <Text style={styles.title}>휴대전화</Text>
+              <PhoneNumberInput
+                telPrefix={telPrefix}
+                tel1={tel1}
+                tel2={tel2}
+                onTelPrefixChange={setTelPrefix}
+                onTel1Change={setTel1}
+                onTel2Change={setTel2}
+                telError={telError}
+              />
+            </View>
+
+            <View style={styles.boxContainer}>
+              <View style={{ gap: 7 }}>
+                <Text style={styles.title}>지역</Text>
+                <Text style={styles.subTitle}>선택하신 지역을 기준으로 주변 가게를 보여드려요</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.addressContainer}
+                onPress={() => setIsPostcodeMode(true)}
+              >
+                <View pointerEvents="none">
+                  <TextInput
+                    style={styles.address}
+                    value={region}
+                    placeholder="주소 검색"
+                    editable={false}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+          <TouchableOpacity
+            style={[styles.signupBtn, { backgroundColor: allValid ? colors.GREEN : '#D4D4D4' }]}
+            onPress={handleSignup}
+          >
+            <Text style={styles.signupText}>회원가입 완료</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -185,6 +223,18 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
     fontFamily: 'Pretendard-SemiBold',
     fontSize: 14,
+  },
+  addressContainer: {
+    borderWidth: 1,
+    borderColor: '#EAEAEA',
+    borderRadius: 10,
+    height: 52,
+    paddingHorizontal: 10,
+  },
+  address: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
+    color: colors.BLACK,
   },
   msgContainer: {
     flexDirection: 'row',

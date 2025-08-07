@@ -81,7 +81,14 @@ const HistoryHomeScreen = () => {
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                       style={styles.buttonGray}
-                      onPress={() => navigation.navigate('OrderDetail', { orderId: order.id })}
+                      onPress={() =>
+                        navigation.navigate('OrderDetail', {
+                          orderId: order.id,
+                          store: order.store,
+                          menu: order.menu,
+                          date: order.date,
+                        })
+                      }
                     >
                       <Text style={styles.buttonGrayText}>주문상세</Text>
                     </TouchableOpacity>

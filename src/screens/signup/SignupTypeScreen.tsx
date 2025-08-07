@@ -13,10 +13,6 @@ type NavigationProp = StackNavigationProp<LoggedOutStackParamList>;
 const SignupTypeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const onPressUserSignup = () => {
-    navigation.navigate(loggedOutNavigations.USER_SIGNUP);
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.infoMessage}>
@@ -39,7 +35,10 @@ const SignupTypeScreen = () => {
               <Text style={styles.type}>{'개인 회원'}</Text>
               <Text style={styles.typeInfo}>{'주변 가게의 메뉴를 확인하고 픽업해보세요.'}</Text>
             </View>
-            <TouchableOpacity onPress={onPressUserSignup} style={styles.userBtn}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(loggedOutNavigations.USER_SIGNUP)}
+              style={styles.userBtn}
+            >
               <Text style={styles.btnText}>{'개인 회원 회원가입'}</Text>
             </TouchableOpacity>
           </View>
@@ -55,7 +54,10 @@ const SignupTypeScreen = () => {
               <Text style={styles.type}>{'사업자 회원'}</Text>
               <Text style={styles.typeInfo}>{'매장을 등록하고 주문을 받아보세요.'}</Text>
             </View>
-            <TouchableOpacity style={styles.sellerBtn}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(loggedOutNavigations.SELLER_SIGNUP)}
+              style={styles.sellerBtn}
+            >
               <Text style={styles.btnText}>{'사업자 회원 회원가입'}</Text>
             </TouchableOpacity>
           </View>

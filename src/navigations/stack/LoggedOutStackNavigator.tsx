@@ -27,7 +27,11 @@ function LoggedOutStackNavigator() {
         component={SignupTypeScreen}
         options={{ headerShown: true, title: '회원가입' }}
       />
-      <Stack.Screen name={loggedOutNavigations.USER_SIGNUP} component={UserSignupScreen} />
+      <Stack.Screen
+        name={loggedOutNavigations.USER_SIGNUP}
+        component={UserSignupScreen}
+        options={{ headerShown: true, title: '회원가입' }}
+      />
     </Stack.Navigator>
   );
 }

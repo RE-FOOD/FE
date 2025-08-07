@@ -8,7 +8,7 @@ import { userNavigations } from '@/constants/navigations';
 import HistoryHomeScreen from '@/screens/history/HistoryHomeScreen';
 import LikeHomeScreen from '@/screens/like/LikeHomeScreen';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
-import MypageHomeScreen from '@/screens/mypage/MypageHomeScreen';
+import MypageHomeScreen from '@/screens/mypage/mypageHomeScreen';
 import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
 
 // interface UserBottomTabsNavigatorProps {

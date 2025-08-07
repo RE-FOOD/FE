@@ -1,4 +1,7 @@
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import WebView, { WebViewMessageEvent } from 'react-native-webview';
+import LoadingScreen from '../_common/LoadingScreen';
 import { DaumPostcodeData } from '@/types/postcode';
 
 interface DaumPostcodeProps {
@@ -6,6 +9,8 @@ interface DaumPostcodeProps {
 }
 
 const DaumPostcode = ({ onSubmit }: DaumPostcodeProps) => {
+  const [loading, setLoading] = useState(true);
+
   const postcodeHTML = `
     <!DOCTYPE html>
     <html>
@@ -24,13 +29,18 @@ const DaumPostcode = ({ onSubmit }: DaumPostcodeProps) => {
         function init() {
           new daum.Postcode({
             oncomplete: function(data) {
-             window.ReactNativeWebView.postMessage(JSON.stringify(data));
+              window.ReactNativeWebView.postMessage(JSON.stringify(data));
             },
             width: '100%',
             height: '100%',
             animation: true,
             hideMapBtn: true, 
           }).embed(document.getElementById('container'));
+          
+          // 다음 우편번호 서비스가 완전히 로드되었음을 알림
+          setTimeout(() => {
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'LOADED' }));
+          }, 100);
         }
        
         window.addEventListener('DOMContentLoaded', init);
@@ -42,24 +52,54 @@ const DaumPostcode = ({ onSubmit }: DaumPostcodeProps) => {
   const handleMessage = (event: WebViewMessageEvent) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
+
+      // 로딩 완료
+      if (data.type === 'LOADED') {
+        setLoading(false);
+        return;
+      }
+
+      // 주소 선택 완료
       onSubmit(data);
     } catch (error) {
-      console.error('Error', error);
+      console.error('Error parsing postcode data:', error);
     }
   };
 
   return (
-    <WebView
-      className="flex flex-1"
-      source={{
-        html: postcodeHTML,
-        baseUrl: 'https://postcode.map.daum.net',
-      }}
-      onMessage={handleMessage}
-      javaScriptEnabled={true}
-      domStorageEnabled={true}
-      originWhitelist={['*']}
-    />
+    <View style={{ flex: 1 }}>
+      <WebView
+        style={{ flex: 1 }}
+        source={{
+          html: postcodeHTML,
+          baseUrl: 'https://postcode.map.daum.net',
+        }}
+        onMessage={handleMessage}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        originWhitelist={['*']}
+        onLoadStart={() => setLoading(true)}
+        onError={() => setLoading(false)}
+        onHttpError={() => setLoading(false)}
+      />
+
+      {loading && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'white',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <LoadingScreen />
+        </View>
+      )}
+    </View>
   );
 };
 

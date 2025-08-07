@@ -1,8 +1,11 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
+import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 const HistoryHomeScreen = () => {
   const orders = [
@@ -10,7 +13,7 @@ const HistoryHomeScreen = () => {
       id: 1,
       type: '픽업주문',
       date: '2025.07.28',
-      status: '픽업완료',
+      status: '픽업전',
       store: 'Pizza & Pasta',
       menu: '콤비네이션 피자',
       picture: 'https://picsum.photos/85',
@@ -19,12 +22,25 @@ const HistoryHomeScreen = () => {
       id: 2,
       type: '픽업주문',
       date: '2025.07.28',
-      status: '픽업전',
+      status: '픽업완료',
       store: 'Chicken',
       menu: '후라이드 치킨',
       picture: 'https://picsum.photos/85',
     },
+    {
+      id: 3,
+      type: '픽업주문',
+      date: '2025.07.28',
+      status: '픽업완료',
+      store: 'Pasta',
+      menu: 'Pasta',
+      picture: 'https://picsum.photos/85',
+    },
   ];
+
+  type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
+  const navigation = useNavigation<NavigationProp>();
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.searchContainer}>
@@ -63,7 +79,10 @@ const HistoryHomeScreen = () => {
                   <Text style={styles.storeText}>{order.store}</Text>
                   <Text style={styles.menuText}>{order.menu}</Text>
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.buttonGray} onPress={() => {}}>
+                    <TouchableOpacity
+                      style={styles.buttonGray}
+                      onPress={() => navigation.navigate('OrderDetail', { orderId: order.id })}
+                    >
                       <Text style={styles.buttonGrayText}>주문상세</Text>
                     </TouchableOpacity>
                     {order.status === '픽업전' ? (
@@ -119,7 +138,7 @@ const styles = StyleSheet.create({
   },
   orderListContainer: {
     paddingVertical: 13,
-    paddingHorizontal: 25,
+    paddingHorizontal: 24,
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: colors.WHITE,

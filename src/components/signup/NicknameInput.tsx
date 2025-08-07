@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Check from '@/assets/icons/msg-check.svg';
-import Error from '@/assets/icons/msg-error.svg';
+import ValidationMessage from './ValidationMessage';
 import { colors } from '@/constants/colors';
 
 type Props = {
@@ -43,33 +42,20 @@ const NicknameInput = ({
         </TouchableOpacity>
       </View>
 
-      {/* 상태에 따른 메시지 */}
       {nicknameErrorVisible && nicknameStatus === 'valid' && (
-        <View style={styles.msgContainer}>
-          <Check width={15} height={18} />
-          <Text style={styles.successMsg}>사용할 수 있는 닉네임입니다.</Text>
-        </View>
+        <ValidationMessage type="success" message="사용할 수 있는 닉네임입니다." />
       )}
 
       {nicknameErrorVisible && nicknameStatus === 'duplicated' && (
-        <View style={styles.msgContainer}>
-          <Error width={16} height={16} />
-          <Text style={styles.errorMsg}>이미 사용 중인 닉네임입니다.</Text>
-        </View>
+        <ValidationMessage type="error" message="이미 사용 중인 닉네임입니다." />
       )}
 
       {nicknameErrorVisible && nicknameStatus === 'invalid' && nickname.trim() !== '' && (
-        <View style={styles.msgContainer}>
-          <Error width={16} height={16} />
-          <Text style={styles.errorMsg}>닉네임 중복확인을 진행해주세요.</Text>
-        </View>
+        <ValidationMessage type="error" message="닉네임 중복확인을 진행해주세요." />
       )}
 
       {nicknameErrorVisible && nicknameStatus === 'none' && (
-        <View style={styles.msgContainer}>
-          <Error width={16} height={16} />
-          <Text style={styles.errorMsg}>닉네임을 입력해주세요.</Text>
-        </View>
+        <ValidationMessage type="error" message="닉네임을 입력해주세요." />
       )}
     </View>
   );
@@ -112,7 +98,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   successMsg: {
-    color: '#00AA00',
+    color: '#079500',
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
   },

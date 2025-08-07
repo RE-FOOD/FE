@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
 import PhonePrefixDropdown from './PhonePrefixDropdown';
-import Error from '@/assets/icons/msg-error.svg';
+import ValidationMessage from './ValidationMessage';
 import { colors } from '@/constants/colors';
 
 type Props = {
@@ -59,12 +59,7 @@ const PhoneNumberInput = ({
         </View>
       </View>
 
-      {telError !== '' && (
-        <View style={styles.msgContainer}>
-          <Error width={16} height={16} />
-          <Text style={styles.errorMsg}>{telError}</Text>
-        </View>
-      )}
+      {telError !== '' && <ValidationMessage type="error" message={telError} />}
     </View>
   );
 };

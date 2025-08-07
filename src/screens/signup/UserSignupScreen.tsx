@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,15 +7,19 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import DaumPostcode from './DaumPostcode';
 import NicknameInput from '@/components/signup/NicknameInput';
 import PhoneNumberInput from '@/components/signup/PhoneNumberInput';
+import RegionSelector from '@/components/signup/RegionSelector';
 import { colors } from '@/constants/colors';
 import { DaumPostcodeData } from '@/types/postcode';
 
 const UserSignupScreen = () => {
+  const navigation = useNavigation();
+
   const [nickname, setNickname] = useState('');
   const [nicknameStatus, setNicknameStatus] = useState<'none' | 'valid' | 'invalid' | 'duplicated'>(
     'none'
@@ -29,6 +33,7 @@ const UserSignupScreen = () => {
 
   const [region, setRegion] = useState('');
   const [isPostcodeMode, setIsPostcodeMode] = useState(false);
+  const [regionError, setRegionError] = useState('');
 
   const isPhoneValid = useCallback(() => {
     return tel1.length === 4 && tel2.length === 4;
@@ -40,8 +45,21 @@ const UserSignupScreen = () => {
     }
   }, [telError, isPhoneValid]);
 
+  useEffect(() => {
+    if (regionError && region.trim() !== '') {
+      setRegionError('');
+    }
+  }, [region, regionError]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: !isPostcodeMode,
+    });
+  }, [isPostcodeMode, navigation]);
+
   const allValid = nicknameStatus === 'valid' && isPhoneValid();
 
+  // TODO: 임시 처리, 추후 API 연결
   const checkNickname = () => {
     if (nickname.trim() === '') {
       setNicknameStatus('none');
@@ -86,6 +104,13 @@ const UserSignupScreen = () => {
       setTelError('');
     }
 
+    if (!region || region.trim() === '') {
+      setRegionError('지역을 설정해주세요.');
+      hasError = true;
+    } else {
+      setRegionError('');
+    }
+
     if (hasError) return;
 
     // 회원가입 처리
@@ -103,9 +128,13 @@ const UserSignupScreen = () => {
       {isPostcodeMode ? (
         <DaumPostcode onSubmit={handleDaumPostcode} />
       ) : (
-        <>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{ flex: 1 }}
+        >
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 30 }}
+            keyboardShouldPersistTaps="handled"
             style={styles.contentContainer}
           >
             <View style={styles.boxContainer}>
@@ -120,8 +149,8 @@ const UserSignupScreen = () => {
                 onCheckNickname={checkNickname}
                 nicknameStatus={nicknameStatus}
                 nicknameErrorVisible={nicknameErrorVisible}
-                setNicknameStatus={setNicknameStatus}
                 setNicknameErrorVisible={setNicknameErrorVisible}
+                setNicknameStatus={setNicknameStatus}
               />
             </View>
 
@@ -143,28 +172,20 @@ const UserSignupScreen = () => {
                 <Text style={styles.title}>지역</Text>
                 <Text style={styles.subTitle}>선택하신 지역을 기준으로 주변 가게를 보여드려요</Text>
               </View>
-              <TouchableOpacity
-                style={styles.addressContainer}
+              <RegionSelector
+                region={region}
+                regionError={regionError}
                 onPress={() => setIsPostcodeMode(true)}
-              >
-                <View pointerEvents="none">
-                  <TextInput
-                    style={styles.address}
-                    value={region}
-                    placeholder="주소 검색"
-                    editable={false}
-                  />
-                </View>
-              </TouchableOpacity>
+              />
             </View>
-          </KeyboardAvoidingView>
+          </ScrollView>
           <TouchableOpacity
             style={[styles.signupBtn, { backgroundColor: allValid ? colors.GREEN : '#D4D4D4' }]}
             onPress={handleSignup}
           >
             <Text style={styles.signupText}>회원가입 완료</Text>
           </TouchableOpacity>
-        </>
+        </KeyboardAvoidingView>
       )}
     </SafeAreaView>
   );
@@ -193,63 +214,7 @@ const styles = StyleSheet.create({
   },
   boxContainer: {
     gap: 13,
-  },
-  inputContainer: {
-    gap: 7,
-  },
-  nicknameWrapper: {
-    flexDirection: 'row',
-    height: 52,
-    borderWidth: 1,
-    borderColor: '#EAEAEA',
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  nicknameInput: {
-    fontSize: 16,
-    fontFamily: 'Pretendard-Regular',
-    color: colors.BLACK,
-  },
-  dupCheckBtnInside: {
-    height: 28,
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    backgroundColor: colors.GREEN,
-    borderRadius: 6,
-  },
-  dupCheckText: {
-    color: colors.WHITE,
-    fontFamily: 'Pretendard-SemiBold',
-    fontSize: 14,
-  },
-  addressContainer: {
-    borderWidth: 1,
-    borderColor: '#EAEAEA',
-    borderRadius: 10,
-    height: 52,
-    paddingHorizontal: 10,
-  },
-  address: {
-    fontSize: 16,
-    fontFamily: 'Pretendard-Regular',
-    color: colors.BLACK,
-  },
-  msgContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  successMsg: {
-    color: '#079500',
-    fontSize: 12,
-    fontFamily: 'Pretendard-Medium',
-  },
-  errorMsg: {
-    color: colors.RED,
-    fontSize: 12,
-    fontFamily: 'Pretendard-Medium',
+    marginBottom: 30,
   },
   signupBtn: {
     height: 69,

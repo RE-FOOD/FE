@@ -134,7 +134,12 @@ const HistoryHomeScreen = () => {
                         <Text style={styles.buttonGreenText}>주문취소</Text>
                       </TouchableOpacity>
                     ) : (
-                      <TouchableOpacity style={styles.buttonGreen} onPress={() => {}}>
+                      <TouchableOpacity
+                        style={styles.buttonGreen}
+                        onPress={() => {
+                          navigation.navigate('ReviewWrite');
+                        }}
+                      >
                         <Text style={styles.buttonGreenText}>리뷰쓰기</Text>
                       </TouchableOpacity>
                     )}

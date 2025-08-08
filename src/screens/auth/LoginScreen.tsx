@@ -51,7 +51,6 @@ const LoginScreen = () => {
             <Text>{'Test: 회원가입 유형 선택'}</Text>
           </TouchableOpacity>
         </View>
-        {/* TODO: 테스트 코드 추후 삭제 */}
       </SafeAreaView>
     </LinearGradient>
   );
@@ -98,8 +97,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     paddingHorizontal: 30,
-    justifyContent: 'center', // 수직 정렬: 중앙
-    alignItems: 'flex-end', // 수평 정렬: 오른쪽
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   loginImg: {
     width: 222,

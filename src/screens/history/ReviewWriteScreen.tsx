@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +23,8 @@ const ReviewWriteScreen = () => {
     '4': true,
     '5': true,
   });
+
+  const [reviewText, setReviewText] = useState('');
 
   const handleStarPress = (starId: string) => {
     setStars((prevStars) => ({
@@ -59,11 +61,15 @@ const ReviewWriteScreen = () => {
             )}
           </View>
         </View>
-        <View style={styles.textBox}>
-          <Text style={styles.grayRegularText_13}>
-            픽업한 음식은 어떠셨나요? 맛, 양, 포장 상태에 대해 자유롭게 작성해주세요.
-          </Text>
-        </View>
+        <TextInput
+          style={styles.reviewInput}
+          value={reviewText}
+          onChangeText={setReviewText}
+          placeholder="픽업한 음식은 어떠셨나요? 맛, 양, 포장 상태에 대해 자유롭게 작성해주세요."
+          placeholderTextColor={colors.GRAY_700}
+          multiline
+          textAlignVertical="top"
+        />
         <TouchableOpacity style={styles.button} onPress={handleRegistration}>
           <Text style={styles.greenRegularText_13}>등록완료</Text>
         </TouchableOpacity>
@@ -94,15 +100,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
   },
-  textBox: {
-    width: '100%',
-    paddingVertical: 29,
+  reviewInput: {
+    height: 300,
+    paddingVertical: 20,
     paddingHorizontal: 24,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     backgroundColor: colors.GRAY_200,
     borderRadius: 10,
-    height: 300,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 13,
+    textAlignVertical: 'top',
   },
   button: {
     width: '100%',

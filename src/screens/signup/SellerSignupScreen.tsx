@@ -9,11 +9,20 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import CustomModal from '@/components/_modal/CustomModal';
 import BusinessNumberInput from '@/components/signup/BusinessNumberInput';
 import PhoneNumberInput from '@/components/signup/PhoneNumberInput';
 import { colors } from '@/constants/colors';
+import { loggedOutNavigations } from '@/constants/navigations';
+import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+
+type NavigationProp = StackNavigationProp<LoggedOutStackParamList, 'Login'>;
 
 const SellerSignupScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
+
   const [tel1, setTel1] = useState('');
   const [tel2, setTel2] = useState('');
   const [telPrefix, setTelPrefix] = useState('010');
@@ -21,6 +30,8 @@ const SellerSignupScreen = () => {
 
   const [bizNumber, setBizNumber] = useState('');
   const [bizNumberError, setBizNumberError] = useState('');
+
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
 
   const isPhoneValid = useCallback(() => {
     return tel1.length === 4 && tel2.length === 4;
@@ -65,6 +76,13 @@ const SellerSignupScreen = () => {
 
     const _phoneNumber = `${telPrefix}${tel1}${tel2}`;
     const _bizNumber = bizNumber;
+    // TODO: 임시 코드, 추후 회원가입 연결
+    setSuccessModalOpen(true);
+  };
+
+  const handleAfterSignup = () => {
+    setSuccessModalOpen(false);
+    navigation.navigate(loggedOutNavigations.LOGIN);
   };
 
   return (
@@ -103,6 +121,12 @@ const SellerSignupScreen = () => {
           <Text style={styles.signupText}>가입 신청</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
+      <CustomModal
+        state="SignUpSuccess"
+        type="success"
+        isOpen={successModalOpen}
+        onClose={handleAfterSignup}
+      />
     </SafeAreaView>
   );
 };

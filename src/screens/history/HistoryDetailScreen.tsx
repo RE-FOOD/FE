@@ -1,7 +1,8 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { colors } from '@/constants/colors';
 import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
@@ -12,7 +13,8 @@ type Props = {
 };
 
 const HistoryDetailScreen = ({ route }: Props) => {
-  const { orderId, menu, store, date } = route.params;
+  const navigation = useNavigation<StackNavigationProp<UserStackParamList>>();
+  const { orderId, menu, store, date, onDelete } = route.params;
 
   const order = [
     {
@@ -50,6 +52,11 @@ const HistoryDetailScreen = ({ route }: Props) => {
       time: '17시 30분',
     },
   ];
+
+  const handleDelete = () => {
+    onDelete(orderId);
+    navigation.goBack();
+  }; //이것도 마찬가지
 
   return (
     <SafeAreaView style={styles.container}>
@@ -132,7 +139,7 @@ const HistoryDetailScreen = ({ route }: Props) => {
         </View>
       </View>
       <View style={{ width: '100%' }}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleDelete}>
           <Text style={styles.greenRegularText_13}>주문 내역 삭제</Text>
         </TouchableOpacity>
       </View>

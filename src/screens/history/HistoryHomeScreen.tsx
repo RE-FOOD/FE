@@ -40,7 +40,7 @@ const initialOrders = [
 ];
 type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
 
-const ORDERS_STORAGE_KEY = 'key';
+const ORDERS_STORAGE_KEY = 'key'; //로그인 기능 구현하고 수정할 예정
 
 const HistoryHomeScreen = () => {
   const [orders, setOrders] = useState(initialOrders);

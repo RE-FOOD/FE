@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { loggedOutNavigations } from '@/constants/navigations';
 import LoginScreen from '@/screens/auth/LoginScreen';
+import SellerSignupScreen from '@/screens/signup/SellerSignupScreen';
 import SignupTypeScreen from '@/screens/signup/SignupTypeScreen';
 import UserSignupScreen from '@/screens/signup/UserSignupScreen';
 
@@ -27,7 +28,16 @@ function LoggedOutStackNavigator() {
         component={SignupTypeScreen}
         options={{ headerShown: true, title: '회원가입' }}
       />
-      <Stack.Screen name={loggedOutNavigations.USER_SIGNUP} component={UserSignupScreen} />
+      <Stack.Screen
+        name={loggedOutNavigations.USER_SIGNUP}
+        component={UserSignupScreen}
+        options={{ headerShown: true, title: '회원가입' }}
+      />
+      <Stack.Screen
+        name={loggedOutNavigations.SELLER_SIGNUP}
+        component={SellerSignupScreen}
+        options={{ headerShown: true, title: '회원가입' }}
+      />
     </Stack.Navigator>
   );
 }

@@ -2,12 +2,18 @@ import { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
+import { userNavigations } from '@/constants/navigations';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 type StarState = {
   [key: string]: boolean;
 };
+
+type NavigationProp = StackNavigationProp<UserStackParamList>;
 
 const ReviewWriteScreen = () => {
   const [stars, setStars] = useState<StarState>({
@@ -23,6 +29,13 @@ const ReviewWriteScreen = () => {
       ...prevStars, // 이전 별들의 상태는 그대로 복사하고
       [starId]: !prevStars[starId], // 클릭된 별의 상태(true/false)만 뒤집기
     }));
+  };
+
+  const navigation = useNavigation<NavigationProp>();
+  const handleRegistration = () => {
+    navigation.navigate('UserTabs', {
+      screen: userNavigations.HISTORY_HOME,
+    });
   };
 
   return (
@@ -51,7 +64,7 @@ const ReviewWriteScreen = () => {
             픽업한 음식은 어떠셨나요? 맛, 양, 포장 상태에 대해 자유롭게 작성해주세요.
           </Text>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleRegistration}>
           <Text style={styles.greenRegularText_13}>등록완료</Text>
         </TouchableOpacity>
       </View>

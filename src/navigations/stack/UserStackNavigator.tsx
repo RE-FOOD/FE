@@ -10,7 +10,13 @@ import HistoryDetailScreen from '@/screens/history/HistoryDetailScreen';
 export type UserStackParamList = {
   UserTabs: NavigatorScreenParams<UserBottomTabsParamList>;
   [userNavigations.STORE_HOME]: undefined;
-  [userNavigations.ORDER_DETAIL]: { orderId: number; store: string; menu: string; date: string };
+  [userNavigations.ORDER_DETAIL]: {
+    orderId: number;
+    store: string;
+    menu: string;
+    date: string;
+    onDelete: (id: number) => void; //추후 수정 예정
+  };
 };
 
 const Stack = createStackNavigator<UserStackParamList>();

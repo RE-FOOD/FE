@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -7,38 +9,72 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
 import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
-const HistoryHomeScreen = () => {
-  const orders = [
-    {
-      id: 1,
-      type: '픽업주문',
-      date: '2025.07.28',
-      status: '픽업전',
-      store: 'Pizza & Pasta',
-      menu: '콤비네이션 피자',
-      picture: 'https://picsum.photos/85',
-    },
-    {
-      id: 2,
-      type: '픽업주문',
-      date: '2025.07.28',
-      status: '픽업완료',
-      store: 'Chicken',
-      menu: '후라이드 치킨',
-      picture: 'https://picsum.photos/85',
-    },
-    {
-      id: 3,
-      type: '픽업주문',
-      date: '2025.07.28',
-      status: '픽업완료',
-      store: 'Pasta',
-      menu: 'Pasta',
-      picture: 'https://picsum.photos/85',
-    },
-  ];
+const initialOrders = [
+  {
+    id: 1,
+    type: '픽업주문',
+    date: '2025.07.28',
+    status: '픽업전',
+    store: 'Pizza & Pasta',
+    menu: '콤비네이션 피자',
+    picture: 'https://picsum.photos/85',
+  },
+  {
+    id: 2,
+    type: '픽업주문',
+    date: '2025.07.28',
+    status: '픽업완료',
+    store: 'Chicken',
+    menu: '후라이드 치킨',
+    picture: 'https://picsum.photos/85',
+  },
+  {
+    id: 3,
+    type: '픽업주문',
+    date: '2025.07.28',
+    status: '픽업완료',
+    store: 'Pasta',
+    menu: 'Pasta',
+    picture: 'https://picsum.photos/85',
+  },
+];
+type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
 
-  type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
+const ORDERS_STORAGE_KEY = 'key';
+
+const HistoryHomeScreen = () => {
+  const [orders, setOrders] = useState(initialOrders);
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const savedOrders = await EncryptedStorage.getItem(ORDERS_STORAGE_KEY);
+        if (savedOrders !== null) {
+          setOrders(JSON.parse(savedOrders));
+        }
+      } catch (e) {
+        console.error('Failed to load orders from encrypted storage.', e);
+      }
+    };
+    loadOrders();
+  }, []);
+
+  useEffect(() => {
+    const saveOrders = async () => {
+      try {
+        await EncryptedStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+      } catch (e) {
+        console.error('Failed to save orders to encrypted storage.', e);
+      }
+    };
+    if (orders != initialOrders) {
+      saveOrders();
+    }
+  }, [orders]);
+
+  const handleDeleteOrder = (idToDelete: number) => {
+    setOrders((currentOrders) => currentOrders.filter((order) => order.id !== idToDelete));
+  };
+
   const navigation = useNavigation<NavigationProp>();
 
   return (
@@ -87,6 +123,7 @@ const HistoryHomeScreen = () => {
                           store: order.store,
                           menu: order.menu,
                           date: order.date,
+                          onDelete: handleDeleteOrder, //후에 zustand로 전역 설정으로 할 예정
                         })
                       }
                     >

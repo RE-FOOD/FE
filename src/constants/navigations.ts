@@ -7,10 +7,14 @@ const loggedOutNavigations = {
 
 const userNavigations = {
   STORE_HOME: 'StoreHome',
+  CATEGORY_LIST: 'CategoryList',
   MAP_HOME: 'MapHome',
   LIKE_HOME: 'LikeHome',
   HISTORY_HOME: 'HistoryHome',
   MYPAGE_HOME: 'MypageHome',
+  LOCATION: 'Location',
+  NOTIFICATION: 'Notification',
+  CART: 'Cart',
 } as const;
 
 export { loggedOutNavigations, userNavigations };

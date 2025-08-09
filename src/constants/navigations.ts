@@ -8,6 +8,7 @@ const loggedOutNavigations = {
 const userNavigations = {
   STORE_HOME: 'StoreHome',
   CATEGORY_LIST: 'CategoryList',
+  SEARCH_RESULT: 'SearchResult',
   MAP_HOME: 'MapHome',
   LIKE_HOME: 'LikeHome',
   HISTORY_HOME: 'HistoryHome',

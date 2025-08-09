@@ -8,6 +8,7 @@ export type StoreItem = {
   name: string;
   distance?: string;
   rating: number;
+  ratingCnt?: string;
   price?: string;
   salePrice?: string;
   discount?: string;
@@ -36,7 +37,14 @@ const StoreCard = ({ item, width = '100%', showDiscountBadge }: Props) => {
           </Text>
           <View style={styles.ratingBox}>
             <Star width={12} height={12} />
-            <Text style={styles.meta}>{item.rating.toFixed(1)}</Text>
+            {item.ratingCnt ? (
+              <View style={styles.ratingRow}>
+                <Text style={styles.meta}>{item.rating.toFixed(1)}</Text>
+                <Text style={styles.metaCnt}>{`(${item.ratingCnt})`}</Text>
+              </View>
+            ) : (
+              <Text style={styles.meta}>{item.rating.toFixed(1)}</Text>
+            )}
           </View>
         </View>
         {item.distance ? (
@@ -62,7 +70,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E8E8E8',
   },
-  image: { width: '100%', height: 105, backgroundColor: '#EEE' },
+  image: {
+    width: '100%',
+    height: 105,
+    backgroundColor: '#EEE',
+  },
   badge: {
     position: 'absolute',
     top: 8,
@@ -72,9 +84,21 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 8,
   },
-  badgeText: { fontSize: 12, color: '#FF4B4B', fontFamily: 'Pretendard-Bold' },
-  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  name: { fontSize: 14, color: colors.BLACK, fontFamily: 'Pretendard-SemiBold' },
+  badgeText: {
+    fontSize: 12,
+    color: '#FF4B4B',
+    fontFamily: 'Pretendard-Bold',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  name: {
+    fontSize: 14,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-SemiBold',
+  },
   ratingBox: {
     flexDirection: 'row',
     paddingVertical: 3,
@@ -83,9 +107,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF8EF',
     borderRadius: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  meta: { fontSize: 10, color: colors.BLACK, fontFamily: 'Pretendard-Medium' },
-  price: { fontSize: 13, color: colors.BLACK, fontFamily: 'Pretendard-SemiBold' },
+  ratingRow: {
+    flexDirection: 'row',
+    gap: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  meta: {
+    fontSize: 10,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Medium',
+    lineHeight: 12,
+  },
+  metaCnt: {
+    fontSize: 10,
+    color: '#9C9C9C',
+    fontFamily: 'Pretendard-Medium',
+    lineHeight: 11.5,
+  },
+  price: {
+    fontSize: 13,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-SemiBold',
+  },
   sale: {
     fontSize: 11,
     color: '#AFAFAF',
@@ -93,5 +139,9 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     marginTop: 1,
   },
-  distance: { fontSize: 11, color: '#7E7E7E', fontFamily: 'Pretendard-Regular' },
+  distance: {
+    fontSize: 11,
+    color: '#7E7E7E',
+    fontFamily: 'Pretendard-Regular',
+  },
 });

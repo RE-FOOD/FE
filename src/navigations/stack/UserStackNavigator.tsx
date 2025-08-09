@@ -10,11 +10,13 @@ import CartScreen from '@/screens/cart/CartScreen';
 import LocationScreen from '@/screens/location/LocationScreen';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
+import SearchResultScreen from '@/screens/store/SearchResultScreen';
 
 export type UserStackParamList = {
   UserTabs: NavigatorScreenParams<UserBottomTabsParamList>;
   [userNavigations.STORE_HOME]: undefined;
   [userNavigations.CATEGORY_LIST]: { key: CategoryKey; label: string };
+  [userNavigations.SEARCH_RESULT]: { keyword: string };
   [userNavigations.LOCATION]: undefined;
   [userNavigations.CART]: undefined;
   [userNavigations.NOTIFICATION]: undefined;
@@ -53,6 +55,11 @@ function UserStackNavigator() {
         name={userNavigations.CATEGORY_LIST}
         component={CategoryListScreen}
         options={{ title: '' }}
+      />
+      <Stack.Screen
+        name={userNavigations.SEARCH_RESULT}
+        component={SearchResultScreen}
+        options={{ title: '검색 결과' }}
       />
     </Stack.Navigator>
   );

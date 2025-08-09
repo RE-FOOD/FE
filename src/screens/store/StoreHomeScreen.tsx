@@ -46,7 +46,11 @@ const StoreHomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.topSection}>
           <TopBar
             locationLabel="서울 종로구 창경궁로 254"
@@ -68,7 +72,11 @@ const StoreHomeScreen = () => {
               }
             />
             <View style={styles.searchSection}>
-              <SearchSection />
+              <SearchSection
+                onSubmitKeyword={(q) =>
+                  navigation.navigate(userNavigations.SEARCH_RESULT, { keyword: q })
+                }
+              />
             </View>
           </View>
         </View>

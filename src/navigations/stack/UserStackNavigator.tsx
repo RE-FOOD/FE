@@ -13,10 +13,6 @@ export type UserStackParamList = {
   [userNavigations.STORE_HOME]: undefined;
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
-    store: string;
-    menu: string;
-    date: string;
-    onDelete: (id: number) => void; //추후 수정 예정
   };
   [userNavigations.REVIEW_WRITE]: undefined;
 };

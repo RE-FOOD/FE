@@ -18,7 +18,10 @@ import { colors } from '@/constants/colors';
 import { loggedOutNavigations } from '@/constants/navigations';
 import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
 
-type NavigationProp = StackNavigationProp<LoggedOutStackParamList, 'Login'>;
+type NavigationProp = StackNavigationProp<
+  LoggedOutStackParamList,
+  typeof loggedOutNavigations.SELLER_SIGNUP
+>;
 
 const SellerSignupScreen = () => {
   const navigation = useNavigation<NavigationProp>();

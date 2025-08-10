@@ -8,7 +8,10 @@ import Kakao from '@/assets/icons/kakao.svg';
 import { loggedOutNavigations } from '@/constants/navigations';
 import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
 
-type NavigationProp = StackNavigationProp<LoggedOutStackParamList, 'SignupType'>;
+type NavigationProp = StackNavigationProp<
+  LoggedOutStackParamList,
+  typeof loggedOutNavigations.LOGIN
+>;
 
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp>();

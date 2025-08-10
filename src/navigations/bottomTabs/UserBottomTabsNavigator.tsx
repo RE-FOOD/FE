@@ -7,8 +7,8 @@ import {
 import { userNavigations } from '@/constants/navigations';
 import HistoryHomeScreen from '@/screens/history/HistoryHomeScreen';
 import LikeHomeScreen from '@/screens/like/LikeHomeScreen';
-import MapHomeScreen from '@/screens/map/mapHomeScreen';
-import MypageHomeScreen from '@/screens/mypage/mypageHomeScreen';
+import MapHomeScreen from '@/screens/map/MapHomeScreen';
+import MypageHomeScreen from '@/screens/mypage/MypageHomeScreen';
 import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
 
 // interface UserBottomTabsNavigatorProps {
@@ -27,7 +27,10 @@ const Tab = createBottomTabNavigator<UserBottomTabsParamList>();
 
 function UserBottomTabsNavigator() {
   return (
-    <Tab.Navigator initialRouteName={userNavigations.STORE_HOME}>
+    <Tab.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName={userNavigations.STORE_HOME}
+    >
       <Tab.Screen
         name={userNavigations.STORE_HOME}
         component={StoreHomeScreen}

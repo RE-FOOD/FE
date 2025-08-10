@@ -47,6 +47,7 @@ const HistoryHomeScreen = () => {
   useEffect(() => {
     const loadOrders = async () => {
       try {
+        await EncryptedStorage.clear();
         const savedOrders = await EncryptedStorage.getItem(ORDERS_STORAGE_KEY);
         if (savedOrders !== null) {
           setOrders(JSON.parse(savedOrders));
@@ -123,7 +124,7 @@ const HistoryHomeScreen = () => {
                           store: order.store,
                           menu: order.menu,
                           date: order.date,
-                          onDelete: handleDeleteOrder, //후에 zustand로 전역 설정으로 할 예정
+                          onDelete: handleDeleteOrder,
                         })
                       }
                     >
@@ -167,6 +168,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
     marginBottom: 10,
+    borderBottomStartRadius: 10,
+    borderBottomEndRadius: 10,
   },
   search: {
     marginHorizontal: 24,
@@ -186,10 +189,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   orderListContainer: {
-    paddingVertical: 13,
-    paddingHorizontal: 24,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    marginHorizontal: 10,
     flexDirection: 'column',
     justifyContent: 'center',
+    borderRadius: 10,
     backgroundColor: colors.WHITE,
   },
   orderInnerContainer: {
@@ -202,7 +207,7 @@ const styles = StyleSheet.create({
   textInnerContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 135,
+    gap: 125,
   },
   dateInnerContainer: {
     flexDirection: 'row',
@@ -233,7 +238,9 @@ const styles = StyleSheet.create({
   rectangle: {
     width: 68,
     height: 16,
+    backgroundColor: colors.GREEN,
     borderColor: colors.GREEN,
+    borderRadius: 3,
     borderWidth: 1,
     alignItems: 'center',
   },
@@ -268,7 +275,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   rectangleText: {
-    color: colors.GREEN,
+    color: colors.WHITE,
     fontFamily: 'Pretendard-Regular',
     fontSize: 10,
   },

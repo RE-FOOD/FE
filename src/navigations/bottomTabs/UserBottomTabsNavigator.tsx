@@ -7,8 +7,8 @@ import {
 import { userNavigations } from '@/constants/navigations';
 import HistoryHomeScreen from '@/screens/history/HistoryHomeScreen';
 import LikeHomeScreen from '@/screens/like/LikeHomeScreen';
-import MapHomeScreen from '@/screens/map/mapHomeScreen';
-import MypageHomeScreen from '@/screens/mypage/mypageHomeScreen';
+import MapHomeScreen from '@/screens/map/MapHomeScreen';
+import MypageHomeScreen from '@/screens/mypage/MypageHomeScreen';
 import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
 
 // interface UserBottomTabsNavigatorProps {
@@ -51,7 +51,7 @@ function UserBottomTabsNavigator() {
       <Tab.Screen
         name={userNavigations.MYPAGE_HOME}
         component={MypageHomeScreen}
-        options={{ title: 'MY' }}
+        options={{ title: 'MY', headerShown: false }}
       />
     </Tab.Navigator>
   );

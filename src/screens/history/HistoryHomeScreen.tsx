@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
+import { ORDERS_STORAGE_KEY } from '@/constants/keys';
 import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
-const initialOrders = [
+export const initialOrders = [
   {
     id: 1,
     type: '픽업주문',
@@ -38,9 +39,8 @@ const initialOrders = [
     picture: 'https://picsum.photos/85',
   },
 ];
-type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
 
-const ORDERS_STORAGE_KEY = 'key'; //로그인 기능 구현하고 수정할 예정
+type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
 
 const HistoryHomeScreen = () => {
   const [orders, setOrders] = useState(initialOrders);
@@ -53,28 +53,40 @@ const HistoryHomeScreen = () => {
           setOrders(JSON.parse(savedOrders));
         }
       } catch (e) {
-        console.error('Failed to load orders from encrypted storage.', e);
+        console.error('없음', e);
       }
     };
     loadOrders();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      let mounted = true;
+      const load = async () => {
+        try {
+          const saved = await EncryptedStorage.getItem(ORDERS_STORAGE_KEY);
+          if (saved && mounted) setOrders(JSON.parse(saved));
+        } catch (e) {
+          console.error('실패', e);
+        }
+      };
+      load();
+      return () => {
+        mounted = false;
+      };
+    }, [])
+  );
 
   useEffect(() => {
     const saveOrders = async () => {
       try {
         await EncryptedStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
       } catch (e) {
-        console.error('Failed to save orders to encrypted storage.', e);
+        console.error('실패.', e);
       }
     };
-    if (orders != initialOrders) {
-      saveOrders();
-    }
+    saveOrders();
   }, [orders]);
-
-  const handleDeleteOrder = (idToDelete: number) => {
-    setOrders((currentOrders) => currentOrders.filter((order) => order.id !== idToDelete));
-  };
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -121,10 +133,6 @@ const HistoryHomeScreen = () => {
                       onPress={() =>
                         navigation.navigate('OrderDetail', {
                           orderId: order.id,
-                          store: order.store,
-                          menu: order.menu,
-                          date: order.date,
-                          onDelete: handleDeleteOrder,
                         })
                       }
                     >

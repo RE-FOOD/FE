@@ -2,7 +2,7 @@ import LoggedOutStackNavigator from '../stack/LoggedOutStackNavigator';
 import UserStackNavigator from '../stack/UserStackNavigator';
 
 function RootNavigator() {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const isSeller = false;
 
   if (!isAuthenticated) {

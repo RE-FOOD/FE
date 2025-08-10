@@ -7,6 +7,8 @@ import UserBottomTabsNavigator, {
 import { CategoryKey } from '@/constants/categoryImages';
 import { userNavigations } from '@/constants/navigations';
 import CartScreen from '@/screens/cart/CartScreen';
+import HistoryDetailScreen from '@/screens/history/HistoryDetailScreen';
+import ReviewWriteScreen from '@/screens/history/ReviewWriteScreen';
 import LocationScreen from '@/screens/location/LocationScreen';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
@@ -15,6 +17,14 @@ import SearchResultScreen from '@/screens/store/SearchResultScreen';
 export type UserStackParamList = {
   UserTabs: NavigatorScreenParams<UserBottomTabsParamList>;
   [userNavigations.STORE_HOME]: undefined;
+  [userNavigations.ORDER_DETAIL]: {
+    orderId: number;
+    store: string;
+    menu: string;
+    date: string;
+    onDelete: (id: number) => void; //추후 수정 예정
+  };
+  [userNavigations.REVIEW_WRITE]: undefined;
   [userNavigations.CATEGORY_LIST]: { key: CategoryKey; label: string };
   [userNavigations.SEARCH_RESULT]: { keyword: string };
   [userNavigations.LOCATION]: undefined;
@@ -35,6 +45,16 @@ function UserStackNavigator() {
         name="UserTabs"
         component={UserBottomTabsNavigator}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="OrderDetail"
+        component={HistoryDetailScreen}
+        options={{ title: '주문 상세', headerShown: true }}
+      />
+      <Stack.Screen
+        name="ReviewWrite"
+        component={ReviewWriteScreen}
+        options={{ title: '리뷰 작성', headerShown: true }}
       />
       <Stack.Screen
         name={userNavigations.LOCATION}

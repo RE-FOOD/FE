@@ -90,6 +90,16 @@ const HistoryHomeScreen = () => {
 
   const navigation = useNavigation<NavigationProp>();
 
+  const handleCancel = async (targetId: number) => {
+    setOrders((prev) => {
+      const next = prev.filter((o) => o.id !== targetId);
+      EncryptedStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(next)).catch((e) =>
+        console.error('주문 취소 저장 실패', e)
+      );
+      return next;
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.searchContainer}>
@@ -139,7 +149,10 @@ const HistoryHomeScreen = () => {
                       <Text style={styles.buttonGrayText}>주문상세</Text>
                     </TouchableOpacity>
                     {order.status === '픽업전' ? (
-                      <TouchableOpacity style={styles.buttonGreen} onPress={() => {}}>
+                      <TouchableOpacity
+                        style={styles.buttonGreen}
+                        onPress={() => handleCancel(order.id)}
+                      >
                         <Text style={styles.buttonGreenText}>주문취소</Text>
                       </TouchableOpacity>
                     ) : (

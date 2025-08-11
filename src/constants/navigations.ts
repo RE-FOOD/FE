@@ -7,6 +7,8 @@ const loggedOutNavigations = {
 
 const userNavigations = {
   STORE_HOME: 'StoreHome',
+  CATEGORY_LIST: 'CategoryList',
+  SEARCH_RESULT: 'SearchResult',
   MAP_HOME: 'MapHome',
   LIKE_HOME: 'LikeHome',
   HISTORY_HOME: 'HistoryHome',
@@ -15,6 +17,9 @@ const userNavigations = {
   MYPAGE_HOME: 'MypageHome',
   NiCKNAME_CHANGE: 'NicknameChange',
   COUPON_BOX: 'CouponBox',
+  LOCATION: 'Location',
+  NOTIFICATION: 'Notification',
+  CART: 'Cart',
 } as const;
 
 export { loggedOutNavigations, userNavigations };

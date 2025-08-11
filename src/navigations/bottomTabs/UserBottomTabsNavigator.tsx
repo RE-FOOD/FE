@@ -27,7 +27,10 @@ const Tab = createBottomTabNavigator<UserBottomTabsParamList>();
 
 function UserBottomTabsNavigator() {
   return (
-    <Tab.Navigator initialRouteName={userNavigations.STORE_HOME}>
+    <Tab.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName={userNavigations.STORE_HOME}
+    >
       <Tab.Screen
         name={userNavigations.STORE_HOME}
         component={StoreHomeScreen}

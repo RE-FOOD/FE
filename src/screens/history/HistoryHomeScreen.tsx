@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
-import { ORDERS_STORAGE_KEY } from '@/constants/keys';
-import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { userNavigations } from '@/constants/navigations';
+import { UserBottomTabsParamList } from '@/navigations/bottomTabs/UserBottomTabsNavigator';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 export const initialOrders = [
   {
@@ -41,63 +41,28 @@ export const initialOrders = [
 ];
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
+type HomeRoute = RouteProp<UserBottomTabsParamList, typeof userNavigations.HISTORY_HOME>;
+const deletedIds = new Set<number>();
 
 const HistoryHomeScreen = () => {
-  const [orders, setOrders] = useState(initialOrders);
-  useEffect(() => {
-    const loadOrders = async () => {
-      try {
-        await EncryptedStorage.clear();
-        const savedOrders = await EncryptedStorage.getItem(ORDERS_STORAGE_KEY);
-        if (savedOrders !== null) {
-          setOrders(JSON.parse(savedOrders));
-        }
-      } catch (e) {
-        console.error('없음', e);
-      }
-    };
-    loadOrders();
-  }, []);
+  const navigation = useNavigation<NavigationProp>();
+  const route = useRoute<HomeRoute>();
+  const [orders, setOrders] = useState(() => initialOrders.filter((o) => !deletedIds.has(o.id)));
 
   useFocusEffect(
     useCallback(() => {
-      let mounted = true;
-      const load = async () => {
-        try {
-          const saved = await EncryptedStorage.getItem(ORDERS_STORAGE_KEY);
-          if (saved && mounted) setOrders(JSON.parse(saved));
-        } catch (e) {
-          console.error('실패', e);
-        }
-      };
-      load();
-      return () => {
-        mounted = false;
-      };
-    }, [])
+      const id = route.params?.deletedOrderId;
+      if (id) {
+        deletedIds.add(id);
+        setOrders((prev) => prev.filter((o) => o.id !== id));
+        navigation.setParams({ deletedOrderId: undefined, nonce: undefined } as any);
+      }
+    }, [route.params?.deletedOrderId])
   );
 
-  useEffect(() => {
-    const saveOrders = async () => {
-      try {
-        await EncryptedStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
-      } catch (e) {
-        console.error('실패.', e);
-      }
-    };
-    saveOrders();
-  }, [orders]);
-
-  const navigation = useNavigation<NavigationProp>();
-
   const handleCancel = async (targetId: number) => {
-    setOrders((prev) => {
-      const next = prev.filter((o) => o.id !== targetId);
-      EncryptedStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(next)).catch((e) =>
-        console.error('주문 취소 저장 실패', e)
-      );
-      return next;
-    });
+    deletedIds.add(targetId);
+    setOrders((prev) => prev.filter((o) => o.id !== targetId));
   };
 
   return (

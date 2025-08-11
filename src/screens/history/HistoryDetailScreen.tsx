@@ -1,12 +1,10 @@
 import { StyleSheet, View, Text } from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation } from '@react-navigation/native';
-
+import { StackNavigationProp } from '@react-navigation/stack';
 import { colors } from '@/constants/colors';
-import { ORDERS_STORAGE_KEY } from '@/constants/keys';
-
+import { userNavigations } from '@/constants/navigations';
 import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 export const ORDER_DETAIL_MOCK: Record<number, any> = {
@@ -93,8 +91,11 @@ type Props = {
   route: OrderDetailProp;
 };
 
+type Nav = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
+
 const HistoryDetailScreen = ({ route }: Props) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<Nav>();
+
   const id = Number(route.params.orderId);
   const data = ORDER_DETAIL_MOCK[id];
   if (!data) return <Text>주문을 찾을 수 없습니다.</Text>;
@@ -102,18 +103,10 @@ const HistoryDetailScreen = ({ route }: Props) => {
   const fmtWon = (n: number) => n.toLocaleString('ko-KR');
 
   const handleDelete = async () => {
-    try {
-      const saved = await EncryptedStorage.getItem(ORDERS_STORAGE_KEY);
-      if (saved) {
-        const arr = JSON.parse(saved) as Array<{ id: number }>;
-        const next = arr.filter((o) => o.id != id);
-        await EncryptedStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(next));
-      }
-      navigation.goBack();
-    } catch (e) {
-      console.log('실패');
-      navigation.goBack();
-    }
+    navigation.navigate('UserTabs', {
+      screen: userNavigations.HISTORY_HOME,
+      params: { deletedOrderId: id, nonce: Date.now() },
+    });
   };
 
   return (

@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
-import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { userNavigations } from '@/constants/navigations';
+import { UserBottomTabsParamList } from '@/navigations/bottomTabs/UserBottomTabsNavigator';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
-const initialOrders = [
+export const initialOrders = [
   {
     id: 1,
     type: '픽업주문',
@@ -38,44 +39,31 @@ const initialOrders = [
     picture: 'https://picsum.photos/85',
   },
 ];
-type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
 
-const ORDERS_STORAGE_KEY = 'key'; //로그인 기능 구현하고 수정할 예정
+type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
+type HomeRoute = RouteProp<UserBottomTabsParamList, typeof userNavigations.HISTORY_HOME>;
+const deletedIds = new Set<number>();
 
 const HistoryHomeScreen = () => {
-  const [orders, setOrders] = useState(initialOrders);
-  useEffect(() => {
-    const loadOrders = async () => {
-      try {
-        const savedOrders = await EncryptedStorage.getItem(ORDERS_STORAGE_KEY);
-        if (savedOrders !== null) {
-          setOrders(JSON.parse(savedOrders));
-        }
-      } catch (e) {
-        console.error('Failed to load orders from encrypted storage.', e);
-      }
-    };
-    loadOrders();
-  }, []);
-
-  useEffect(() => {
-    const saveOrders = async () => {
-      try {
-        await EncryptedStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
-      } catch (e) {
-        console.error('Failed to save orders to encrypted storage.', e);
-      }
-    };
-    if (orders != initialOrders) {
-      saveOrders();
-    }
-  }, [orders]);
-
-  const handleDeleteOrder = (idToDelete: number) => {
-    setOrders((currentOrders) => currentOrders.filter((order) => order.id !== idToDelete));
-  };
-
   const navigation = useNavigation<NavigationProp>();
+  const route = useRoute<HomeRoute>();
+  const [orders, setOrders] = useState(() => initialOrders.filter((o) => !deletedIds.has(o.id)));
+
+  useFocusEffect(
+    useCallback(() => {
+      const id = route.params?.deletedOrderId;
+      if (id) {
+        deletedIds.add(id);
+        setOrders((prev) => prev.filter((o) => o.id !== id));
+        navigation.setParams({ deletedOrderId: undefined, nonce: undefined } as any);
+      }
+    }, [route.params?.deletedOrderId])
+  );
+
+  const handleCancel = async (targetId: number) => {
+    deletedIds.add(targetId);
+    setOrders((prev) => prev.filter((o) => o.id !== targetId));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,17 +108,16 @@ const HistoryHomeScreen = () => {
                       onPress={() =>
                         navigation.navigate('OrderDetail', {
                           orderId: order.id,
-                          store: order.store,
-                          menu: order.menu,
-                          date: order.date,
-                          onDelete: handleDeleteOrder, //후에 zustand로 전역 설정으로 할 예정
                         })
                       }
                     >
                       <Text style={styles.buttonGrayText}>주문상세</Text>
                     </TouchableOpacity>
                     {order.status === '픽업전' ? (
-                      <TouchableOpacity style={styles.buttonGreen} onPress={() => {}}>
+                      <TouchableOpacity
+                        style={styles.buttonGreen}
+                        onPress={() => handleCancel(order.id)}
+                      >
                         <Text style={styles.buttonGreenText}>주문취소</Text>
                       </TouchableOpacity>
                     ) : (
@@ -167,6 +154,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
     marginBottom: 10,
+    borderBottomStartRadius: 10,
+    borderBottomEndRadius: 10,
   },
   search: {
     marginHorizontal: 24,
@@ -186,10 +175,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   orderListContainer: {
-    paddingVertical: 13,
-    paddingHorizontal: 24,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    marginHorizontal: 10,
     flexDirection: 'column',
     justifyContent: 'center',
+    borderRadius: 10,
     backgroundColor: colors.WHITE,
   },
   orderInnerContainer: {
@@ -202,7 +193,7 @@ const styles = StyleSheet.create({
   textInnerContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 135,
+    gap: 125,
   },
   dateInnerContainer: {
     flexDirection: 'row',
@@ -233,7 +224,9 @@ const styles = StyleSheet.create({
   rectangle: {
     width: 68,
     height: 16,
+    backgroundColor: colors.GREEN,
     borderColor: colors.GREEN,
+    borderRadius: 3,
     borderWidth: 1,
     alignItems: 'center',
   },
@@ -268,7 +261,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   rectangleText: {
-    color: colors.GREEN,
+    color: colors.WHITE,
     fontFamily: 'Pretendard-Regular',
     fontSize: 10,
   },

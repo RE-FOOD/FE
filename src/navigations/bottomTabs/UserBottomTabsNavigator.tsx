@@ -19,7 +19,7 @@ export type UserBottomTabsParamList = {
   [userNavigations.STORE_HOME]: undefined;
   [userNavigations.MAP_HOME]: undefined;
   [userNavigations.LIKE_HOME]: undefined;
-  [userNavigations.HISTORY_HOME]: undefined;
+  [userNavigations.HISTORY_HOME]: { deletedOrderId?: number; nonce?: number } | undefined;
   [userNavigations.MYPAGE_HOME]: undefined;
 };
 
@@ -54,7 +54,7 @@ function UserBottomTabsNavigator() {
       <Tab.Screen
         name={userNavigations.MYPAGE_HOME}
         component={MypageHomeScreen}
-        options={{ title: 'MY' }}
+        options={{ title: 'MY', headerShown: false }}
       />
     </Tab.Navigator>
   );

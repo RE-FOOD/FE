@@ -4,7 +4,86 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { colors } from '@/constants/colors';
+import { userNavigations } from '@/constants/navigations';
 import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+
+export const ORDER_DETAIL_MOCK: Record<number, any> = {
+  1: {
+    id: 1,
+    type: 'PICKUP',
+    status: 'PICKUP_PENDING',
+    store: { name: 'Pizza & Pasta' },
+    orderNumber: '1234',
+    orderedAt: '2025-07-28T12:23:00+09:00',
+    items: [
+      {
+        id: 101,
+        name: '콤비네이션 피자',
+        quantity: 6,
+        unitPrice: 63000,
+        imageUrl: 'https://picsum.photos/85',
+        status: '주문완료',
+      },
+    ],
+    pricing: { subtotal: 63000, discountRate: 0.3, total: 60000 },
+    payment: {
+      method: 'CARD',
+      cardName: '카카오뱅크',
+      approvedAt: '2025-07-28T12:23:00+09:00',
+    },
+    pickup: { name: '구희원', phone: '010-1234-1234', timeText: '17시 30분' },
+  },
+  2: {
+    id: 2,
+    type: 'PICKUP',
+    status: 'PICKUP_DONE',
+    store: { name: 'Chicken' },
+    orderNumber: '4518',
+    orderedAt: '2025-07-28T10:10:00+09:00',
+    items: [
+      {
+        id: 201,
+        name: '후라이드 치킨',
+        quantity: 1,
+        unitPrice: 18000,
+        imageUrl: 'https://picsum.photos/85',
+        status: '주문완료',
+      },
+    ],
+    pricing: { subtotal: 18000, discountRate: 0, total: 18000 },
+    payment: {
+      method: 'CARD',
+      cardName: '신한카드',
+      approvedAt: '2025-07-28T10:10:30+09:00',
+    },
+    pickup: { name: '구희원', phone: '010-1234-1234', timeText: '즉시 픽업' },
+  },
+  3: {
+    id: 3,
+    type: 'PICKUP',
+    status: 'PICKUP_DONE',
+    store: { name: 'Pasta' },
+    orderNumber: '7890',
+    orderedAt: '2025-07-28T09:30:00+09:00',
+    items: [
+      {
+        id: 301,
+        name: '까르보나라',
+        quantity: 2,
+        unitPrice: 24000,
+        imageUrl: 'https://picsum.photos/85',
+        status: '주문완료',
+      },
+    ],
+    pricing: { subtotal: 24000, discountRate: 0.1, total: 21600 },
+    payment: {
+      method: 'CARD',
+      cardName: '우리카드',
+      approvedAt: '2025-07-28T09:30:20+09:00',
+    },
+    pickup: { name: '구희원', phone: '010-1234-1234', timeText: '12시 10분' },
+  },
+};
 
 type OrderDetailProp = RouteProp<UserStackParamList, 'OrderDetail'>;
 
@@ -12,130 +91,98 @@ type Props = {
   route: OrderDetailProp;
 };
 
+type Nav = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
+
 const HistoryDetailScreen = ({ route }: Props) => {
-  const navigation = useNavigation<StackNavigationProp<UserStackParamList>>();
-  const { orderId, menu, store, date, onDelete } = route.params;
+  const navigation = useNavigation<Nav>();
 
-  const order = [
-    {
-      orderId: orderId,
-      storeName: store,
-      orderNumber: '1234',
-      orderDate: date,
-    },
-  ];
-  const menuInfo = [
-    {
-      menuId: 1,
-      menuName: menu,
-      amount: '6',
-      price: '63,000',
-      discount: '30%',
-      status: '주문 완료',
-      total: '60,000',
-    },
-  ];
-  const price = [
-    {
-      priceId: 1,
-      price: '63,000',
-      card: '카카오뱅크',
-      discount: '30%',
-      total: '60,000',
-    },
-  ];
-  const member = [
-    {
-      memberId: 1,
-      name: '구희원',
-      phoneNumber: '010-1234-1234',
-      time: '17시 30분',
-    },
-  ];
+  const id = Number(route.params.orderId);
+  const data = ORDER_DETAIL_MOCK[id];
+  if (!data) return <Text>주문을 찾을 수 없습니다.</Text>;
 
-  const handleDelete = () => {
-    onDelete(orderId);
-    navigation.goBack();
-  }; //이것도 마찬가지
+  const fmtWon = (n: number) => n.toLocaleString('ko-KR');
+
+  const handleDelete = async () => {
+    navigation.navigate('UserTabs', {
+      screen: userNavigations.HISTORY_HOME,
+      params: { deletedOrderId: id, nonce: Date.now() },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.menuInfoContainer}>
         <View style={styles.menuInnerContainer}>
-          {order.map((item) => (
-            <View key={item.orderId} style={styles.menuOrderContainer}>
-              <Text style={styles.blackBoldText_13}>{store}</Text>
-              <Text style={styles.grayRegularText}>주문 번호: {item.orderNumber}</Text>
-              <Text style={styles.grayRegularText}>주문 일시: {item.orderDate}</Text>
-            </View>
-          ))}
+          <View style={styles.menuOrderContainer}>
+            <Text style={styles.blackBoldText_13}>{data.store.name}</Text>
+            <Text style={styles.grayRegularText}>주문 번호: {data.orderNumber}</Text>
+            <Text style={styles.grayRegularText}>주문 일시: {data.orderedAt}</Text>
+          </View>
           <View style={styles.horizontalLine} />
-          {menuInfo.map((item) => (
-            <View key={item.menuId} style={styles.menuPictureContainer}>
+
+          {data.items.map((item: any) => (
+            <View key={item.id} style={styles.menuPictureContainer}>
               <View style={styles.picture} />
               <View style={styles.menuPictureTextContainer}>
-                <Text style={styles.blackBoldText_11}>{item.menuName}</Text>
-                <Text style={styles.blackRegularText}>수량: {item.amount}</Text>
-                <Text style={styles.blackRegularText}>가격: {item.price}원</Text>
+                <Text style={styles.blackBoldText_11}>{item.name}</Text>
+                <Text style={styles.blackRegularText}>수량: {item.quantity}</Text>
+                <Text style={styles.blackRegularText}>가격: {fmtWon(item.unitPrice)}원</Text>
                 <Text style={styles.greenBoldText}>{item.status}</Text>
               </View>
             </View>
           ))}
           <View style={styles.horizontalLine} />
-          {price.map((item) => (
-            <View key={item.priceId} style={styles.menuInfoPriceContainer}>
-              <View style={styles.leftCol}>
-                <Text style={styles.blackRegularText}>상품 합계</Text>
-                <Text style={styles.blackRegularText}>할인 쿠폰</Text>
-                <Text style={styles.blackRegularText}>총 금액</Text>
-              </View>
-              <View style={styles.rightCol}>
-                <Text style={styles.blackRegularText}>{item.price}원</Text>
-                <Text style={styles.greenRegularText_11}>{item.discount}</Text>
-                <Text style={styles.blackRegularText}>{item.total}원</Text>
-              </View>
+
+          <View style={styles.menuInfoPriceContainer}>
+            <View style={styles.leftCol}>
+              <Text style={styles.blackRegularText}>상품 합계</Text>
+              <Text style={styles.blackRegularText}>할인 쿠폰</Text>
+              <Text style={styles.blackRegularText}>총 금액</Text>
             </View>
-          ))}
+            <View style={styles.rightCol}>
+              <Text style={styles.blackRegularText}>{fmtWon(data.pricing.subtotal)}원</Text>
+              <Text style={styles.greenRegularText_11}>
+                {Math.round(data.pricing.discountRate * 100)}%
+              </Text>
+              <Text style={styles.blackRegularText}>{fmtWon(data.pricing.total)}원</Text>
+            </View>
+          </View>
         </View>
       </View>
       <View style={styles.accountContainer}>
         <View style={styles.accountInnerContainer}>
           <Text style={styles.blackBoldText_13}>결제 정보</Text>
-          {price.map((item) => (
-            <View key={item.priceId} style={styles.accountInfoContainer}>
-              <View style={styles.leftCol}>
-                <Text style={styles.blackRegularText}>결제 수단</Text>
-                <Text style={styles.blackRegularText}>결제 정보</Text>
-                <Text style={styles.blackRegularText}>결제 금액</Text>
-                <Text style={styles.blackRegularText}>결제 시간</Text>
-              </View>
-              <View style={styles.rightCol}>
-                <Text style={styles.blackRegularText}>신용카드</Text>
-                <Text style={styles.greenRegularText_11}>{item.card} 승인</Text>
-                <Text style={styles.blackRegularText}>{item.total}원</Text>
-                <Text style={styles.blackRegularText}>{date}</Text>
-              </View>
+          <View style={styles.accountInfoContainer}>
+            <View style={styles.leftCol}>
+              <Text style={styles.blackRegularText}>결제 수단</Text>
+              <Text style={styles.blackRegularText}>결제 정보</Text>
+              <Text style={styles.blackRegularText}>결제 금액</Text>
+              <Text style={styles.blackRegularText}>결제 시간</Text>
             </View>
-          ))}
+            <View style={styles.rightCol}>
+              <Text style={styles.blackRegularText}>신용카드</Text>
+              <Text style={styles.greenRegularText_11}>{data.payment.cardName} 승인</Text>
+              <Text style={styles.blackRegularText}>{fmtWon(data.pricing.total)}원</Text>
+              <Text style={styles.blackRegularText}>{data.payment.approvedAt}</Text>
+            </View>
+          </View>
         </View>
       </View>
       <View style={styles.memberContainer}>
         <View style={styles.accountInnerContainer}>
           <Text style={styles.blackBoldText_13}>픽업 정보</Text>
-          {member.map((item) => (
-            <View key={item.memberId} style={styles.accountInfoContainer}>
-              <View style={styles.leftCol}>
-                <Text style={styles.blackRegularText}>예약인</Text>
-                <Text style={styles.blackRegularText}>전화번호</Text>
-                <Text style={styles.blackRegularText}>픽업 시간</Text>
-              </View>
-              <View style={styles.rightCol}>
-                <Text style={styles.blackRegularText}>{item.name}</Text>
-                <Text style={styles.blackRegularText}>{item.phoneNumber}</Text>
-                <Text style={styles.blackRegularText}>{item.time}</Text>
-              </View>
+          <View style={styles.accountInfoContainer}>
+            <View style={styles.leftCol}>
+              <Text style={styles.blackRegularText}>예약인</Text>
+              <Text style={styles.blackRegularText}>전화번호</Text>
+              <Text style={styles.blackRegularText}>픽업 시간</Text>
             </View>
-          ))}
+            <View style={styles.rightCol}>
+              <Text style={styles.blackRegularText}>{data.pickup.name}</Text>
+              <Text style={styles.blackRegularText}>{data.pickup.phone}</Text>
+              <Text style={styles.blackRegularText}>{data.pickup.timeText}</Text>
+            </View>
+          </View>
         </View>
       </View>
       <View style={{ width: '100%' }}>

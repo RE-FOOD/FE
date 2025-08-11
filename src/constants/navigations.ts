@@ -15,6 +15,8 @@ const userNavigations = {
   ORDER_DETAIL: 'OrderDetail',
   REVIEW_WRITE: 'ReviewWrite',
   MYPAGE_HOME: 'MypageHome',
+  NiCKNAME_CHANGE: 'NicknameChange',
+  COUPON_BOX: 'CouponBox',
   LOCATION: 'Location',
   NOTIFICATION: 'Notification',
   CART: 'Cart',

@@ -16,10 +16,11 @@ const userNavigations = {
   REVIEW_WRITE: 'ReviewWrite',
   MYPAGE_HOME: 'MypageHome',
   NiCKNAME_CHANGE: 'NicknameChange',
-  COUPON_BOX: 'CouponBox',
   LOCATION: 'Location',
   NOTIFICATION: 'Notification',
   CART: 'Cart',
+  REVIEW: 'Review',
+  REPORT: 'GreenReport',
 } as const;
 
 export { loggedOutNavigations, userNavigations };

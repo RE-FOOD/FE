@@ -1,33 +1,46 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Check from '@/assets/icons/msg-check.svg';
+import NicknameInput from '@/components/signup/NicknameInput';
 import { colors } from '@/constants/colors';
 
+type Status = 'none' | 'valid' | 'invalid' | 'duplicated';
+
 const NicknameChangeScreen = () => {
-  const [text, setText] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [nicknameStatus, setNicknameStatus] = useState<Status>('none');
+  const [nicknameErrorVisible, setNicknameErrorVisible] = useState(false);
+
+  const onChangeNickname = (val: string) => {
+    setNickname(val);
+    if (nicknameStatus === 'valid') setNicknameStatus('invalid');
+    setNicknameErrorVisible(false);
+  };
+
+  const onCheckNickname = async () => {
+    if (!nickname.trim()) {
+      setNicknameStatus('none');
+      setNicknameErrorVisible(true);
+      return;
+    }
+    const isDup = false; // 예시
+    setNicknameStatus(isDup ? 'duplicated' : 'valid');
+    setNicknameErrorVisible(true);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         <Text style={styles.grayRegularText}>닉네임</Text>
-        <View style={styles.nicknameContainer}>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              value={text}
-              placeholder="닉네임을 입력하세요"
-              onChangeText={setText}
-            />
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.whiteRegularText_14}>중복확인</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.hintRow}>
-            <Check width={16} height={16} />
-            <Text style={styles.greenRegularText_13}>사용 가능한 닉네임입니다.</Text>
-          </View>
-        </View>
+        <NicknameInput
+          nickname={nickname}
+          onChangeNickname={onChangeNickname}
+          onCheckNickname={onCheckNickname}
+          nicknameStatus={nicknameStatus}
+          nicknameErrorVisible={nicknameErrorVisible}
+          setNicknameStatus={setNicknameStatus}
+          setNicknameErrorVisible={setNicknameErrorVisible}
+        />
       </View>
       <View style={styles.bottomArea}>
         <TouchableOpacity style={styles.submitButton}>
@@ -49,21 +62,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 24,
     gap: 13,
-  },
-  nicknameContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    gap: 7,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.GRAY_200,
-    borderRadius: 10,
-    overflow: 'hidden',
-    justifyContent: 'space-between',
   },
   button: {
     paddingVertical: 3,

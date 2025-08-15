@@ -1,11 +1,10 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Arrow from '@/assets/icons/arrow.svg';
-import Level1 from '@/assets/images/level1.svg';
 import LevelProgress from '@/components/mypage/LevelProgress';
 import { colors } from '@/constants/colors';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
@@ -25,20 +24,13 @@ const MypageHomeScreen = () => {
         <View style={styles.innerContainer}>
           <View style={styles.profileInnerContainer}>
             <View>
-              <Level1 />
+              <Image source={require('@/assets/images/level2.webp')} style={styles.logo} />
             </View>
             <View style={styles.couponContainer}>
               <View style={styles.textContainer}>
                 <Text style={styles.blackBoldText_16}>홍시님, 안녕하세요!</Text>
                 <Text style={styles.grayRegularText}>hyewha@kosa.com</Text>
               </View>
-              <TouchableOpacity
-                style={styles.coupon}
-                onPress={() => navigation.navigate('CouponBox')}
-              >
-                <Text style={styles.grayRegularText}>쿠폰함</Text>
-                <Arrow />
-              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.levelContainer}>
@@ -72,23 +64,22 @@ const MypageHomeScreen = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.itemContainer}>
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => navigation.navigate('GreenReport')}
+        >
           <View style={styles.itemTextContainer}>
             <Text style={styles.blackRegularText_16}>환경 리포트</Text>
             <Arrow />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.itemContainer}>
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => navigation.navigate('Review')}
+        >
           <View style={styles.itemTextContainer}>
             <Text style={styles.blackRegularText_16}>리뷰 관리</Text>
-            <Arrow />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.itemContainer}>
-          <View style={styles.itemTextContainer}>
-            <Text style={styles.blackRegularText_16}>회원 탈퇴</Text>
             <Arrow />
           </View>
         </TouchableOpacity>
@@ -120,6 +111,10 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
+  },
+  logo: {
+    width: 73,
+    height: 73,
   },
   innerContainer: {
     padding: 20,
@@ -167,8 +162,8 @@ const styles = StyleSheet.create({
     height: 69,
     justifyContent: 'center',
     backgroundColor: colors.WHITE,
-    borderColor: colors.GRAY_700,
-    borderBottomWidth: 1,
+    borderColor: colors.GRAY_200,
+    borderWidth: 1,
   },
   itemTextContainer: {
     flexDirection: 'row',

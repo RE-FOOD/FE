@@ -1,10 +1,7 @@
 import { StyleSheet, View, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import { colors } from '@/constants/colors';
-import { userNavigations } from '@/constants/navigations';
 import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 export const ORDER_DETAIL_MOCK: Record<number, any> = {
@@ -91,23 +88,12 @@ type Props = {
   route: OrderDetailProp;
 };
 
-type Nav = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
-
 const HistoryDetailScreen = ({ route }: Props) => {
-  const navigation = useNavigation<Nav>();
-
   const id = Number(route.params.orderId);
   const data = ORDER_DETAIL_MOCK[id];
   if (!data) return <Text>주문을 찾을 수 없습니다.</Text>;
 
   const fmtWon = (n: number) => n.toLocaleString('ko-KR');
-
-  const handleDelete = async () => {
-    navigation.navigate('UserTabs', {
-      screen: userNavigations.HISTORY_HOME,
-      params: { deletedOrderId: id, nonce: Date.now() },
-    });
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -184,11 +170,6 @@ const HistoryDetailScreen = ({ route }: Props) => {
             </View>
           </View>
         </View>
-      </View>
-      <View style={{ width: '100%' }}>
-        <TouchableOpacity style={styles.button} onPress={handleDelete}>
-          <Text style={styles.greenRegularText_13}>주문 내역 삭제</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

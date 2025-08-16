@@ -1,0 +1,144 @@
+import { StyleSheet, Image, View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import LevelProgress from '@/components/mypage/LevelProgress';
+import { colors } from '@/constants/colors';
+
+const GreenReport = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.topContainer}>
+        <View style={styles.imgContainer}>
+          <Image source={require('@/assets/images/level2.webp')} style={styles.logo} />
+        </View>
+        <View style={styles.levelContainer}>
+          <Text style={styles.greenBoldText_20}>2단계 묘목</Text>
+          <Text style={styles.blackRegularText_16}>현재 이서님은 2단계 등급입니다.</Text>
+        </View>
+        <LevelProgress
+          value={0.35} // 35% 채움
+          labels={['씨앗', '묘목', '나무', '환경쿠폰']}
+          height={16}
+          colors={['#FF6A3D', '#FFC0A3']}
+        />
+      </View>
+      <View style={styles.bottomContainer}>
+        <View style={styles.glevelContainer}>
+          <Text style={styles.greenBoldText_20}>환경 레벨이란?</Text>
+          <Text style={styles.centerText}>
+            사용자의 음식 구출 횟수, {'\n'} 다회용기 사용 횟수를 기준으로 {'\n'}
+            환경 점수를 계산한 등급 제도입니다.
+          </Text>
+        </View>
+        <View style={styles.glevelContainer}>
+          <Text style={styles.greenBoldText_20}>환경 쿠폰 혜택</Text>
+          <Text style={styles.centerText}>쿠폰 혜택 내용 기재</Text>
+        </View>
+        <View style={styles.savingContainer}>
+          <View style={styles.round}>
+            <Text style={styles.whiteBoldText_14}>상세 적립 기준</Text>
+          </View>
+          <View style={styles.rectangle}>
+            <Text style={styles.blackRegularText_13}>① 음식 구출 시 nn점 적립</Text>
+            <Text style={styles.blackRegularText_13}>② 다회용기 사용 시 nn점 적립</Text>
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    backgroundColor: colors.GRAY_200,
+    gap: 25,
+  },
+  topContainer: {
+    paddingTop: 20,
+    paddingBottom: 30,
+    gap: 25,
+    alignSelf: 'stretch',
+    borderBottomStartRadius: 20,
+    borderBottomEndRadius: 20,
+    backgroundColor: colors.WHITE,
+    paddingHorizontal: 24,
+  },
+  bottomContainer: {
+    paddingVertical: 30,
+    paddingHorizontal: 30,
+    flexDirection: 'column',
+    gap: 35,
+    alignSelf: 'stretch',
+    backgroundColor: colors.WHITE,
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
+  },
+  imgContainer: {
+    alignItems: 'center',
+  },
+  levelContainer: {
+    alignItems: 'center',
+    gap: 3,
+  },
+  glevelContainer: {
+    alignItems: 'center',
+    gap: 11,
+  },
+  savingContainer: {
+    width: 297,
+    height: 101,
+  },
+  centerText: {
+    textAlign: 'center',
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 15,
+  },
+  logo: {
+    width: 73,
+    height: 73,
+  },
+  round: {
+    alignSelf: 'center',
+    paddingHorizontal: 13,
+    paddingVertical: 5,
+    alignItems: 'center',
+    gap: 10,
+    borderRadius: 20,
+    position: 'absolute',
+    top: -12,
+    zIndex: 1,
+    backgroundColor: colors.GREEN,
+  },
+  rectangle: {
+    borderColor: colors.GREEN,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingVertical: 28,
+    paddingHorizontal: 50,
+  },
+  blackRegularText_13: {
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 13,
+  },
+  blackRegularText_16: {
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 16,
+  },
+  whiteBoldText_14: {
+    color: colors.WHITE,
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 14,
+  },
+  greenBoldText_20: {
+    color: colors.GREEN,
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 20,
+  },
+});
+
+export default GreenReport;

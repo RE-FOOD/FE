@@ -1,13 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect, useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
-import { userNavigations } from '@/constants/navigations';
-import { UserBottomTabsParamList } from '@/navigations/bottomTabs/UserBottomTabsNavigator';
+
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 export const initialOrders = [
@@ -41,24 +40,12 @@ export const initialOrders = [
 ];
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
-type HomeRoute = RouteProp<UserBottomTabsParamList, typeof userNavigations.HISTORY_HOME>;
 const deletedIds = new Set<number>();
 
 const HistoryHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const route = useRoute<HomeRoute>();
-  const [orders, setOrders] = useState(() => initialOrders.filter((o) => !deletedIds.has(o.id)));
 
-  useFocusEffect(
-    useCallback(() => {
-      const id = route.params?.deletedOrderId;
-      if (id) {
-        deletedIds.add(id);
-        setOrders((prev) => prev.filter((o) => o.id !== id));
-        navigation.setParams({ deletedOrderId: undefined, nonce: undefined } as any);
-      }
-    }, [route.params?.deletedOrderId])
-  );
+  const [orders, setOrders] = useState(() => initialOrders.filter((o) => !deletedIds.has(o.id)));
 
   const handleCancel = async (targetId: number) => {
     deletedIds.add(targetId);

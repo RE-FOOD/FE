@@ -7,10 +7,11 @@ import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import axios from 'axios';
-import { kakaoLogin } from '@/api/auth';
 import Kakao from '@/assets/icons/kakao.svg';
 import { loggedOutNavigations } from '@/constants/navigations';
+import useAuth from '@/hooks/queries/useAuth';
 import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+import { useAuthStore } from '@/zustand/useAuthStore';
 
 type NavigationProp = StackNavigationProp<
   LoggedOutStackParamList,
@@ -18,6 +19,7 @@ type NavigationProp = StackNavigationProp<
 >;
 
 const LoginScreen = () => {
+  const { loginMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
 
   const handlePressSignup = () => {
@@ -31,6 +33,7 @@ const LoginScreen = () => {
 
   const handleKakaoLogin = async (): Promise<void> => {
     const deviceToken = await getFcmToken();
+    let kakaoAccessToken: string | undefined;
     console.log(`deviceToken: ${deviceToken}`);
 
     // 1) 카카오톡 로그인 시도
@@ -39,7 +42,9 @@ const LoginScreen = () => {
       .catch((err) => {
         if (err?.code === 'E_CANCELLED_OPERATION') {
           console.log('Talk 취소 → 계정(웹) 로그인 시도');
-          return KakaoLogin.loginWithKakaoAccount();
+          return KakaoLogin.loginWithKakaoAccount()
+            .then((res) => Promise.resolve(res))
+            .catch((err2) => Promise.reject(err2));
         }
         // 그 외 에러는 상위 catch로
         return Promise.reject(err);
@@ -49,29 +54,35 @@ const LoginScreen = () => {
         if (!res?.accessToken) {
           return Promise.reject(new Error('No Kakao access token'));
         }
-        const accessToken = res.accessToken;
-        // 네 API: POST /api/auth/login/members { accessToken }
-        return kakaoLogin(accessToken);
+        kakaoAccessToken = res.accessToken;
+        return loginMutation.mutateAsync({
+          accessToken: kakaoAccessToken,
+          fcmToken: deviceToken,
+        });
+        // return kakaoLogin(kakaoAccessToken, deviceToken);
+        // setAccessToken(res.accessToken);
+        // return kakaoLogin(accessToken);
       })
       // 4) 우리 토큰 수령 → 저장/네비게이션
       .then((tokens) => {
         // saveTokens(tokens);
         // navigation.replace('UserTabs');
+        // setAsyncData(storageKeys)
         console.log('서버 토큰 발급 OK');
         console.log(`tokens: ${tokens}`);
       })
       // 5) 에러 공통 처리(404 → 회원가입)
       .catch((e) => {
         if (axios.isAxiosError(e) && e.response?.status === 404) {
-          // (선택) 카카오 프로필 프리필
-          KakaoLogin.getProfile()
+          useAuthStore.getState().setKakaoAccessToken(kakaoAccessToken);
+          // 카카오 프로필 프리필
+          return KakaoLogin.getProfile()
             .then(() => {
               navigation.navigate(loggedOutNavigations.SIGNUP_TYPE);
             })
             .catch(() => {
               navigation.navigate(loggedOutNavigations.SIGNUP_TYPE);
             });
-          return;
         }
         if (e?.code === 'E_CANCELLED_OPERATION') {
           // 계정(웹뷰)에서도 사용자가 취소한 경우

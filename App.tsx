@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import { FirebaseMessagingTypes, getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
+import queryClient from '@/api/queryClient';
 import { NotificationProvider } from '@/hooks/useNotification';
 import RootNavigator from '@/navigations/root/RootNavigator';
 import pushNoti from '@/utils/pushNoti';
@@ -10,8 +11,6 @@ import pushNoti from '@/utils/pushNoti';
 const AppTheme = {
   ...DefaultTheme,
 };
-
-const queryClient = new QueryClient();
 
 function AppContent() {
   useEffect(() => {
@@ -55,6 +54,7 @@ function AppContent() {
     </QueryClientProvider>
   );
 }
+
 function App() {
   return (
     <NotificationProvider>

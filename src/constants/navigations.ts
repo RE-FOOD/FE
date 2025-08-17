@@ -3,6 +3,7 @@ const loggedOutNavigations = {
   SIGNUP_TYPE: 'SignupType',
   USER_SIGNUP: 'UserSignup',
   SELLER_SIGNUP: 'SellerSignup',
+  DAUM_POSTCODE: 'DaumPostcode',
 } as const;
 
 const userNavigations = {

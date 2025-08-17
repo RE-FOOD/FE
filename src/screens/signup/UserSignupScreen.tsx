@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,184 +9,216 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getMessaging, getToken } from '@react-native-firebase/messaging';
 import { useNavigation } from '@react-navigation/native';
-import DaumPostcode from './DaumPostcode';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 import NicknameInput from '@/components/signup/NicknameInput';
 import PhoneNumberInput from '@/components/signup/PhoneNumberInput';
 import RegionSelector from '@/components/signup/RegionSelector';
+
 import { colors } from '@/constants/colors';
-import { DaumPostcodeData } from '@/types/postcode';
+import { loggedOutNavigations } from '@/constants/navigations';
+
+import useAuth from '@/hooks/queries/useAuth';
+import { useCheckNickname } from '@/hooks/queries/useMember';
+import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+import { useAuthStore } from '@/zustand/useAuthStore';
+import { useSignupStore } from '@/zustand/useSignupStore';
+
+type NavigationProp = StackNavigationProp<LoggedOutStackParamList>;
+
+const nicknameRegex = /^[가-힣a-zA-Z0-9]{1,6}$/; // 한글/영문/숫자 + 1~6자
 
 const UserSignupScreen = () => {
-  const navigation = useNavigation();
+  const { signupMutation, loginMutation } = useAuth();
+  const kakaoAccessToken = useAuthStore((s) => s.kakaoAccessToken);
+  const navigation = useNavigation<NavigationProp>();
 
-  const [nickname, setNickname] = useState('');
-  const [nicknameStatus, setNicknameStatus] = useState<'none' | 'valid' | 'invalid' | 'duplicated'>(
-    'none'
-  );
+  const { nickname, phone, region, setNickname, setPhone } = useSignupStore();
+
+  const [nicknameStatus, setNicknameStatus] = useState<
+    'none' | 'valid' | 'invalid' | 'duplicated' | 'invalidFormat'
+  >('none');
   const [nicknameErrorVisible, setNicknameErrorVisible] = useState(false);
 
-  const [tel1, setTel1] = useState('');
-  const [tel2, setTel2] = useState('');
-  const [telPrefix, setTelPrefix] = useState('010');
-  const [telError, setTelError] = useState('');
+  const initial = useMemo(() => {
+    if (phone && phone.length >= 10) {
+      const prefix = phone.slice(0, 3);
+      const mid = phone.slice(3, 7);
+      const tail = phone.slice(7, 11);
+      return { prefix, mid, tail };
+    }
+    return { prefix: '010', mid: '', tail: '' };
+  }, [phone]);
 
-  const [region, setRegion] = useState('');
-  const [isPostcodeMode, setIsPostcodeMode] = useState(false);
+  const [telPrefix, setTelPrefix] = useState(initial.prefix);
+  const [tel1, setTel1] = useState(initial.mid);
+  const [tel2, setTel2] = useState(initial.tail);
+  const [telError, setTelError] = useState('');
   const [regionError, setRegionError] = useState('');
 
-  const isPhoneValid = useCallback(() => {
-    return tel1.length === 4 && tel2.length === 4;
-  }, [tel1, tel2]);
+  const { refetch: refetchNickname } = useCheckNickname(nickname, { enabled: false });
+
+  const isPhoneValid = useCallback(() => tel1.length === 4 && tel2.length === 4, [tel1, tel2]);
 
   useEffect(() => {
-    if (telError !== '' && isPhoneValid()) {
-      setTelError('');
-    }
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      useSignupStore.getState().reset();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const full = `${telPrefix}${tel1}${tel2}`;
+    setPhone(full);
+  }, [telPrefix, tel1, tel2, setPhone]);
+
+  useEffect(() => {
+    if (telError && isPhoneValid()) setTelError('');
   }, [telError, isPhoneValid]);
 
   useEffect(() => {
-    if (regionError && region.trim() !== '') {
-      setRegionError('');
-    }
+    if (regionError && region.trim() !== '') setRegionError('');
   }, [region, regionError]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: !isPostcodeMode,
-    });
-  }, [isPostcodeMode, navigation]);
+  const allValid = nicknameStatus === 'valid' && isPhoneValid() && region.trim().length > 0;
 
-  const allValid = nicknameStatus === 'valid' && isPhoneValid();
+  const checkNickname = async () => {
+    const trimmed = nickname.trim();
 
-  // TODO: 임시 처리, 추후 API 연결
-  const checkNickname = () => {
-    if (nickname.trim() === '') {
+    if (trimmed === '' || trimmed.length === 0) {
       setNicknameStatus('none');
       setNicknameErrorVisible(true);
-    } else if (nickname === '리푸드') {
-      setNicknameStatus('valid');
-      setNicknameErrorVisible(true);
-    } else if (nickname === '리푸') {
-      setNicknameStatus('duplicated');
-      setNicknameErrorVisible(true);
-    } else {
-      setNicknameStatus('invalid');
-      setNicknameErrorVisible(true);
+      return;
     }
+    if (!nicknameRegex.test(trimmed)) {
+      setNicknameStatus('invalidFormat');
+      setNicknameErrorVisible(true);
+      return;
+    }
+
+    const res = await refetchNickname();
+    const ok = res.data?.statusCode === 200;
+    setNicknameStatus(ok ? 'valid' : 'duplicated');
+    setNicknameErrorVisible(true);
   };
 
-  const handleSignup = () => {
+  const getFcmToken = async () => {
+    const fcmToken = await getToken(getMessaging());
+    return fcmToken;
+  };
+
+  const handleSignup = async () => {
     let hasError = false;
 
     const trimmed = nickname.trim();
-
-    if (trimmed === '') {
+    if (trimmed === '' || trimmed.length === 0) {
       setNicknameStatus('none');
       setNicknameErrorVisible(true);
       hasError = true;
-    } else if (!nicknameErrorVisible) {
-      if (nicknameStatus !== 'valid') {
-        setNicknameStatus('invalid');
-        setNicknameErrorVisible(true);
-        hasError = true;
-      }
-    } else {
-      if (nicknameStatus !== 'valid') {
-        hasError = true;
-      }
     }
-
+    if (nicknameStatus !== 'valid') {
+      setNicknameErrorVisible(true);
+      hasError = true;
+    }
     if (!isPhoneValid()) {
       setTelError('000-0000-0000 형식으로 입력해주세요.');
       hasError = true;
-    } else {
-      setTelError('');
     }
-
-    if (!region || region.trim() === '') {
+    if (!region.trim()) {
       setRegionError('지역을 설정해주세요.');
       hasError = true;
-    } else {
-      setRegionError('');
     }
-
     if (hasError) return;
 
-    // 회원가입 처리
-    const _phoneNumber = `${telPrefix}${tel1}${tel2}`;
-  };
-
-  const handleDaumPostcode = (data: DaumPostcodeData) => {
-    const fullAddress = data.address;
-    setRegion(fullAddress);
-    setIsPostcodeMode(false);
+    const deviceToken = await getFcmToken();
+    // console.log(`kakaoToken: ${kakaoAccessToken}`);
+    signupMutation.mutate(
+      { kakaoAccessToken, phone, nickname, region },
+      {
+        onSuccess: () => {
+          useAuthStore.getState().clear();
+          useSignupStore.getState().reset();
+          loginMutation.mutate({
+            accessToken: kakaoAccessToken!,
+            fcmToken: deviceToken,
+          });
+        },
+      }
+    );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {isPostcodeMode ? (
-        <DaumPostcode onSubmit={handleDaumPostcode} />
-      ) : (
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={{ flex: 1 }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 30 }}
+          keyboardShouldPersistTaps="handled"
+          style={styles.contentContainer}
         >
-          <ScrollView
-            contentContainerStyle={{ paddingBottom: 30 }}
-            keyboardShouldPersistTaps="handled"
-            style={styles.contentContainer}
-          >
-            <View style={styles.boxContainer}>
-              <View style={{ gap: 7 }}>
-                <Text style={styles.title}>닉네임</Text>
-                <Text style={styles.subTitle}>마이페이지에서 수정할 수 있어요</Text>
-              </View>
-
-              <NicknameInput
-                nickname={nickname}
-                onChangeNickname={setNickname}
-                onCheckNickname={checkNickname}
-                nicknameStatus={nicknameStatus}
-                nicknameErrorVisible={nicknameErrorVisible}
-                setNicknameErrorVisible={setNicknameErrorVisible}
-                setNicknameStatus={setNicknameStatus}
-              />
+          {/* 닉네임 */}
+          <View style={styles.boxContainer}>
+            <View style={{ gap: 7 }}>
+              <Text style={styles.title}>닉네임</Text>
+              <Text style={styles.subTitle}>마이페이지에서 수정할 수 있어요</Text>
             </View>
 
-            <View style={styles.boxContainer}>
-              <Text style={styles.title}>휴대전화</Text>
-              <PhoneNumberInput
-                telPrefix={telPrefix}
-                tel1={tel1}
-                tel2={tel2}
-                onTelPrefixChange={setTelPrefix}
-                onTel1Change={setTel1}
-                onTel2Change={setTel2}
-                telError={telError}
-              />
-            </View>
+            <NicknameInput
+              nickname={nickname}
+              onChangeNickname={(v) => {
+                setNickname(v);
+                // 입력 시 valid -> invalid
+                if (nicknameStatus === 'valid') {
+                  setNicknameStatus('invalid');
+                  setNicknameErrorVisible(false);
+                }
+              }}
+              onCheckNickname={checkNickname}
+              nicknameStatus={nicknameStatus}
+              nicknameErrorVisible={nicknameErrorVisible}
+              setNicknameStatus={setNicknameStatus}
+            />
+          </View>
 
-            <View style={styles.boxContainer}>
-              <View style={{ gap: 7 }}>
-                <Text style={styles.title}>지역</Text>
-                <Text style={styles.subTitle}>선택하신 지역을 기준으로 주변 가게를 보여드려요</Text>
-              </View>
-              <RegionSelector
-                region={region}
-                regionError={regionError}
-                onPress={() => setIsPostcodeMode(true)}
-              />
+          {/* 휴대전화 */}
+          <View style={styles.boxContainer}>
+            <Text style={styles.title}>휴대전화</Text>
+            <PhoneNumberInput
+              telPrefix={telPrefix}
+              tel1={tel1}
+              tel2={tel2}
+              onTelPrefixChange={setTelPrefix}
+              onTel1Change={setTel1}
+              onTel2Change={setTel2}
+              telError={telError}
+            />
+          </View>
+
+          {/* 지역 */}
+          <View style={styles.boxContainer}>
+            <View style={{ gap: 7 }}>
+              <Text style={styles.title}>지역</Text>
+              <Text style={styles.subTitle}>선택하신 지역을 기준으로 주변 가게를 보여드려요</Text>
             </View>
-          </ScrollView>
-          <TouchableOpacity
-            style={[styles.signupBtn, { backgroundColor: allValid ? colors.GREEN : '#D4D4D4' }]}
-            onPress={handleSignup}
-          >
-            <Text style={styles.signupText}>회원가입 완료</Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      )}
+            <RegionSelector
+              region={region}
+              regionError={regionError}
+              onPress={() => navigation.navigate(loggedOutNavigations.DAUM_POSTCODE)}
+            />
+          </View>
+        </ScrollView>
+
+        <TouchableOpacity
+          style={[styles.signupBtn, { backgroundColor: allValid ? colors.GREEN : '#D4D4D4' }]}
+          onPress={handleSignup}
+        >
+          <Text style={styles.signupText}>회원가입 완료</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

@@ -7,10 +7,11 @@ type Props = {
   nickname: string;
   onChangeNickname: (val: string) => void;
   onCheckNickname: () => void;
-  nicknameStatus: 'none' | 'valid' | 'invalid' | 'duplicated';
+  nicknameStatus: 'none' | 'valid' | 'invalid' | 'duplicated' | 'invalidFormat';
   nicknameErrorVisible: boolean;
-  setNicknameStatus: (status: 'none' | 'valid' | 'invalid' | 'duplicated') => void;
-  setNicknameErrorVisible: (val: boolean) => void;
+  setNicknameStatus: (
+    status: 'none' | 'valid' | 'invalid' | 'duplicated' | 'invalidFormat'
+  ) => void;
 };
 
 const NicknameInput = ({
@@ -20,7 +21,6 @@ const NicknameInput = ({
   nicknameStatus,
   nicknameErrorVisible,
   setNicknameStatus,
-  setNicknameErrorVisible,
 }: Props) => {
   return (
     <View style={styles.inputContainer}>
@@ -33,9 +33,9 @@ const NicknameInput = ({
             onChangeNickname(text);
             if (nicknameStatus === 'valid') {
               setNicknameStatus('invalid');
-              setNicknameErrorVisible(false);
             }
           }}
+          maxLength={6}
         />
         <TouchableOpacity style={styles.dupCheckBtnInside} onPress={onCheckNickname}>
           <Text style={styles.dupCheckText}>중복확인</Text>
@@ -56,6 +56,10 @@ const NicknameInput = ({
 
       {nicknameErrorVisible && nicknameStatus === 'none' && (
         <ValidationMessage type="error" message="닉네임을 입력해주세요." />
+      )}
+
+      {nicknameErrorVisible && nicknameStatus === 'invalidFormat' && (
+        <ValidationMessage type="error" message="닉네임은 한글, 영문, 숫자만 입력할 수 있습니다." />
       )}
     </View>
   );

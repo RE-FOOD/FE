@@ -1,11 +1,12 @@
 import LoggedOutStackNavigator from '../stack/LoggedOutStackNavigator';
 import UserStackNavigator from '../stack/UserStackNavigator';
+import useAuth from '@/hooks/queries/useAuth';
 
 function RootNavigator() {
-  const isAuthenticated = true;
+  const { isLogin } = useAuth();
   const isSeller = false;
 
-  if (!isAuthenticated) {
+  if (!isLogin) {
     return <LoggedOutStackNavigator />;
   }
 

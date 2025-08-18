@@ -69,6 +69,8 @@ ios/*.hmap
 .env.development.local
 .env.test.local
 .env.production.local
+.env.development
+.env.production
 
 # Logs / Reports
 logs/
@@ -100,3 +102,4 @@ web-build/
 .parcel-cache
 .docusaurus/
 .serverless/
+google-services.json

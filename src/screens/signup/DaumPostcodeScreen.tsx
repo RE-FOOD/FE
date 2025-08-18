@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import WebView, { WebViewMessageEvent } from 'react-native-webview';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import LoadingScreen from '../_common/LoadingScreen';
-import { DaumPostcodeData } from '@/types/postcode';
+import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+import { useSignupStore } from '@/zustand/useSignupStore';
 
-interface DaumPostcodeProps {
-  onSubmit: (data: DaumPostcodeData) => void;
-}
+type NavigationProp = StackNavigationProp<LoggedOutStackParamList>;
 
-const DaumPostcode = ({ onSubmit }: DaumPostcodeProps) => {
+const DaumPostcodeScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const { setRegion } = useSignupStore();
   const [loading, setLoading] = useState(true);
 
   const postcodeHTML = `
@@ -60,7 +63,8 @@ const DaumPostcode = ({ onSubmit }: DaumPostcodeProps) => {
       }
 
       // 주소 선택 완료
-      onSubmit(data);
+      setRegion(data.address);
+      navigation.goBack();
     } catch (error) {
       console.error('Error parsing postcode data:', error);
     }
@@ -103,4 +107,4 @@ const DaumPostcode = ({ onSubmit }: DaumPostcodeProps) => {
   );
 };
 
-export default DaumPostcode;
+export default DaumPostcodeScreen;

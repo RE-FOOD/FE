@@ -133,7 +133,6 @@ const UserSignupScreen = () => {
     if (hasError) return;
 
     const deviceToken = await getFcmToken();
-    // console.log(`kakaoToken: ${kakaoAccessToken}`);
     signupMutation.mutate(
       { kakaoAccessToken, phone, nickname, region },
       {

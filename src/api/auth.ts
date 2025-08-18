@@ -25,13 +25,6 @@ const kakaoSignup = async ({
   nickname,
   region,
 }: RequestMember): Promise<void> => {
-  const body = {
-    accessToken: kakaoAccessToken,
-    phone,
-    nickname,
-    address: region,
-  };
-  console.log('signup body →', JSON.stringify(body));
   const { data } = await axiosInstance.post('/auth/signup/members', {
     accessToken: kakaoAccessToken,
     phone,
@@ -48,9 +41,7 @@ type ResponseToken = {
 };
 
 const getProfile = async (): Promise<Profile> => {
-  console.log(`프로필 조회 시작`);
   const { data } = await axiosInstance.get('/members/profile');
-  console.log(`프로필 조회: ${data}`);
   return data;
 };
 

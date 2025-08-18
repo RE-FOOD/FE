@@ -41,7 +41,6 @@ function useGetRefreshToken() {
   useEffect(() => {
     (async () => {
       if (isSuccess) {
-        console.log(`success data: ${data.accessToken}`);
         setHeader('Authorization', `Bearer ${data?.accessToken}`);
         await setEncryptStorage('refreshToken', data?.refreshToken);
       }

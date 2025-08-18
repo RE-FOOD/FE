@@ -41,7 +41,6 @@ const LoginScreen = () => {
       // 2) 사용자가 톡에서 취소하면 계정(웹뷰)으로 폴백
       .catch((err) => {
         if (err?.code === 'E_CANCELLED_OPERATION') {
-          console.log('Talk 취소 → 계정(웹) 로그인 시도');
           return KakaoLogin.loginWithKakaoAccount()
             .then((res) => Promise.resolve(res))
             .catch((err2) => Promise.reject(err2));
@@ -64,12 +63,11 @@ const LoginScreen = () => {
         // return kakaoLogin(accessToken);
       })
       // 4) 우리 토큰 수령 → 저장/네비게이션
-      .then((tokens) => {
+      .then((_tokens) => {
         // saveTokens(tokens);
         // navigation.replace('UserTabs');
         // setAsyncData(storageKeys)
-        console.log('서버 토큰 발급 OK');
-        console.log(`tokens: ${tokens}`);
+        console.log('서버 토큰 발급 성공');
       })
       // 5) 에러 공통 처리(404 → 회원가입)
       .catch((e) => {

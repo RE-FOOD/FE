@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getAccessToken, getProfile, kakaoLogin, kakaoSignup } from '@/api/auth';
+import { getAccessToken, getProfile, kakaoLogin, kakaoSignup, logout } from '@/api/auth';
 import queryClient from '@/api/queryClient';
+import { queryKeys, storageKeys } from '@/constants/keys';
 import { numbers } from '@/constants/numbers';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/api';
 import { Profile } from '@/types/domain';
@@ -20,9 +21,9 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
     mutationFn: kakaoLogin,
     onSuccess: async ({ accessToken, refreshToken }) => {
       setHeader('Authorization', `Bearer ${accessToken}`);
-      await setEncryptStorage('refreshToken', refreshToken);
+      await setEncryptStorage(storageKeys.REFRESH_TOKEN, refreshToken);
       queryClient.fetchQuery({
-        queryKey: ['auth', 'getAccessToken'],
+        queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
       });
     },
     ...mutationOptions,
@@ -31,7 +32,7 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
 
 function useGetRefreshToken() {
   const { data, isSuccess, isError } = useQuery({
-    queryKey: ['auth', 'getAccessToken'],
+    queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
     enabled: true,
     staleTime: numbers.ACCESS_TOKEN_REFRESH_TIME,
@@ -42,7 +43,7 @@ function useGetRefreshToken() {
     (async () => {
       if (isSuccess) {
         setHeader('Authorization', `Bearer ${data?.accessToken}`);
-        await setEncryptStorage('refreshToken', data?.refreshToken);
+        await setEncryptStorage(storageKeys.REFRESH_TOKEN, data?.refreshToken);
       }
     })();
   }, [isSuccess, data?.accessToken, data?.refreshToken]);
@@ -51,7 +52,7 @@ function useGetRefreshToken() {
     (async () => {
       if (isError) {
         removeHeader('Authorization');
-        await removeEncryptStorage('refreshToken');
+        await removeEncryptStorage(storageKeys.REFRESH_TOKEN);
       }
     })();
   }, [isError]);
@@ -62,8 +63,20 @@ function useGetRefreshToken() {
 function useGetProfile(queryOptions?: UseQueryCustomOptions<Profile>) {
   return useQuery({
     queryFn: getProfile,
-    queryKey: ['auth', 'getProfile'],
+    queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
     ...queryOptions,
+  });
+}
+
+function useLogout(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: async () => {
+      removeHeader('Authorization');
+      await removeEncryptStorage(storageKeys.REFRESH_TOKEN);
+      queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
+    },
+    ...mutationOptions,
   });
 }
 
@@ -74,8 +87,9 @@ function useAuth() {
   const { isSuccess: isLogin } = useGetProfile({
     enabled: refreshTokenQuery.isSuccess, // 성공 시 프로필 반환
   });
+  const logoutMutation = useLogout();
 
-  return { signupMutation, loginMutation, isLogin };
+  return { signupMutation, loginMutation, isLogin, logoutMutation };
 }
 
 export default useAuth;

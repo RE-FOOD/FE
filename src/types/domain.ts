@@ -25,4 +25,41 @@ interface Profile {
   location?: Location | null;
 }
 
-export type { Member, Profile };
+interface Menu {
+  id: number;
+  name: string;
+  price: number;
+  dailyDiscountPercent: number;
+  discountPrice: number;
+  dailyQuantity: number;
+  imageUrl: string;
+}
+
+interface StoreDetail {
+  name: string;
+  phoneNumber: string;
+  address: string;
+  description: string;
+  origin: string;
+  openTime: string;
+  closeTime: string;
+  category: string;
+  latitude: number;
+  longitude: number;
+  imageUrl: string[];
+  menus: Menu[];
+  like: boolean;
+  ratingAvg: number;
+  count: number;
+}
+
+interface Review {
+  id: number;
+  nickname: string;
+  rating: number; // 1~5
+  content: string;
+  createdAt: string;
+  menus: string[];
+}
+
+export type { Member, Profile, Menu, StoreDetail, Review };

@@ -17,6 +17,7 @@ import NotificationScreen from '@/screens/notification/NotificationScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
 import SearchResultScreen from '@/screens/store/SearchResultScreen';
 import StoreDetailScreen from '@/screens/store/StoreDetailScreen';
+import StoreInfoScreen from '@/screens/store/StoreInfoScreen';
 import StoreReviewScreen from '@/screens/store/StoreReviewScreen';
 
 export type UserStackParamList = {
@@ -24,6 +25,7 @@ export type UserStackParamList = {
   [userNavigations.STORE_HOME]: undefined;
   [userNavigations.STORE_DETAIL]: { storeId: number; storeName: string };
   [userNavigations.STORE_REVIEW]: { storeId: number };
+  [userNavigations.STORE_INFO]: { storeId: number; storeName: string };
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
   };
@@ -55,6 +57,11 @@ function UserStackNavigator() {
       <Stack.Screen
         name="StoreDetail"
         component={StoreDetailScreen}
+        options={{ title: '', headerShown: true }}
+      />
+      <Stack.Screen
+        name="StoreInfo"
+        component={StoreInfoScreen}
         options={{ title: '', headerShown: true }}
       />
       <Stack.Screen

@@ -10,6 +10,7 @@ const userNavigations = {
   STORE_HOME: 'StoreHome',
   STORE_DETAIL: 'StoreDetail',
   STORE_REVIEW: 'StoreReview',
+  STORE_INFO: 'StoreInfo',
   CATEGORY_LIST: 'CategoryList',
   SEARCH_RESULT: 'SearchResult',
   MAP_HOME: 'MapHome',

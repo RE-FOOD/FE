@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import queryClient from '@/api/queryClient';
 import CategoryCarousel from '@/components/store/CategoryCarousel';
 import HorizontalSnapList, { StoreItem } from '@/components/store/HorizontalSnapList';
 import SearchSection from '@/components/store/SearchSection';
@@ -45,6 +46,10 @@ const StoreHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const goDetail = (item: StoreItem) => {
+    queryClient.removeQueries({
+      queryKey: ['storeDetail'],
+      exact: false,
+    });
     navigation.navigate(userNavigations.STORE_DETAIL, { storeId: item.id, storeName: item.name });
   };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import ReviewItem from './ReviewItem';
+import ReviewItem from '../../components/store/ReviewItem';
 import { colors } from '@/constants/colors';
 import { Review } from '@/types/domain';
 

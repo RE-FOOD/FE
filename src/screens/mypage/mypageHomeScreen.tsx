@@ -7,11 +7,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Arrow from '@/assets/icons/arrow.svg';
 import LevelProgress from '@/components/mypage/LevelProgress';
 import { colors } from '@/constants/colors';
+import useAuth from '@/hooks/queries/useAuth';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
 
 const MypageHomeScreen = () => {
+  const { logoutMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
   return (
     <SafeAreaView style={styles.container}>
@@ -97,7 +99,9 @@ const MypageHomeScreen = () => {
           style={styles.logoutWrapper}
           activeOpacity={0.6}
         >
-          <Text style={styles.logoutText}>로그아웃</Text>
+          <Text onPress={() => logoutMutation.mutate(null)} style={styles.logoutText}>
+            로그아웃
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

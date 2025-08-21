@@ -5,13 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import LoadingScreen from '../_common/LoadingScreen';
 import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+import { parseDaumRoadAddress } from '@/utils/address';
 import { useSignupStore } from '@/zustand/useSignupStore';
 
 type NavigationProp = StackNavigationProp<LoggedOutStackParamList>;
 
 const DaumPostcodeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { setRegion } = useSignupStore();
+  const { setAddress, setRoadAddress } = useSignupStore();
   const [loading, setLoading] = useState(true);
 
   const postcodeHTML = `
@@ -63,7 +64,9 @@ const DaumPostcodeScreen = () => {
       }
 
       // 주소 선택 완료
-      setRegion(data.address);
+      const parsed = parseDaumRoadAddress(data);
+      setAddress(parsed.formattedFull);
+      setRoadAddress(parsed.formattedShort);
       navigation.goBack();
     } catch (error) {
       console.error('Error parsing postcode data:', error);

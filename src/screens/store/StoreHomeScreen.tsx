@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import queryClient from '@/api/queryClient';
 import CategoryCarousel from '@/components/store/CategoryCarousel';
 import HorizontalSnapList, { StoreItem } from '@/components/store/HorizontalSnapList';
 import SearchSection from '@/components/store/SearchSection';
@@ -24,7 +25,7 @@ const CATEGORIES: { key: CategoryKey; label: string }[] = [
 ];
 
 const DISCOUNT_STORES: StoreItem[] = new Array(6).fill(null).map((_, i) => ({
-  id: `d${i}`,
+  id: i,
   name: i % 2 ? '판떡볶이' : '잠봉베르 샌드위치',
   rating: 4.5 + Math.random() * 0.4,
   price: i % 2 ? '10,000원' : '4,000원',
@@ -34,7 +35,7 @@ const DISCOUNT_STORES: StoreItem[] = new Array(6).fill(null).map((_, i) => ({
 }));
 
 const POPULAR_STORES: StoreItem[] = new Array(6).fill(null).map((_, i) => ({
-  id: `p${i}`,
+  id: i + 100,
   name: i % 2 ? '517낙지&아구' : '능동타코집',
   distance: `${(Math.random() * 3 + 0.2).toFixed(1)}km`,
   rating: 4.3 + Math.random() * 0.6,
@@ -43,6 +44,14 @@ const POPULAR_STORES: StoreItem[] = new Array(6).fill(null).map((_, i) => ({
 
 const StoreHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
+
+  const goDetail = (item: StoreItem) => {
+    queryClient.removeQueries({
+      queryKey: ['storeDetail'],
+      exact: false,
+    });
+    navigation.navigate(userNavigations.STORE_DETAIL, { storeId: item.id, storeName: item.name });
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -82,8 +91,13 @@ const StoreHomeScreen = () => {
         </View>
 
         <View style={styles.bottomSection}>
-          <HorizontalSnapList title="💸 할인율 최고" data={DISCOUNT_STORES} showDiscountBadge />
-          <HorizontalSnapList title="🔥 인기 가게" data={POPULAR_STORES} />
+          <HorizontalSnapList
+            title="할인율 최고 💸"
+            onPressItem={goDetail}
+            data={DISCOUNT_STORES}
+            showDiscountBadge
+          />
+          <HorizontalSnapList title="인기 가게 🔥" onPressItem={goDetail} data={POPULAR_STORES} />
         </View>
       </ScrollView>
     </SafeAreaView>

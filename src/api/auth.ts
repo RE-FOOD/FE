@@ -16,20 +16,23 @@ type RequestMember = {
   kakaoAccessToken: string | undefined;
   phone: string;
   nickname: string;
-  region: string;
+  address: string;
+  roadAddress: string;
 };
 
 const kakaoSignup = async ({
   kakaoAccessToken,
   phone,
   nickname,
-  region,
+  address,
+  roadAddress,
 }: RequestMember): Promise<void> => {
   const { data } = await axiosInstance.post('/auth/signup/members', {
     accessToken: kakaoAccessToken,
     phone,
     nickname,
-    address: region,
+    address,
+    roadAddress,
   });
   return data;
 };
@@ -42,6 +45,7 @@ type ResponseToken = {
 
 const getProfile = async (): Promise<Profile> => {
   const { data } = await axiosInstance.get('/members/profile');
+  console.log(data);
   return data;
 };
 
@@ -50,6 +54,7 @@ const getAccessToken = async (): Promise<ResponseToken> => {
   const { data } = await axiosInstance.post('/auth/refresh', {
     refreshToken,
   });
+  console.log(data.data);
   return data.data;
 };
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
 import Star from '@/assets/icons/star.svg';
 import { itemSeparator } from '@/components/_common/ItemSeparator';
 import { colors } from '@/constants/colors';
@@ -7,7 +7,7 @@ import { colors } from '@/constants/colors';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export type StoreItem = {
-  id: string;
+  id: number;
   name: string;
   distance?: string;
   rating: number;
@@ -23,14 +23,16 @@ interface Props {
   showDiscountBadge?: boolean;
   cardWidthRatio?: number;
   itemSpacing?: number;
+  onPressItem?: (item: StoreItem) => void;
 }
 
 const HorizontalSnapList = ({
   title,
   data,
   showDiscountBadge,
-  cardWidthRatio = 0.6, // 기본값: 0.6
-  itemSpacing = 12, // 기본값: 12
+  cardWidthRatio = 0.66,
+  itemSpacing = 12,
+  onPressItem,
 }: Props) => {
   const CARD_WIDTH = useMemo(() => SCREEN_WIDTH * cardWidthRatio, [cardWidthRatio]);
   const SNAP_INTERVAL = CARD_WIDTH + itemSpacing;
@@ -45,7 +47,7 @@ const HorizontalSnapList = ({
       <FlatList
         horizontal
         data={data}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         showsHorizontalScrollIndicator={false}
         snapToInterval={SNAP_INTERVAL}
         decelerationRate="fast"
@@ -53,34 +55,39 @@ const HorizontalSnapList = ({
         ItemSeparatorComponent={ItemSeparator}
         contentContainerStyle={{ paddingLeft: 20, paddingRight: 18 }}
         renderItem={({ item }) => (
-          <View style={[styles.storeCard, { width: CARD_WIDTH }]}>
-            <Image source={{ uri: item.image }} style={styles.storeImage} />
-            {showDiscountBadge && item.discount && (
-              <View style={styles.discountBadge}>
-                <Text style={styles.discountText}>{item.discount}</Text>
-              </View>
-            )}
-            <View style={{ paddingHorizontal: 12, paddingTop: 8, paddingBottom: 12, gap: 3 }}>
-              <View style={styles.storeInfo}>
-                <Text style={styles.storeName} numberOfLines={1}>
-                  {item.name}
-                </Text>
-                <View style={styles.ratingBox}>
-                  <Star width={12} height={12} />
-                  <Text style={styles.metaText}>{item.rating.toFixed(1)}</Text>
-                </View>
-              </View>
-
-              {item.distance ? (
-                <Text style={styles.distanceText}>{item.distance}</Text>
-              ) : (
-                <View style={styles.priceRow}>
-                  {!!item.price && <Text style={styles.priceText}>{item.price}</Text>}
-                  {!!item.salePrice && <Text style={styles.saleText}>{item.salePrice}</Text>}
+          <Pressable
+            onPress={() => onPressItem?.(item)}
+            style={({ pressed }) => [{ opacity: pressed ? 0.9 : 1 }]}
+          >
+            <View style={[styles.storeCard, { width: CARD_WIDTH }]}>
+              <Image source={{ uri: item.image }} style={styles.storeImage} />
+              {showDiscountBadge && item.discount && (
+                <View style={styles.discountBadge}>
+                  <Text style={styles.discountText}>{item.discount}</Text>
                 </View>
               )}
+              <View style={{ paddingHorizontal: 12, paddingTop: 8, paddingBottom: 12, gap: 3 }}>
+                <View style={styles.storeInfo}>
+                  <Text style={styles.storeName} numberOfLines={1}>
+                    {item.name}
+                  </Text>
+                  <View style={styles.ratingBox}>
+                    <Star width={12} height={12} />
+                    <Text style={styles.metaText}>{item.rating.toFixed(1)}</Text>
+                  </View>
+                </View>
+
+                {item.distance ? (
+                  <Text style={styles.distanceText}>{item.distance}</Text>
+                ) : (
+                  <View style={styles.priceRow}>
+                    {!!item.price && <Text style={styles.priceText}>{item.price}</Text>}
+                    {!!item.salePrice && <Text style={styles.saleText}>{item.salePrice}</Text>}
+                  </View>
+                )}
+              </View>
             </View>
-          </View>
+          </Pressable>
         )}
       />
     </View>
@@ -112,7 +119,7 @@ const styles = StyleSheet.create({
   },
   storeImage: {
     width: '100%',
-    height: 105,
+    height: 130,
     backgroundColor: '#EEE',
   },
   discountBadge: {

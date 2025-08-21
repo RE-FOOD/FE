@@ -35,7 +35,7 @@ const UserSignupScreen = () => {
   const kakaoAccessToken = useAuthStore((s) => s.kakaoAccessToken);
   const navigation = useNavigation<NavigationProp>();
 
-  const { nickname, phone, region, setNickname, setPhone } = useSignupStore();
+  const { nickname, phone, address, roadAddress, setNickname, setPhone } = useSignupStore();
 
   const [nicknameStatus, setNicknameStatus] = useState<
     'none' | 'valid' | 'invalid' | 'duplicated' | 'invalidFormat'
@@ -79,10 +79,10 @@ const UserSignupScreen = () => {
   }, [telError, isPhoneValid]);
 
   useEffect(() => {
-    if (regionError && region.trim() !== '') setRegionError('');
-  }, [region, regionError]);
+    if (regionError && address.trim() !== '') setRegionError('');
+  }, [address, regionError]);
 
-  const allValid = nicknameStatus === 'valid' && isPhoneValid() && region.trim().length > 0;
+  const allValid = nicknameStatus === 'valid' && isPhoneValid() && address.trim().length > 0;
 
   const checkNickname = async () => {
     const trimmed = nickname.trim();
@@ -126,7 +126,7 @@ const UserSignupScreen = () => {
       setTelError('000-0000-0000 형식으로 입력해주세요.');
       hasError = true;
     }
-    if (!region.trim()) {
+    if (!address.trim()) {
       setRegionError('지역을 설정해주세요.');
       hasError = true;
     }
@@ -134,7 +134,7 @@ const UserSignupScreen = () => {
 
     const deviceToken = await getFcmToken();
     signupMutation.mutate(
-      { kakaoAccessToken, phone, nickname, region },
+      { kakaoAccessToken, phone, nickname, address, roadAddress },
       {
         onSuccess: () => {
           useAuthStore.getState().clear();
@@ -204,7 +204,7 @@ const UserSignupScreen = () => {
               <Text style={styles.subTitle}>선택하신 지역을 기준으로 주변 가게를 보여드려요</Text>
             </View>
             <RegionSelector
-              region={region}
+              region={address}
               regionError={regionError}
               onPress={() => navigation.navigate(loggedOutNavigations.DAUM_POSTCODE)}
             />

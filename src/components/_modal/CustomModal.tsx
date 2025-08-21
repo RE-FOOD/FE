@@ -16,10 +16,11 @@ import { stateMap, buttonMap } from '@/constants/modalStates';
 export const ICON_COLORS = {
   warning: colors.RED,
   success: colors.GREEN,
+  check: colors.GREEN,
   logout: colors.RED,
 };
 
-type ModalType = 'warning' | 'success' | 'logout';
+type ModalType = 'warning' | 'success' | 'check' | 'logout';
 
 interface CustomModalProps {
   state: keyof typeof stateMap;
@@ -38,6 +39,10 @@ const CustomModal = ({ state, type, isOpen, onClose, onButtonClick, desc }: Cust
     const iconContainerStyle = [styles.iconContainer, { backgroundColor: ICON_COLORS[type] }];
 
     return type === 'warning' ? (
+      <View style={iconContainerStyle}>
+        <Warn />
+      </View>
+    ) : type === 'check' ? (
       <View style={iconContainerStyle}>
         <Warn />
       </View>
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
     color: '#9C9C9C',
     textAlign: 'center',
     fontFamily: 'Pretendard-Regular',
-    lineHeight: 17,
+    lineHeight: 19,
   },
   desc: {
     fontSize: 13,

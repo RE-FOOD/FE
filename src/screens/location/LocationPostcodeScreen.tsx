@@ -4,12 +4,15 @@ import WebView, { WebViewMessageEvent } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import LoadingScreen from '../_common/LoadingScreen';
-import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+import { userNavigations } from '@/constants/navigations';
+import useLocation from '@/hooks/queries/useLocation';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { parseDaumRoadAddress } from '@/utils/address';
 
-type NavigationProp = StackNavigationProp<LoggedOutStackParamList>;
+type NavigationProp = StackNavigationProp<UserStackParamList, 'LocationPostcode'>;
 
 const LocationPostcodeScreen = () => {
+  const { addLocationMutation } = useLocation();
   const navigation = useNavigation<NavigationProp>();
   const [loading, setLoading] = useState(true);
 
@@ -51,7 +54,7 @@ const LocationPostcodeScreen = () => {
     </html>
   `;
 
-  const handleMessage = (event: WebViewMessageEvent) => {
+  const handleMessage = async (event: WebViewMessageEvent) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
 
@@ -62,8 +65,13 @@ const LocationPostcodeScreen = () => {
       }
 
       // 주소 선택 완료
-      const _parsed = parseDaumRoadAddress(data);
-      navigation.goBack();
+      const parsed = parseDaumRoadAddress(data);
+
+      addLocationMutation.mutate({
+        address: parsed.formattedFull,
+        roadAddress: parsed.formattedShort,
+      });
+      navigation.navigate(userNavigations.LOCATION);
     } catch (error) {
       console.error('Error parsing postcode data:', error);
     }
@@ -72,6 +80,8 @@ const LocationPostcodeScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <WebView
+        collapsable={false}
+        removeClippedSubviews={false}
         style={{ flex: 1 }}
         source={{
           html: postcodeHTML,

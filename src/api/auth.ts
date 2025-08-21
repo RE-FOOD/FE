@@ -16,20 +16,23 @@ type RequestMember = {
   kakaoAccessToken: string | undefined;
   phone: string;
   nickname: string;
-  region: string;
+  address: string;
+  roadAddress: string;
 };
 
 const kakaoSignup = async ({
   kakaoAccessToken,
   phone,
   nickname,
-  region,
+  address,
+  roadAddress,
 }: RequestMember): Promise<void> => {
   const { data } = await axiosInstance.post('/auth/signup/members', {
     accessToken: kakaoAccessToken,
     phone,
     nickname,
-    address: region,
+    address,
+    roadAddress,
   });
   return data;
 };

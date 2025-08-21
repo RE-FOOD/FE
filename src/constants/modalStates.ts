@@ -38,6 +38,20 @@ export const stateMap: StateMap = {
     subtitle: '승인 결과는 카카오 계정에 등록된\n이메일로 안내드립니다.',
     btn: [3],
   },
+  ChangeLocation: {
+    title: '위치 변경',
+    subtitle: '현위치를 변경하시겠습니까?',
+    btn: [0, 1],
+  },
+  DeleteLocation: {
+    title: '주소 삭제',
+    subtitle: '주소를 삭제하시겠습니까?',
+    btn: [0, 4],
+  },
+  AddressLimit: {
+    title: '주소는 최대 10개까지 등록할 수 있습니다.',
+    btn: [3],
+  },
 };
 
 export const buttonMap: ButtonMap = {

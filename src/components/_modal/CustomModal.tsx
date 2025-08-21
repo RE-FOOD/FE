@@ -31,7 +31,9 @@ interface CustomModalProps {
   desc?: string; // 추가된 설명 (옵션)
 }
 
-const CustomModal = ({ state, type, isOpen, onClose, onButtonClick }: CustomModalProps) => {
+const CustomModal = ({ state, type, isOpen, onClose, onButtonClick, desc }: CustomModalProps) => {
+  const description = desc ?? stateMap[state]?.desc;
+
   const renderIcon = () => {
     const iconContainerStyle = [styles.iconContainer, { backgroundColor: ICON_COLORS[type] }];
 
@@ -76,7 +78,6 @@ const CustomModal = ({ state, type, isOpen, onClose, onButtonClick }: CustomModa
   ];
 
   const subtitle = stateMap[state]?.subtitle;
-  const description = stateMap[state]?.desc;
 
   return (
     <RNModal visible={isOpen} transparent animationType="fade" onRequestClose={onClose}>

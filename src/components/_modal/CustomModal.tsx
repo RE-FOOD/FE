@@ -16,10 +16,11 @@ import { stateMap, buttonMap } from '@/constants/modalStates';
 export const ICON_COLORS = {
   warning: colors.RED,
   success: colors.GREEN,
+  check: colors.GREEN,
   logout: colors.RED,
 };
 
-type ModalType = 'warning' | 'success' | 'logout';
+type ModalType = 'warning' | 'success' | 'check' | 'logout';
 
 interface CustomModalProps {
   state: keyof typeof stateMap;
@@ -31,11 +32,17 @@ interface CustomModalProps {
   desc?: string; // 추가된 설명 (옵션)
 }
 
-const CustomModal = ({ state, type, isOpen, onClose, onButtonClick }: CustomModalProps) => {
+const CustomModal = ({ state, type, isOpen, onClose, onButtonClick, desc }: CustomModalProps) => {
+  const description = desc ?? stateMap[state]?.desc;
+
   const renderIcon = () => {
     const iconContainerStyle = [styles.iconContainer, { backgroundColor: ICON_COLORS[type] }];
 
     return type === 'warning' ? (
+      <View style={iconContainerStyle}>
+        <Warn />
+      </View>
+    ) : type === 'check' ? (
       <View style={iconContainerStyle}>
         <Warn />
       </View>
@@ -76,7 +83,6 @@ const CustomModal = ({ state, type, isOpen, onClose, onButtonClick }: CustomModa
   ];
 
   const subtitle = stateMap[state]?.subtitle;
-  const description = stateMap[state]?.desc;
 
   return (
     <RNModal visible={isOpen} transparent animationType="fade" onRequestClose={onClose}>
@@ -159,7 +165,7 @@ const styles = StyleSheet.create({
     color: '#9C9C9C',
     textAlign: 'center',
     fontFamily: 'Pretendard-Regular',
-    lineHeight: 17,
+    lineHeight: 19,
   },
   desc: {
     fontSize: 13,

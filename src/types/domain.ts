@@ -7,11 +7,16 @@ interface Member {
   bussinessNumber?: string;
 }
 
-interface Location {
+interface LocationFull {
   id: number;
   address: string;
+  roadAddress: string;
+  latitude: number;
+  longitude: number;
   isMostRecent: boolean;
 }
+
+type Location = Pick<LocationFull, 'id' | 'address' | 'isMostRecent'>;
 
 interface Profile {
   id: number;
@@ -62,4 +67,4 @@ interface Review {
   menus: string[];
 }
 
-export type { Member, Profile, Menu, StoreDetail, Review };
+export type { Member, Profile, LocationFull, Menu, StoreDetail, Review };

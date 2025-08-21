@@ -3,19 +3,23 @@ import { create } from 'zustand';
 interface SignupState {
   nickname: string;
   phone: string;
-  region: string;
+  address: string;
+  roadAddress: string;
   setNickname: (nickname: string) => void;
   setPhone: (phone: string) => void;
-  setRegion: (region: string) => void;
+  setAddress: (address: string) => void;
+  setRoadAddress: (roadAddress: string) => void;
   reset: () => void;
 }
 
 export const useSignupStore = create<SignupState>((set) => ({
   nickname: '',
   phone: '',
-  region: '',
+  address: '',
+  roadAddress: '',
   setNickname: (nickname) => set({ nickname }),
   setPhone: (phone) => set({ phone }),
-  setRegion: (region) => set({ region }),
-  reset: () => set({ nickname: '', phone: '', region: '' }),
+  setAddress: (address) => set({ address }),
+  setRoadAddress: (roadAddress) => set({ roadAddress }),
+  reset: () => set({ nickname: '', phone: '', address: '', roadAddress: '' }),
 }));

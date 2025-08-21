@@ -4,10 +4,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import axiosInstance from '@/api/axios';
 import Arrow from '@/assets/icons/arrow.svg';
 import LevelProgress from '@/components/mypage/LevelProgress';
 import { colors } from '@/constants/colors';
 import useAuth from '@/hooks/queries/useAuth';
+import { useMyPage } from '@/hooks/queries/useMyPage';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
@@ -15,6 +17,15 @@ type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
 const MypageHomeScreen = () => {
   const { logoutMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
+  const { data, isLoading, error } = useMyPage();
+  // 🔍 마운트 시 현재 헤더/베이스URL 확인
+  //    accessToken 헤더가 필요한 스펙이라면 여기서 꼭 보이도록!
+  console.log('axios common headers =', axiosInstance.defaults.headers.common);
+  console.log('eho');
+  if (isLoading) return <Text> 로딩중</Text>;
+  if (error) return <Text>불러오기 실패</Text>;
+  const me = data?.data;
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
@@ -30,8 +41,8 @@ const MypageHomeScreen = () => {
             </View>
             <View style={styles.couponContainer}>
               <View style={styles.textContainer}>
-                <Text style={styles.blackBoldText_16}>홍시님, 안녕하세요!</Text>
-                <Text style={styles.grayRegularText}>hyewha@kosa.com</Text>
+                <Text style={styles.blackBoldText_16}>{me?.nickname}, 안녕하세요!</Text>
+                <Text style={styles.grayRegularText}>{me?.email}</Text>
               </View>
             </View>
           </View>
@@ -43,7 +54,7 @@ const MypageHomeScreen = () => {
               </View>
               <View style={styles.levelRemindTextBox}>
                 <Text style={styles.grayRegularText}>다음 레벨까지 남은 환경 점수</Text>
-                <Text style={styles.orangeBoldText_13}>130점</Text>
+                <Text style={styles.orangeBoldText_13}>{me?.environmentScore}</Text>
               </View>
             </View>
             <LevelProgress

@@ -5,6 +5,16 @@ import { queryKeys } from '@/constants/keys';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/api';
 import { LocationFull } from '@/types/domain';
 
+export function useSetDefaultLocation(mutationOptions?: UseMutationCustomOptions<LocationFull>) {
+  return useMutation({
+    mutationFn: (locationId: number) => setDefaultLocation(locationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.LOCATION] });
+    },
+    ...mutationOptions,
+  });
+}
+
 function useGetLocations(queryOptions?: UseQueryCustomOptions<LocationFull[]>) {
   return useQuery({
     queryKey: [queryKeys.LOCATION, queryKeys.GET_LOCATIONS],
@@ -31,16 +41,6 @@ function useAddLocation(mutationOptions?: UseMutationCustomOptions<LocationFull>
 function useDeleteLocation(mutationOptions?: UseMutationCustomOptions<void>) {
   return useMutation({
     mutationFn: (locationId: number) => deleteLocation(locationId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.LOCATION] });
-    },
-    ...mutationOptions,
-  });
-}
-
-function useSetDefaultLocation(mutationOptions?: UseMutationCustomOptions<LocationFull>) {
-  return useMutation({
-    mutationFn: (locationId: number) => setDefaultLocation(locationId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.LOCATION] });
     },

@@ -9,6 +9,7 @@ import { userNavigations } from '@/constants/navigations';
 import CartScreen from '@/screens/cart/CartScreen';
 import HistoryDetailScreen from '@/screens/history/HistoryDetailScreen';
 import ReviewWriteScreen from '@/screens/history/ReviewWriteScreen';
+import LocationPostcodeScreen from '@/screens/location/LocationPostcodeScreen';
 import LocationScreen from '@/screens/location/LocationScreen';
 import GreenReport from '@/screens/mypage/GreenReport';
 import NicknameChangeScreen from '@/screens/mypage/NicknameChangeScreen';
@@ -19,6 +20,7 @@ import NotificationScreen from '@/screens/notification/NotificationScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
 import SearchResultScreen from '@/screens/store/SearchResultScreen';
 import StoreDetailScreen from '@/screens/store/StoreDetailScreen';
+import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
 import StoreInfoScreen from '@/screens/store/StoreInfoScreen';
 import StoreReviewScreen from '@/screens/store/StoreReviewScreen';
 
@@ -36,6 +38,7 @@ export type UserStackParamList = {
   [userNavigations.CATEGORY_LIST]: { key: CategoryKey; label: string };
   [userNavigations.SEARCH_RESULT]: { keyword: string };
   [userNavigations.LOCATION]: undefined;
+  [userNavigations.LOCATION_POSTCODE]: undefined;
   [userNavigations.CART]: undefined;
   [userNavigations.NOTIFICATION]: undefined;
   [userNavigations.REVIEW]: undefined;
@@ -58,6 +61,7 @@ function UserStackNavigator() {
         component={UserBottomTabsNavigator}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="StoreHome" component={StoreHomeScreen} options={{ headerShown: false }} />
       <Stack.Screen
         name="StoreDetail"
         component={StoreDetailScreen}
@@ -91,6 +95,11 @@ function UserStackNavigator() {
       <Stack.Screen
         name={userNavigations.LOCATION}
         component={LocationScreen}
+        options={{ title: '지역 설정' }}
+      />
+      <Stack.Screen
+        name={userNavigations.LOCATION_POSTCODE}
+        component={LocationPostcodeScreen}
         options={{ title: '지역 설정' }}
       />
       <Stack.Screen

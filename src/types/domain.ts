@@ -7,11 +7,16 @@ interface Member {
   bussinessNumber?: string;
 }
 
-interface Location {
+interface LocationFull {
   id: number;
   address: string;
+  roadAddress: string;
+  latitude: number;
+  longitude: number;
   isMostRecent: boolean;
 }
+
+type Location = Pick<LocationFull, 'id' | 'address' | 'isMostRecent'>;
 
 interface Profile {
   id: number;
@@ -25,7 +30,7 @@ interface Profile {
   location?: Location | null;
 }
 
-export type EnvironmentLevel = 'SPROUT' | 'SEEDLING' | 'TREE' | 'FRUIT';
+type EnvironmentLevel = 'SPROUT' | 'SEEDLING' | 'TREE' | 'FRUIT';
 interface Mypage {
   id: number;
   email: string;
@@ -86,9 +91,12 @@ export type {
   Member,
   Profile,
   Mypage,
+  LocationFull,
+  Location,
   Menu,
   StoreDetail,
   Review,
   UpdateNicknameData,
   UpdateNicknameRequest,
+  EnvironmentLevel,
 };

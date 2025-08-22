@@ -21,6 +21,7 @@ const userNavigations = {
   MYPAGE_HOME: 'MypageHome',
   NiCKNAME_CHANGE: 'NicknameChange',
   LOCATION: 'Location',
+  LOCATION_POSTCODE: 'LocationPostcode',
   NOTIFICATION: 'Notification',
   CART: 'Cart',
   REVIEW: 'Review',

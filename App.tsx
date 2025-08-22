@@ -1,15 +1,57 @@
 import React, { useEffect } from 'react';
+import Toast, { BaseToast, BaseToastProps, ErrorToast } from 'react-native-toast-message';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import { FirebaseMessagingTypes, getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@/api/queryClient';
+import { colors } from '@/constants/colors';
 import { NotificationProvider } from '@/hooks/useNotification';
 import RootNavigator from '@/navigations/root/RootNavigator';
 import pushNoti from '@/utils/pushNoti';
 
 const AppTheme = {
   ...DefaultTheme,
+};
+
+const toastConfig = {
+  success: (props: BaseToastProps) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: 'transparent', backgroundColor: colors.BLACK }}
+      text1Style={{
+        fontSize: 14,
+        fontFamily: 'Pretendard-Medium',
+        fontWeight: 'normal',
+        color: colors.WHITE,
+      }}
+      text2Style={{
+        fontSize: 12,
+        fontFamily: 'Pretendard-Regular',
+        fontWeight: 'normal',
+        color: colors.WHITE,
+      }}
+    />
+  ),
+
+  error: (props: BaseToastProps) => (
+    <ErrorToast
+      {...props}
+      style={{ borderLeftColor: 'transparent', backgroundColor: colors.BLACK }}
+      text1Style={{
+        fontSize: 14,
+        fontFamily: 'Pretendard-SemiBold',
+        fontWeight: 'normal',
+        color: colors.WHITE,
+      }}
+      text2Style={{
+        fontSize: 12,
+        fontFamily: 'Pretendard-Regular',
+        fontWeight: 'normal',
+        color: colors.WHITE,
+      }}
+    />
+  ),
 };
 
 function AppContent() {
@@ -50,6 +92,7 @@ function AppContent() {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer theme={AppTheme}>
         <RootNavigator />
+        <Toast config={toastConfig} />
       </NavigationContainer>
     </QueryClientProvider>
   );

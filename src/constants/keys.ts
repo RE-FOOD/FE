@@ -2,6 +2,8 @@ const queryKeys = {
   AUTH: 'auth',
   GET_ACCESS_TOKEN: 'getAccessToken',
   GET_PROFILE: 'getProfile',
+  LOCATION: 'location',
+  GET_LOCATIONS: 'getLocations',
 } as const;
 
 const storageKeys = {

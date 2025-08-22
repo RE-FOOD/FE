@@ -4,13 +4,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import axiosInstance from '@/api/axios';
 import Arrow from '@/assets/icons/arrow.svg';
 import LevelProgress from '@/components/mypage/LevelProgress';
 import { colors } from '@/constants/colors';
 import useAuth from '@/hooks/queries/useAuth';
 import { useMyPage } from '@/hooks/queries/useMyPage';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { toLevelLabel, getLevelImage } from '@/utils/level';
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
 
@@ -18,11 +18,8 @@ const MypageHomeScreen = () => {
   const { logoutMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
   const { data, isLoading, error } = useMyPage();
-  // 🔍 마운트 시 현재 헤더/베이스URL 확인
-  //    accessToken 헤더가 필요한 스펙이라면 여기서 꼭 보이도록!
-  console.log('axios common headers =', axiosInstance.defaults.headers.common);
-  console.log('eho');
-  if (isLoading) return <Text> 로딩중</Text>;
+
+  if (isLoading) return <Text>로딩중</Text>;
   if (error) return <Text>불러오기 실패</Text>;
   const me = data?.data;
 
@@ -37,11 +34,11 @@ const MypageHomeScreen = () => {
         <View style={styles.innerContainer}>
           <View style={styles.profileInnerContainer}>
             <View>
-              <Image source={require('@/assets/images/level2.webp')} style={styles.logo} />
+              <Image source={getLevelImage(me?.environmentLevel)} style={styles.logo} />
             </View>
             <View style={styles.couponContainer}>
               <View style={styles.textContainer}>
-                <Text style={styles.blackBoldText_16}>{me?.nickname}, 안녕하세요!</Text>
+                <Text style={styles.blackBoldText_16}>{me?.nickname}님, 안녕하세요!</Text>
                 <Text style={styles.grayRegularText}>{me?.email}</Text>
               </View>
             </View>
@@ -50,16 +47,16 @@ const MypageHomeScreen = () => {
             <View style={styles.levelTextContainer}>
               <View style={styles.levelTextBox}>
                 <Text style={styles.grayRegularText}>현재 레벨</Text>
-                <Text style={styles.greenRegularText_13}>레벨 2 묘목</Text>
+                <Text style={styles.greenRegularText_13}>{toLevelLabel(me?.environmentLevel)}</Text>
               </View>
               <View style={styles.levelRemindTextBox}>
                 <Text style={styles.grayRegularText}>다음 레벨까지 남은 환경 점수</Text>
-                <Text style={styles.orangeBoldText_13}>{me?.environmentScore}</Text>
+                <Text style={styles.orangeBoldText_13}>130점</Text>
               </View>
             </View>
             <LevelProgress
-              value={0.35} // 35% 채움
-              labels={['LEVEL1', 'LEVEL2', 'LEVEL3', '환경쿠폰']}
+              value={me?.environmentScore} // %로 수정 요청
+              labels={['LEVEL1', 'LEVEL2', 'LEVEL3', 'LEVEL4']}
               height={16}
               colors={['#FF6A3D', '#FFC0A3']}
             />
@@ -97,9 +94,18 @@ const MypageHomeScreen = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.itemContainer}>
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => navigation.navigate('Private')}
+        >
           <View style={styles.itemTextContainer}>
-            <Text style={styles.blackRegularText_16}>개인정보 처리 및 이용약관</Text>
+            <Text style={styles.blackRegularText_16}>개인정보처리방침 </Text>
+            <Arrow />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate('Rule')}>
+          <View style={styles.itemTextContainer}>
+            <Text style={styles.blackRegularText_16}>운영약관 </Text>
             <Arrow />
           </View>
         </TouchableOpacity>

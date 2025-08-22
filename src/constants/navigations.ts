@@ -25,6 +25,8 @@ const userNavigations = {
   CART: 'Cart',
   REVIEW: 'Review',
   REPORT: 'GreenReport',
+  PRIVATE: 'Private',
+  RULE: 'Rule',
 } as const;
 
 export { loggedOutNavigations, userNavigations };

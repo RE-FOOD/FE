@@ -12,7 +12,9 @@ import ReviewWriteScreen from '@/screens/history/ReviewWriteScreen';
 import LocationScreen from '@/screens/location/LocationScreen';
 import GreenReport from '@/screens/mypage/GreenReport';
 import NicknameChangeScreen from '@/screens/mypage/NicknameChangeScreen';
+import Private from '@/screens/mypage/Private';
 import Review from '@/screens/mypage/Review';
+import Rule from '@/screens/mypage/Rule';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
 import SearchResultScreen from '@/screens/store/SearchResultScreen';
@@ -38,6 +40,8 @@ export type UserStackParamList = {
   [userNavigations.NOTIFICATION]: undefined;
   [userNavigations.REVIEW]: undefined;
   [userNavigations.REPORT]: undefined;
+  [userNavigations.PRIVATE]: undefined;
+  [userNavigations.RULE]: undefined;
 };
 
 const Stack = createStackNavigator<UserStackParamList>();
@@ -119,6 +123,12 @@ function UserStackNavigator() {
         component={GreenReport}
         options={{ title: '환경 리포트' }}
       />
+      <Stack.Screen
+        name={userNavigations.PRIVATE}
+        component={Private}
+        options={{ title: '개인정보 처리방침' }}
+      />
+      <Stack.Screen name={userNavigations.RULE} component={Rule} options={{ title: '운영 약관' }} />
     </Stack.Navigator>
   );
 }

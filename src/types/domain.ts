@@ -25,6 +25,17 @@ interface Profile {
   location?: Location | null;
 }
 
+export type EnvironmentLevel = 'SPROUT' | 'SEEDLING' | 'TREE' | 'FRUIT';
+interface Mypage {
+  id: number;
+  email: string;
+  nickname: string;
+  environmentLevel: EnvironmentLevel;
+  orderCount: number;
+  dishCount: number;
+  environmentScore: number;
+}
+
 interface Menu {
   id: number;
   name: string;
@@ -62,4 +73,22 @@ interface Review {
   menus: string[];
 }
 
-export type { Member, Profile, Menu, StoreDetail, Review };
+interface UpdateNicknameRequest {
+  nickname: string;
+}
+
+interface UpdateNicknameData {
+  id: number;
+  nickname: string;
+}
+
+export type {
+  Member,
+  Profile,
+  Mypage,
+  Menu,
+  StoreDetail,
+  Review,
+  UpdateNicknameData,
+  UpdateNicknameRequest,
+};

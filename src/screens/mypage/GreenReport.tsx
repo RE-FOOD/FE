@@ -2,21 +2,28 @@ import { StyleSheet, Image, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LevelProgress from '@/components/mypage/LevelProgress';
 import { colors } from '@/constants/colors';
+import { useMyPage } from '@/hooks/queries/useMyPage';
+import { toLevelLabel, getLevelImage } from '@/utils/level';
 
 const GreenReport = () => {
+  const { data } = useMyPage();
+  const me = data?.data;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
         <View style={styles.imgContainer}>
-          <Image source={require('@/assets/images/level2.webp')} style={styles.logo} />
+          <Image source={getLevelImage(me?.environmentLevel)} style={styles.logo} />
         </View>
         <View style={styles.levelContainer}>
-          <Text style={styles.greenBoldText_20}>2단계 묘목</Text>
-          <Text style={styles.blackRegularText_16}>현재 이서님은 2단계 등급입니다.</Text>
+          <Text style={styles.greenBoldText_20}>{toLevelLabel(me?.environmentLevel)}</Text>
+          <Text style={styles.blackRegularText_16}>
+            현재 {me?.nickname}님은 {toLevelLabel(me?.environmentLevel)} 등급입니다.
+          </Text>
         </View>
         <LevelProgress
-          value={0.35} // 35% 채움
-          labels={['씨앗', '묘목', '나무', '환경쿠폰']}
+          value={me?.environmentScore}
+          labels={['씨앗', '묘목', '나무', '사과나무']}
           height={16}
           colors={['#FF6A3D', '#FFC0A3']}
         />
@@ -69,7 +76,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 30,
     flexDirection: 'column',
-    gap: 35,
+    gap: 25,
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
     borderTopStartRadius: 20,

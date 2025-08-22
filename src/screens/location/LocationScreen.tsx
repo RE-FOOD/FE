@@ -10,23 +10,38 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import LoadingScreen from '../_common/LoadingScreen';
 import Search from '@/assets/icons/search-gray.svg';
 import CustomModal from '@/components/_modal/CustomModal';
 import LocationItem from '@/components/location/LocationItem';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
-import useLocation from '@/hooks/queries/useLocation';
+import useLocation, { useSetDefaultLocation } from '@/hooks/queries/useLocation';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { showToast } from '@/utils/toast';
 
 type Nav = StackNavigationProp<UserStackParamList, 'Location'>;
 
 const LocationScreen = () => {
-  const { locationsQuery, deleteLocationMutation, setDefaultLocationMutation } = useLocation();
+  const { locationsQuery, deleteLocationMutation } = useLocation();
   const navigation = useNavigation<Nav>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [limitModalOpen, setLimitModalOpen] = useState(false);
   const [selected, setSelected] = useState<{ id: number; roadAddress: string } | null>(null);
+
+  const setDefaultLocationMutation = useSetDefaultLocation({
+    onSuccess: () => {
+      navigation.navigate(userNavigations.STORE_HOME);
+      showToast('success', '지역 설정이 완료되었습니다.');
+    },
+    onError: () => {
+      showToast('error', '지역 설정에 실패했습니다.');
+    },
+  });
+
+  if (setDefaultLocationMutation.isPending) {
+    return <LoadingScreen />;
+  }
 
   if (locationsQuery.isLoading) {
     return (
@@ -48,7 +63,6 @@ const LocationScreen = () => {
 
   const handleItemPress = (id: number) => {
     setDefaultLocationMutation.mutate(id);
-    navigation.navigate(userNavigations.STORE_HOME);
   };
 
   const handleDeletePress = (id: number, roadAddress: string) => {
@@ -58,7 +72,11 @@ const LocationScreen = () => {
 
   const handleSearchPress = () => {
     if (data.length >= 10) {
-      setLimitModalOpen(true);
+      showToast(
+        'error',
+        '주소는 최대 10개까지 등록할 수 있습니다.',
+        '기존 주소를 삭제 후 추가해주세요.'
+      );
       return;
     }
     navigation.navigate(userNavigations.LOCATION_POSTCODE);

@@ -23,32 +23,39 @@ const StoreInfoScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.title}>가게 정보</Text>
-        <View>
-          <View>
-            <View style={styles.subtitleBox}>
-              <Text style={styles.subTitle}>상호명</Text>
+      <View style={{ gap: 20 }}>
+        <View style={{ gap: 20 }}>
+          <Text style={styles.title}>가게 정보</Text>
+          <View style={{ gap: 8 }}>
+            <View style={styles.infoRow}>
+              <View style={styles.subtitleBox}>
+                <Text style={styles.subTitle}>상호명</Text>
+              </View>
+              <Text style={styles.text}>{store?.name}</Text>
             </View>
-            <Text style={styles.text}>{store?.name}</Text>
-          </View>
-          <View>
-            <View>
-              <Text style={styles.subTitle}>픽업시간</Text>
+            <View style={styles.infoRow}>
+              <View style={styles.subtitleBox}>
+                <Text style={styles.subTitle}>픽업시간</Text>
+              </View>
+              <Text style={styles.text}>
+                {store?.openTime} ~ {store?.closeTime}
+              </Text>
             </View>
-            <Text style={styles.text}>
-              {store?.openTime} ~ {store?.closeTime}
-            </Text>
-          </View>
-          <View>
-            <View>
-              <Text style={styles.subTitle}>전화번호</Text>
+            <View style={styles.infoRow}>
+              <View style={styles.subtitleBox}>
+                <Text style={styles.subTitle}>전화번호</Text>
+              </View>
+              <Text style={styles.text}>{store?.phoneNumber}</Text>
             </View>
-            <Text style={styles.text}>{store?.phoneNumber}</Text>
           </View>
         </View>
+        <View>{/* 지도 */}</View>
+        <View style={{ gap: 8 }}>
+          <Text style={styles.subTitle}>주소</Text>
+          <Text style={styles.text}>{store?.address}</Text>
+        </View>
       </View>
-      <View>
+      <View style={{ gap: 20 }}>
         <Text style={styles.title}>원산지 정보</Text>
         <Text style={styles.text}>{store?.origin}</Text>
       </View>
@@ -71,8 +78,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.BLACK,
   },
+  infoRow: {
+    flexDirection: 'row',
+    gap: 20,
+  },
   subtitleBox: {
-    width: 52,
+    width: 65,
   },
   subTitle: {
     fontFamily: 'Pretendard-Medium',

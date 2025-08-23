@@ -2,15 +2,27 @@ import { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import NicknameInput from '@/components/signup/NicknameInput';
 import { colors } from '@/constants/colors';
+import { useCheckNickname } from '@/hooks/queries/useMember';
+import { useUpdateNickname } from '@/hooks/queries/useMyPage';
 
-type Status = 'none' | 'valid' | 'invalid' | 'duplicated';
+type Status = 'none' | 'valid' | 'invalid' | 'duplicated' | 'invalidFormat';
+const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{1,6}$/;
 
 const NicknameChangeScreen = () => {
+  const navigation = useNavigation();
   const [nickname, setNickname] = useState('');
   const [nicknameStatus, setNicknameStatus] = useState<Status>('none');
   const [nicknameErrorVisible, setNicknameErrorVisible] = useState(false);
+
+  const { mutate } = useUpdateNickname();
+  const { refetch } = useCheckNickname(nickname, {
+    enabled: false,
+    refetchOnMount: false,
+    retry: false,
+  });
 
   const onChangeNickname = (val: string) => {
     setNickname(val);
@@ -19,15 +31,56 @@ const NicknameChangeScreen = () => {
   };
 
   const onCheckNickname = async () => {
+    const trimmed = nickname.trim();
+    if (!trimmed) {
+      setNicknameStatus('none');
+      setNicknameErrorVisible(true);
+      return;
+    }
+
+    if (!NICKNAME_REGEX.test(trimmed)) {
+      setNicknameStatus('invalidFormat');
+      setNicknameErrorVisible(true);
+      return;
+    }
+
+    try {
+      const response = await refetch();
+
+      if (response.data) {
+        setNicknameStatus('valid');
+      } else {
+        setNicknameStatus('duplicated');
+      }
+
+      setNicknameErrorVisible(true);
+    } catch (error) {
+      console.error('닉네임 중복 확인 실패', error);
+      setNicknameStatus('duplicated');
+      setNicknameErrorVisible(true);
+    }
+  };
+
+  const onSubmit = () => {
     if (!nickname.trim()) {
       setNicknameStatus('none');
       setNicknameErrorVisible(true);
       return;
     }
-    const isDup = false; // 예시
-    setNicknameStatus(isDup ? 'duplicated' : 'valid');
-    setNicknameErrorVisible(true);
+    if (nicknameStatus !== 'valid') {
+      setNicknameErrorVisible(true);
+      return;
+    }
+    mutate(
+      { nickname },
+      {
+        onSuccess: () => {
+          navigation.goBack();
+        },
+      }
+    );
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -43,7 +96,7 @@ const NicknameChangeScreen = () => {
         />
       </View>
       <View style={styles.bottomArea}>
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={onSubmit}>
           <Text style={styles.whiteRegularText_14}>변경완료</Text>
         </TouchableOpacity>
       </View>

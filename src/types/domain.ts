@@ -30,6 +30,17 @@ interface Profile {
   location?: Location | null;
 }
 
+type EnvironmentLevel = 'SPROUT' | 'SEEDLING' | 'TREE' | 'FRUIT';
+interface Mypage {
+  id: number;
+  email: string;
+  nickname: string;
+  environmentLevel: EnvironmentLevel;
+  orderCount: number;
+  dishCount: number;
+  environmentScore: number;
+}
+
 interface Menu {
   id: number;
   name: string;
@@ -67,4 +78,14 @@ interface Review {
   menus: string[];
 }
 
-export type { Member, Profile, LocationFull, Menu, StoreDetail, Review };
+export type {
+  Member,
+  Profile,
+  Mypage,
+  LocationFull,
+  Location,
+  Menu,
+  StoreDetail,
+  Review,
+  EnvironmentLevel,
+};

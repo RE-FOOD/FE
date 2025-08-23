@@ -18,6 +18,7 @@ import Review from '@/screens/mypage/ReviewScreen';
 import Rule from '@/screens/mypage/RuleScreen';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
+import MenuDetailScreen from '@/screens/store/MenuDetailScreen';
 import SearchResultScreen from '@/screens/store/SearchResultScreen';
 import StoreDetailScreen from '@/screens/store/StoreDetailScreen';
 import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
@@ -30,6 +31,7 @@ export type UserStackParamList = {
   [userNavigations.STORE_DETAIL]: { storeId: number; storeName: string };
   [userNavigations.STORE_REVIEW]: { storeId: number };
   [userNavigations.STORE_INFO]: { storeId: number; storeName: string };
+  [userNavigations.MENU_DETAIL]: { storeId: number; storeName: string; menuId: number };
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
   };
@@ -76,6 +78,11 @@ function UserStackNavigator() {
         name="StoreReview"
         component={StoreReviewScreen}
         options={{ title: '리뷰', headerShown: true }}
+      />
+      <Stack.Screen
+        name="MenuDetail"
+        component={MenuDetailScreen}
+        options={{ title: '', headerShown: true }}
       />
       <Stack.Screen
         name="OrderDetail"

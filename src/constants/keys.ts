@@ -4,6 +4,9 @@ const queryKeys = {
   GET_PROFILE: 'getProfile',
   LOCATION: 'location',
   GET_LOCATIONS: 'getLocations',
+  STORE: 'store',
+  GET_STORE_DETAIL: 'getStoreDetail',
+  GET_MENU_DETAIL: 'getMenuDetail',
 } as const;
 
 const storageKeys = {

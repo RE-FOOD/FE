@@ -6,7 +6,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import StoreMap from '@/components/store/StoreMap';
 import { colors } from '@/constants/colors';
-import { useGetStoreDetail } from '@/hooks/queries/useStore';
+import useStore from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 type Rt = RouteProp<UserStackParamList, 'StoreInfo'>;
@@ -16,8 +16,8 @@ const StoreInfoScreen = () => {
   const { params } = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
   const { storeId, storeName } = params;
-
-  const { data: store } = useGetStoreDetail(storeId);
+  const { storeDetailQuery } = useStore(storeId);
+  const { data: store } = storeDetailQuery;
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: storeName });

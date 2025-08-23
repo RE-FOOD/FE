@@ -6,10 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 import NicknameInput from '@/components/signup/NicknameInput';
 import { colors } from '@/constants/colors';
 import { useCheckNickname } from '@/hooks/queries/useMember';
-import { useUpdateNickname } from '@/hooks/queries/useUpdateNickname';
+import { useUpdateNickname } from '@/hooks/queries/useMyPage';
 
 type Status = 'none' | 'valid' | 'invalid' | 'duplicated' | 'invalidFormat';
-const NICKNAME_REGEX = /^[가-힣A-Za-z0-9]+$/;
+const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{1,6}$/;
 
 const NicknameChangeScreen = () => {
   const navigation = useNavigation();

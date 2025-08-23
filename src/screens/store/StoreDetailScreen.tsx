@@ -62,7 +62,7 @@ const StoreDetailScreen = () => {
         // TODO: API 연동 이후 storeId 고정 삭제
         onPressReview={() => navigation.navigate(userNavigations.STORE_REVIEW, { storeId: 1 })}
         onPressOrigin={() =>
-          navigation.navigate(userNavigations.STORE_INFO, { storeId: 1, storeName: store.name })
+          navigation.navigate(userNavigations.STORE_INFO, { storeId: 15, storeName: store.name })
         }
       />
 

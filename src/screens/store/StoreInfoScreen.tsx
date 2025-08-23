@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import StoreMap from '@/components/store/StoreMap';
 import { colors } from '@/constants/colors';
 import { useGetStoreDetail } from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
@@ -23,32 +24,39 @@ const StoreInfoScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.title}>가게 정보</Text>
-        <View>
-          <View>
-            <View style={styles.subtitleBox}>
-              <Text style={styles.subTitle}>상호명</Text>
+      <View style={{ gap: 20 }}>
+        <View style={{ gap: 20 }}>
+          <Text style={styles.title}>가게 정보</Text>
+          <View style={{ gap: 8 }}>
+            <View style={styles.infoRow}>
+              <View style={styles.subtitleBox}>
+                <Text style={styles.subTitle}>상호명</Text>
+              </View>
+              <Text style={styles.text}>{store?.name}</Text>
             </View>
-            <Text style={styles.text}>{store?.name}</Text>
-          </View>
-          <View>
-            <View>
-              <Text style={styles.subTitle}>픽업시간</Text>
+            <View style={styles.infoRow}>
+              <View style={styles.subtitleBox}>
+                <Text style={styles.subTitle}>픽업시간</Text>
+              </View>
+              <Text style={styles.text}>
+                {store?.openTime} ~ {store?.closeTime}
+              </Text>
             </View>
-            <Text style={styles.text}>
-              {store?.openTime} ~ {store?.closeTime}
-            </Text>
-          </View>
-          <View>
-            <View>
-              <Text style={styles.subTitle}>전화번호</Text>
+            <View style={styles.infoRow}>
+              <View style={styles.subtitleBox}>
+                <Text style={styles.subTitle}>전화번호</Text>
+              </View>
+              <Text style={styles.text}>{store?.phoneNumber}</Text>
             </View>
-            <Text style={styles.text}>{store?.phoneNumber}</Text>
           </View>
         </View>
+        <StoreMap latitude={store?.latitude} longitude={store?.longitude} />
+        <View style={{ gap: 8 }}>
+          <Text style={styles.subTitle}>주소</Text>
+          <Text style={styles.text}>{store?.address}</Text>
+        </View>
       </View>
-      <View>
+      <View style={{ gap: 20 }}>
         <Text style={styles.title}>원산지 정보</Text>
         <Text style={styles.text}>{store?.origin}</Text>
       </View>
@@ -71,8 +79,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.BLACK,
   },
+  infoRow: {
+    flexDirection: 'row',
+    gap: 20,
+  },
   subtitleBox: {
-    width: 52,
+    width: 65,
   },
   subTitle: {
     fontFamily: 'Pretendard-Medium',

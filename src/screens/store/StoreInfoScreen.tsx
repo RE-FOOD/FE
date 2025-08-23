@@ -1,11 +1,12 @@
 import { useLayoutEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Linking, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import StoreMap from '@/components/store/StoreMap';
 import { colors } from '@/constants/colors';
-import { useGetStoreDetail } from '@/hooks/queries/useStore';
+import useStore from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 type Rt = RouteProp<UserStackParamList, 'StoreInfo'>;
@@ -15,8 +16,8 @@ const StoreInfoScreen = () => {
   const { params } = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
   const { storeId, storeName } = params;
-
-  const { data: store } = useGetStoreDetail(storeId);
+  const { storeDetailQuery } = useStore(storeId);
+  const { data: store } = storeDetailQuery;
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: storeName });
@@ -46,7 +47,17 @@ const StoreInfoScreen = () => {
               <View style={styles.subtitleBox}>
                 <Text style={styles.subTitle}>전화번호</Text>
               </View>
-              <Text style={styles.text}>{store?.phoneNumber}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  if (store?.phoneNumber) {
+                    Linking.openURL(`tel:${store.phoneNumber}`);
+                  }
+                }}
+              >
+                <Text style={[styles.text, { textDecorationLine: 'underline' }]}>
+                  {store?.phoneNumber}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

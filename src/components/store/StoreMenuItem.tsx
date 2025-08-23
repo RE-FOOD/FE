@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { colors } from '@/constants/colors';
 import { formatPrice } from '@/utils/format';
 
@@ -11,6 +11,7 @@ type Props = {
   dailyDiscountPercent: number;
   dailyQuantity: number;
   imageUrl: string;
+  onPress?: () => void;
 };
 
 const StoreMenuItem = ({
@@ -20,37 +21,40 @@ const StoreMenuItem = ({
   dailyDiscountPercent,
   dailyQuantity,
   imageUrl,
+  onPress,
 }: Props) => {
   const soldOut = dailyQuantity === 0;
 
   return (
-    <View style={[styles.menuRow, soldOut && styles.soldOutRow]}>
-      <View style={styles.menuTexts}>
-        {soldOut && <Text style={styles.soldOutBadge}>품절된 메뉴입니다</Text>}
+    <Pressable onPress={onPress}>
+      <View style={[styles.menuRow, soldOut && styles.soldOutRow]}>
+        <View style={styles.menuTexts}>
+          {soldOut && <Text style={styles.soldOutBadge}>품절된 메뉴입니다</Text>}
 
-        <View style={{ gap: 4 }}>
-          <Text style={[styles.menuName, soldOut && styles.grayText]} numberOfLines={1}>
-            {name}
-          </Text>
-
-          <View style={styles.priceBlock}>
-            <Text style={[styles.discountPercent, soldOut && styles.grayText]}>
-              {dailyDiscountPercent}%
+          <View style={{ gap: 4 }}>
+            <Text style={[styles.menuName, soldOut && styles.grayText]} numberOfLines={1}>
+              {name}
             </Text>
 
-            <Text style={[styles.discountPrice, soldOut && styles.grayText]}>
-              {formatPrice(discountPrice)}
-            </Text>
+            <View style={styles.priceBlock}>
+              <Text style={[styles.discountPercent, soldOut && styles.grayText]}>
+                {dailyDiscountPercent}%
+              </Text>
 
-            <Text style={[styles.originalPrice, soldOut && styles.grayText]}>
-              {formatPrice(price)}
-            </Text>
+              <Text style={[styles.discountPrice, soldOut && styles.grayText]}>
+                {formatPrice(discountPrice)}
+              </Text>
+
+              <Text style={[styles.originalPrice, soldOut && styles.grayText]}>
+                {formatPrice(price)}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      <Image source={{ uri: imageUrl }} style={styles.menuImage} />
-    </View>
+        <Image source={{ uri: imageUrl }} style={styles.menuImage} />
+      </View>
+    </Pressable>
   );
 };
 

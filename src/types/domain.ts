@@ -78,15 +78,6 @@ interface Review {
   menus: string[];
 }
 
-interface UpdateNicknameRequest {
-  nickname: string;
-}
-
-interface UpdateNicknameData {
-  id: number;
-  nickname: string;
-}
-
 export type {
   Member,
   Profile,
@@ -96,7 +87,5 @@ export type {
   Menu,
   StoreDetail,
   Review,
-  UpdateNicknameData,
-  UpdateNicknameRequest,
   EnvironmentLevel,
 };

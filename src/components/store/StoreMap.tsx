@@ -1,17 +1,21 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { NaverMapView, NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 
-export default function StoreMap() {
-  const store = { latitude: 37.57035, longitude: 126.9909 };
+type StoreMapProps = {
+  latitude?: number;
+  longitude?: number;
+};
+
+export default function StoreMap({ latitude, longitude }: StoreMapProps) {
+  if (!latitude || !longitude) return null;
 
   return (
     <View style={{ height: 200 }}>
-      <Text>Test Page</Text>
       <NaverMapView
-        style={{ width: '100%', height: 170 }}
+        style={{ width: '100%', height: 200 }}
         initialCamera={{
-          latitude: store.latitude,
-          longitude: store.longitude,
+          latitude,
+          longitude,
           zoom: 15,
           tilt: 0,
           bearing: 0,
@@ -20,11 +24,12 @@ export default function StoreMap() {
         isShowScaleBar={false}
       >
         <NaverMapMarkerOverlay
-          latitude={store.latitude}
-          longitude={store.longitude}
-          tintColor={'#000000ff'}
-          // caption={{ text: '곱마니 순대국' }}
+          latitude={latitude}
+          longitude={longitude}
+          tintColor={'#270000f8'}
           anchor={{ x: 0.5, y: 0.5 }}
+          image={require('@/assets/images/pin.png')}
+          // caption={{ text: '곱마니 순대국' }}
         />
       </NaverMapView>
     </View>

@@ -50,7 +50,7 @@ const StoreInfoScreen = () => {
             </View>
           </View>
         </View>
-        <StoreMap />
+        <StoreMap latitude={store?.latitude} longitude={store?.longitude} />
         <View style={{ gap: 8 }}>
           <Text style={styles.subTitle}>주소</Text>
           <Text style={styles.text}>{store?.address}</Text>

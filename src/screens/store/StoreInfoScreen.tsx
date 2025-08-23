@@ -1,5 +1,6 @@
 import { useLayoutEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Linking, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -46,7 +47,17 @@ const StoreInfoScreen = () => {
               <View style={styles.subtitleBox}>
                 <Text style={styles.subTitle}>전화번호</Text>
               </View>
-              <Text style={styles.text}>{store?.phoneNumber}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  if (store?.phoneNumber) {
+                    Linking.openURL(`tel:${store.phoneNumber}`);
+                  }
+                }}
+              >
+                <Text style={[styles.text, { textDecorationLine: 'underline' }]}>
+                  {store?.phoneNumber}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

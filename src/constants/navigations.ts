@@ -11,6 +11,7 @@ const userNavigations = {
   STORE_DETAIL: 'StoreDetail',
   STORE_REVIEW: 'StoreReview',
   STORE_INFO: 'StoreInfo',
+  MENU_DETAIL: 'MenuDetail',
   CATEGORY_LIST: 'CategoryList',
   SEARCH_RESULT: 'SearchResult',
   MAP_HOME: 'MapHome',

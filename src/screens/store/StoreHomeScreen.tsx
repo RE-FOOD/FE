@@ -10,6 +10,7 @@ import SearchSection from '@/components/store/SearchSection';
 import TopBar from '@/components/store/TopBar';
 import { CategoryKey } from '@/constants/categoryImages';
 import { colors } from '@/constants/colors';
+import { queryKeys } from '@/constants/keys';
 import { userNavigations } from '@/constants/navigations';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
@@ -47,7 +48,7 @@ const StoreHomeScreen = () => {
 
   const goDetail = (item: StoreItem) => {
     queryClient.removeQueries({
-      queryKey: ['storeDetail'],
+      queryKey: [queryKeys.STORE, queryKeys.GET_STORE_DETAIL],
       exact: false,
     });
     navigation.navigate(userNavigations.STORE_DETAIL, { storeId: item.id, storeName: item.name });

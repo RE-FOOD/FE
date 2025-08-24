@@ -7,7 +7,7 @@ import LoadingScreen from '../_common/LoadingScreen';
 import StoreHeader from '@/components/store/StoreHeader';
 import StoreMenuItem from '@/components/store/StoreMenuItem';
 import { userNavigations } from '@/constants/navigations';
-import { useGetStoreDetail } from '@/hooks/queries/useStore';
+import useStore from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 type Rt = RouteProp<UserStackParamList, 'StoreDetail'>;
@@ -16,7 +16,9 @@ type Nav = StackNavigationProp<UserStackParamList, 'StoreDetail'>;
 const StoreDetailScreen = () => {
   const { params } = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
-  const { data: store, isLoading, isError } = useGetStoreDetail(1);
+  // TODO: storeId 하드코딩 API 개발 끝나면 수정
+  const { storeDetailQuery } = useStore(1);
+  const { data: store, isLoading, isError } = storeDetailQuery;
   // const { storeId, storeName } = params;
   const { storeName } = params;
 
@@ -62,14 +64,26 @@ const StoreDetailScreen = () => {
         // TODO: API 연동 이후 storeId 고정 삭제
         onPressReview={() => navigation.navigate(userNavigations.STORE_REVIEW, { storeId: 1 })}
         onPressOrigin={() =>
-          navigation.navigate(userNavigations.STORE_INFO, { storeId: 15, storeName: store.name })
+          navigation.navigate(userNavigations.STORE_INFO, { storeId: 1, storeName: store.name })
         }
       />
 
       <FlatList
         data={store.menus ?? []}
         keyExtractor={(m) => String(m.id)}
-        renderItem={({ item }) => <StoreMenuItem {...item} />}
+        // TODO: API 연동 이후 storeId 고정 삭제
+        renderItem={({ item }) => (
+          <StoreMenuItem
+            {...item}
+            onPress={() =>
+              navigation.navigate(userNavigations.MENU_DETAIL, {
+                storeId: 1,
+                storeName: store.name,
+                menuId: item.id,
+              })
+            }
+          />
+        )}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={{ padding: 20 }}>

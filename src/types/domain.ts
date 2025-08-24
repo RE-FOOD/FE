@@ -31,6 +31,7 @@ interface Profile {
 }
 
 type EnvironmentLevel = 'SPROUT' | 'SEEDLING' | 'TREE' | 'FRUIT';
+
 interface Mypage {
   id: number;
   email: string;

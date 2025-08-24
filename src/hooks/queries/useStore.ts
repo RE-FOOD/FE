@@ -1,8 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMenuDetail, getStoreDetail, MenuDetail } from '@/api/store';
+import {
+  getMenuDetail,
+  getStoreDetail,
+  getStoreList,
+  MenuDetail,
+  StoreListParams,
+} from '@/api/store';
 import { queryKeys } from '@/constants/keys';
 import { UseQueryCustomOptions } from '@/types/api';
 import { StoreDetail } from '@/types/domain';
+
+function useGetStoreList(params: StoreListParams = {}) {
+  return useQuery({
+    queryKey: [queryKeys.STORE, params],
+    queryFn: () => getStoreList(params),
+  });
+}
 
 function useGetStoreDetail(storeId: number, queryOptions?: UseQueryCustomOptions<StoreDetail>) {
   return useQuery({
@@ -27,11 +40,13 @@ function useGetMenuDetail(
   });
 }
 
-function useStore(storeId: number, menuId?: number) {
-  const storeDetailQuery = useGetStoreDetail(storeId);
-  const menuDetailQuery = useGetMenuDetail(storeId, menuId!);
+function useStore(storeId?: number, menuId?: number) {
+  const storeListQuery = useGetStoreList();
+  const storeDetailQuery = useGetStoreDetail(storeId!);
+  const menuDetailQuery = useGetMenuDetail(storeId!, menuId!);
 
   return {
+    storeListQuery,
     storeDetailQuery,
     menuDetailQuery,
   };

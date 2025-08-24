@@ -42,6 +42,10 @@ interface Mypage {
   environmentScore: number;
 }
 
+type StoreCategory = 'ENFOOD' | 'CHFOOD' | 'KRFOOD' | 'JPFOOD' | 'SNACKFOOD' | 'DESSERT';
+
+type StoreSort = 'NEAR' | 'REVIEW' | 'RATING';
+
 interface Menu {
   id: number;
   name: string;
@@ -50,6 +54,16 @@ interface Menu {
   discountPrice: number;
   dailyQuantity: number;
   imageUrl: string;
+}
+
+interface Store {
+  id: number;
+  name: string;
+  imageUrl: string;
+  discountPercent: number;
+  ratingAvg: number;
+  count: number;
+  distance: number;
 }
 
 interface StoreDetail {
@@ -86,6 +100,9 @@ export type {
   LocationFull,
   Location,
   Menu,
+  StoreCategory,
+  StoreSort,
+  Store,
   StoreDetail,
   Review,
   EnvironmentLevel,

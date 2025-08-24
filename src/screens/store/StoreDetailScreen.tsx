@@ -16,11 +16,9 @@ type Nav = StackNavigationProp<UserStackParamList, 'StoreDetail'>;
 const StoreDetailScreen = () => {
   const { params } = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
-  // TODO: storeId 하드코딩 API 개발 끝나면 수정
-  const { storeDetailQuery } = useStore(1);
+  const { storeId, storeName } = params;
+  const { storeDetailQuery } = useStore(storeId);
   const { data: store, isLoading, isError } = storeDetailQuery;
-  // const { storeId, storeName } = params;
-  const { storeName } = params;
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: storeName });
@@ -61,23 +59,21 @@ const StoreDetailScreen = () => {
         count={store.count}
         liked={liked}
         onToggleLike={() => setLiked((prev) => !prev)}
-        // TODO: API 연동 이후 storeId 고정 삭제
-        onPressReview={() => navigation.navigate(userNavigations.STORE_REVIEW, { storeId: 1 })}
+        onPressReview={() => navigation.navigate(userNavigations.STORE_REVIEW, { storeId })}
         onPressOrigin={() =>
-          navigation.navigate(userNavigations.STORE_INFO, { storeId: 1, storeName: store.name })
+          navigation.navigate(userNavigations.STORE_INFO, { storeId, storeName: store.name })
         }
       />
 
       <FlatList
         data={store.menus ?? []}
         keyExtractor={(m) => String(m.id)}
-        // TODO: API 연동 이후 storeId 고정 삭제
         renderItem={({ item }) => (
           <StoreMenuItem
             {...item}
             onPress={() =>
               navigation.navigate(userNavigations.MENU_DETAIL, {
-                storeId: 1,
+                storeId,
                 storeName: store.name,
                 menuId: item.id,
               })

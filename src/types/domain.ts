@@ -78,6 +78,16 @@ interface Review {
   menus: string[];
 }
 
+interface Like {
+  id: number;
+  name: string;
+  rating: number;
+  review: number;
+  near: number;
+  discount: number;
+  image?: string;
+}
+
 export type {
   Member,
   Profile,
@@ -88,4 +98,5 @@ export type {
   StoreDetail,
   Review,
   EnvironmentLevel,
+  Like,
 };

@@ -4,73 +4,76 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Image from '@/components/_common/RestaurantList';
 import Sort from '@/components/_common/Sort';
 import { colors } from '@/constants/colors';
-import { Like } from '@/types/domain';
+import { StoreSortOption, Like } from '@/types/domain';
 
 const restaurantData: Like[] = [
   {
     id: 1,
     name: '비스티버거',
-    rating: 3.5,
-    review: 1030,
-    near: 1.9,
-    discount: 40,
-    image: 'https://picsum.photos/300/200?random=2',
+    status: 'OPEN',
+    ratingAvg: 3.5,
+    count: 1030,
+    distance: 1.9,
+    salePercent: 40,
+    imageUrl: 'https://picsum.photos/300/200?random=2',
   },
   {
     id: 2,
     name: '비스티버거',
-    rating: 4.2,
-    review: 1,
-    near: 0.8,
-    discount: 20,
-    image: 'https://picsum.photos/300/200?random=2',
+    status: 'CLOSE',
+    ratingAvg: 4.2,
+    count: 1,
+    distance: 0.8,
+    salePercent: 20,
+    imageUrl: 'https://picsum.photos/300/200?random=2',
   },
   {
     id: 3,
     name: '버거킹',
-    rating: 4.2,
-    review: 1200,
-    near: 2.5,
-    discount: 20,
-    image: 'https://picsum.photos/300/200?random=2',
+    status: 'OPEN',
+    ratingAvg: 4.2,
+    count: 1200,
+    distance: 2.5,
+    salePercent: 20,
+    imageUrl: 'https://picsum.photos/300/200?random=2',
   },
   {
     id: 4,
     name: '비스티버거',
-    rating: 3.8,
-    review: 1200,
-    near: 1.2,
-    discount: 20,
-    image: 'https://picsum.photos/300/200?random=2',
+    status: 'OPEN',
+    ratingAvg: 3.8,
+    count: 1200,
+    distance: 1.2,
+    salePercent: 20,
+    imageUrl: 'https://picsum.photos/300/200?random=2',
   },
   {
     id: 5,
     name: '쉑쉑버거',
-    rating: 4.5,
-    review: 2100,
-    near: 3.1,
-    discount: 15,
-    image: 'https://picsum.photos/300/200?random=2',
+    status: 'CLOSE',
+    ratingAvg: 4.5,
+    count: 2100,
+    distance: 3.1,
+    salePercent: 15,
+    imageUrl: 'https://picsum.photos/300/200?random=2',
   },
 ];
 
-type SortType = 'near' | 'review' | 'rating';
-
 const LikeHomeScreen = () => {
-  const [sortType, setSortType] = useState<SortType>('near');
+  const [sortType, setSortType] = useState<StoreSortOption>('NEAR');
   const [restaurants, setRestaurants] = useState(restaurantData);
 
-  const handleSortChange = (type: SortType) => {
+  const handleSortChange = (type: StoreSortOption) => {
     setSortType(type);
     //정렬 로직
     const sortedData = [...restaurants].sort((a, b) => {
       switch (type) {
-        case 'near':
-          return a.near - b.near;
-        case 'review':
-          return b.review - a.review;
-        case 'rating':
-          return b.rating - a.rating;
+        case 'NEAR':
+          return a.distance - b.distance;
+        case 'REVIEW':
+          return b.count - a.count;
+        case 'RATING':
+          return b.ratingAvg - a.ratingAvg;
       }
     });
     setRestaurants(sortedData);

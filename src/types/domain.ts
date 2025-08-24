@@ -73,20 +73,22 @@ interface StoreDetail {
 interface Review {
   id: number;
   nickname: string;
-  rating: number; // 1~5
+  rating: number;
   content: string;
   createdAt: string;
   menus: string[];
 }
 
+export type StoreSortOption = 'NEAR' | 'REVIEW' | 'RATING';
 interface Like {
   id: number;
   name: string;
-  rating: number;
-  review: number;
-  near: number;
-  discount: number;
-  image?: string;
+  status: 'OPEN' | 'CLOSE';
+  ratingAvg: number;
+  count: number;
+  distance: number;
+  salePercent: number;
+  imageUrl?: string;
 }
 
 export type {

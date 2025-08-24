@@ -11,33 +11,44 @@ interface ImageProps {
 export default function RestaurantList({ restaurants }: ImageProps) {
   return (
     <View style={styles.imgContainer}>
-      {restaurants.map((restaurant) => (
-        <TouchableOpacity key={restaurant.id} style={styles.list}>
-          <ImageBackground
-            source={{ uri: restaurant.image }}
-            style={styles.img}
-            imageStyle={{
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-            }}
-          >
-            <View style={styles.sale}>
-              <Text style={styles.redRegularText_15}>{restaurant.discount}%</Text>
-            </View>
-          </ImageBackground>
-          <View style={styles.info}>
-            <View style={styles.rate}>
-              <Text style={styles.blackRegularText_14}>{restaurant.name}</Text>
-              <View style={styles.review}>
-                <Star />
-                <Text style={styles.blackRegularText_11}>{restaurant.rating}</Text>
-                <Text style={styles.grayRegularText}>({restaurant.review})</Text>
+      {restaurants.map((restaurant) => {
+        const closed = restaurant.status === 'CLOSE';
+
+        return (
+          <TouchableOpacity key={restaurant.id} style={styles.list}>
+            <ImageBackground
+              source={{ uri: restaurant.imageUrl }}
+              style={styles.img}
+              imageStyle={{
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+              }}
+            >
+              {!closed && (
+                <View style={styles.sale}>
+                  <Text style={styles.redRegularText_15}>{restaurant.salePercent}%</Text>
+                </View>
+              )}
+              {closed && (
+                <View style={styles.overlay}>
+                  <Text style={styles.overlayText}>판매 중인 메뉴가 없어요</Text>
+                </View>
+              )}
+            </ImageBackground>
+            <View style={styles.info}>
+              <View style={styles.rate}>
+                <Text style={styles.blackRegularText_14}>{restaurant.name}</Text>
+                <View style={styles.review}>
+                  <Star />
+                  <Text style={styles.blackRegularText_11}>{restaurant.ratingAvg}</Text>
+                  <Text style={styles.grayRegularText}>({restaurant.count})</Text>
+                </View>
               </View>
+              <Text style={styles.grayRegularText}>{restaurant.distance}km</Text>
             </View>
-            <Text style={styles.grayRegularText}>1.9km</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
@@ -120,5 +131,18 @@ const styles = StyleSheet.create({
     color: colors.BLACK,
     fontFamily: 'Pretendard-Regular',
     fontSize: 14,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlayText: {
+    color: colors.WHITE,
+    fontSize: 18,
+    fontFamily: 'Pretendard-Bold', // 폰트는 프로젝트에 맞게 조절
   },
 });

@@ -91,6 +91,15 @@ interface Like {
   imageUrl?: string;
 }
 
+interface Map {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  status: 'OPEN' | 'CLOSED';
+  maxPercent: number;
+}
+
 export type {
   Member,
   Profile,
@@ -102,4 +111,5 @@ export type {
   Review,
   EnvironmentLevel,
   Like,
+  Map,
 };

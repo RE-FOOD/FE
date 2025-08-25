@@ -17,7 +17,7 @@ export type StoreListResponse = {
   stores: Store[];
 };
 
-export const getStoreList = async ({
+const getStoreList = async ({
   category = null,
   keyWord = null,
   sort = 'NEAR',
@@ -39,7 +39,7 @@ export const getStoreList = async ({
   return res.data.data;
 };
 
-export const getStoreDetail = async (storeId: number) => {
+const getStoreDetail = async (storeId: number) => {
   const res = await axiosInstance.get<ApiResponse<StoreDetail>>(`/stores/${storeId}`);
   return res.data.data;
 };
@@ -48,9 +48,11 @@ export interface MenuDetail extends Menu {
   info: string;
 }
 
-export const getMenuDetail = async (storeId: number, menuId: number) => {
+const getMenuDetail = async (storeId: number, menuId: number) => {
   const res = await axiosInstance.get<ApiResponse<MenuDetail>>(
     `/stores/${storeId}/menus/${menuId}`
   );
   return res.data.data;
 };
+
+export { getStoreList, getStoreDetail, getMenuDetail };

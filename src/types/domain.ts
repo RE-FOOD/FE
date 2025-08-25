@@ -84,6 +84,18 @@ interface StoreDetail {
   count: number;
 }
 
+type CartMenu = Menu & {
+  orderQuantity: number;
+};
+
+interface Cart {
+  id: number;
+  name: string;
+  imageUrl: string;
+  totalCoast: number;
+  menus: CartMenu[];
+}
+
 interface Review {
   id: number;
   nickname: string;
@@ -104,6 +116,8 @@ export type {
   StoreSort,
   Store,
   StoreDetail,
+  CartMenu,
+  Cart,
   Review,
   EnvironmentLevel,
 };

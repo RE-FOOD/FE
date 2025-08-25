@@ -34,6 +34,7 @@ const MenuDetailScreen = () => {
 
   const discountedPrice = Math.floor(menu.price * (1 - menu.dailyDiscountPercent / 100));
   const totalPrice = discountedPrice * count;
+  const addToCart = async () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,13 +103,13 @@ const MenuDetailScreen = () => {
       </View>
 
       <View style={styles.bottom}>
-        <View style={{ gap: 3 }}>
+        <View>
           {menu.dailyDiscountPercent > 0 && (
             <Text style={styles.totalOriginal}>{(menu.price * count).toLocaleString()}원</Text>
           )}
           <Text style={styles.total}>{totalPrice.toLocaleString()}원</Text>
         </View>
-        <Pressable style={styles.cartBtn}>
+        <Pressable style={styles.cartBtn} onPress={addToCart}>
           <Text style={styles.cartBtnText}>장바구니에 담기</Text>
         </Pressable>
       </View>
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0FB758',
     borderRadius: 50,
     paddingVertical: 14,
-    paddingHorizontal: 40,
+    paddingHorizontal: 30,
     alignItems: 'center',
   },
   cartBtnText: {

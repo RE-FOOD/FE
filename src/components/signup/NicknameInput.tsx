@@ -12,7 +12,7 @@ type Props = {
   setNicknameStatus: (
     status: 'none' | 'valid' | 'invalid' | 'duplicated' | 'invalidFormat'
   ) => void;
-  setNicknameErrorVisible: (visible: boolean) => void;
+  setNicknameErrorVisible?: (visible: boolean) => void;
 };
 
 const NicknameInput = ({

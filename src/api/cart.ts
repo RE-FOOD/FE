@@ -9,10 +9,20 @@ const getCarts = async () => {
   return res.data.data;
 };
 
-const checkCartStore = async (storeId: number) => {
-  const res = await axiosInstance.get<ApiResponse<string>>(`/carts/check?storeId=${storeId}`);
-  return res.status;
-  // 200: 동일 가게 데이터 존재, 201: 장바구니 데이터 없음, 409: 다른 가게 존재
+type CheckCartStoreResponse = ApiResponse<string> & {
+  httpStatus: number;
+};
+
+const checkCartStore = async (storeId: number): Promise<CheckCartStoreResponse> => {
+  const res = await axiosInstance.get<ApiResponse<string>>(`/carts/check?storeId=${storeId}`, {
+    // 200: 동일 가게 데이터 존재, 201: 장바구니 데이터 없음, 409: 다른 가게 존재
+    validateStatus: (status) => [200, 201, 409].includes(status),
+  });
+
+  return {
+    httpStatus: res.status,
+    ...res.data,
+  };
 };
 
 export type AddMenuRequest = {
@@ -22,8 +32,24 @@ export type AddMenuRequest = {
   quantity: number;
 };
 
-// const addMenuToCart = async (data: AddMenuRequest) => {
-//   const res = await axiosInstance.post<ApiResponse<string>>(`/carts`, data);
-// };
+const addMenuToCart = async (data: AddMenuRequest) => {
+  const res = await axiosInstance.post<ApiResponse<string>>(`/carts`, data);
+  console.log(res.data);
+  return res.data;
+};
 
-export { getCarts, checkCartStore };
+export type UpdateCartRequest = {
+  id: number; // storeId
+  menus: {
+    id: number; // menuId
+    quantity: number; // 수량 (삭제 시 0)
+  }[];
+};
+
+const updateCartItem = async (data: UpdateCartRequest) => {
+  const res = await axiosInstance.put<ApiResponse<string>>(`/carts`, data);
+  console.log(res.data);
+  return res.data;
+};
+
+export { getCarts, checkCartStore, addMenuToCart, updateCartItem };

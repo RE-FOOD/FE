@@ -6,7 +6,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import LoadingScreen from '../_common/LoadingScreen';
 import Minus from '@/assets/icons/minus.svg';
 import Plus from '@/assets/icons/plus.svg';
+import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
+import useCart from '@/hooks/queries/useCart';
 import useStore from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { showToast } from '@/utils/toast';
@@ -20,9 +22,11 @@ const MenuDetailScreen = () => {
   const { storeId, storeName, menuId } = params;
 
   const { menuDetailQuery } = useStore(storeId, menuId);
+  const { checkCartStoreMutation, addMenuMutation } = useCart();
   const { data: menu, isLoading } = menuDetailQuery;
 
   const [count, setCount] = useState(1);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: storeName });
@@ -34,7 +38,43 @@ const MenuDetailScreen = () => {
 
   const discountedPrice = Math.floor(menu.price * (1 - menu.dailyDiscountPercent / 100));
   const totalPrice = discountedPrice * count;
-  const addToCart = async () => {};
+
+  const addToCart = async () => {
+    const result = await checkCartStoreMutation.mutateAsync(storeId);
+
+    if (result.httpStatus === 200) {
+      addMenuMutation.mutate({
+        checkNew: false,
+        storeId,
+        menuId,
+        quantity: count,
+      });
+    } else if (result.httpStatus === 201) {
+      addMenuMutation.mutate({
+        checkNew: true,
+        storeId,
+        menuId,
+        quantity: count,
+      });
+    } else if (result.httpStatus === 409) {
+      setModalOpen(true);
+    }
+  };
+
+  const handleModalClick = (btnIndex: number) => {
+    console.log(btnIndex);
+    // 0 = 취소
+    if (btnIndex === 0) return;
+    // 5 = 새로 담기
+    if (btnIndex === 1) {
+      addMenuMutation.mutate({
+        checkNew: true,
+        storeId,
+        menuId,
+        quantity: count,
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -113,6 +153,13 @@ const MenuDetailScreen = () => {
           <Text style={styles.cartBtnText}>장바구니에 담기</Text>
         </Pressable>
       </View>
+      <CustomModal
+        state="ResetCart"
+        type="warning"
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onButtonClick={handleModalClick}
+      />
     </SafeAreaView>
   );
 };
@@ -249,7 +296,7 @@ const styles = StyleSheet.create({
   },
   cartBtnText: {
     color: colors.WHITE,
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'Pretendard-SemiBold',
   },
 });

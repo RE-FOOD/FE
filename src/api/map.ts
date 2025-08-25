@@ -1,8 +1,17 @@
 import axiosInstance from './axios';
+import { ApiResponse } from '@/types/api';
 import { Map } from '@/types/domain';
 
 type GetNearbyStoresRequest = Pick<Map, 'latitude' | 'longitude'> & {
   radiusKm?: number;
+};
+type StoreSummary = Pick<Map, 'id' | 'name' | 'status' | 'maxPercent'> & {
+  imageUrl: string;
+  pickupTime: string;
+  distance: number;
+  rating: number;
+  reviewCount: number;
+  address: string;
 };
 
 const map = async (request: GetNearbyStoresRequest): Promise<Map[]> => {
@@ -23,4 +32,16 @@ const map = async (request: GetNearbyStoresRequest): Promise<Map[]> => {
   }
 };
 
-export default map;
+const storeSummary = async (
+  storeId: number,
+  latitude: number,
+  longitude: number
+): Promise<ApiResponse<StoreSummary>> => {
+  const { data } = await axiosInstance.get<ApiResponse<StoreSummary>>(`/maps/${storeId}/summary`, {
+    params: { latitude, longitude },
+  });
+  return data;
+};
+
+export default { map, storeSummary };
+export type { StoreSummary };

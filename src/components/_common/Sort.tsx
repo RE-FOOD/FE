@@ -45,7 +45,6 @@ const Sort: React.FC<SortProps> = ({ onSortChange, currentSort }) => {
 
 const styles = StyleSheet.create({
   sortContainer: {
-    paddingVertical: 15,
     flexDirection: 'row',
     gap: 5,
   },

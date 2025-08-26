@@ -1,4 +1,5 @@
 import LoggedOutStackNavigator from '../stack/LoggedOutStackNavigator';
+import SellerStackNavigator from '../stack/SellerStackNavigator';
 import UserStackNavigator from '../stack/UserStackNavigator';
 import useAuth from '@/hooks/queries/useAuth';
 
@@ -10,7 +11,7 @@ function RootNavigator() {
   }
 
   if (isSeller) {
-    return <LoggedOutStackNavigator />;
+    return <SellerStackNavigator />;
   }
   return <UserStackNavigator />;
 }

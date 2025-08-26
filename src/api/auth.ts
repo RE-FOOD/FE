@@ -61,7 +61,7 @@ type ResponseToken = {
 const getProfile = async (): Promise<Profile> => {
   const { data } = await axiosInstance.get('/members/profile');
   console.log(data);
-  return data;
+  return data.data;
 };
 
 const getAccessToken = async (): Promise<ResponseToken> => {

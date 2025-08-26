@@ -1,6 +1,14 @@
 import { useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getAccessToken, getProfile, kakaoLogin, kakaoSignup, logout } from '@/api/auth';
+import axios from 'axios';
+import {
+  getAccessToken,
+  getProfile,
+  kakaoLogin,
+  kakaoSignup,
+  logout,
+  sellerSignup,
+} from '@/api/auth';
 import queryClient from '@/api/queryClient';
 import { queryKeys, storageKeys } from '@/constants/keys';
 import { numbers } from '@/constants/numbers';
@@ -8,10 +16,18 @@ import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/api';
 import { Profile } from '@/types/domain';
 import { removeEncryptStorage, setEncryptStorage } from '@/utils/encryptStorage';
 import { removeHeader, setHeader } from '@/utils/header';
+import { showToast } from '@/utils/toast';
 
-function useSignup(mutationOptions?: UseMutationCustomOptions) {
+function useKakaoSignup(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: kakaoSignup,
+    ...mutationOptions,
+  });
+}
+
+function useSellerSignup(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: sellerSignup,
     ...mutationOptions,
   });
 }
@@ -25,6 +41,11 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
       queryClient.fetchQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
       });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        showToast('error', '사업자 등록 승인 대기 중', '승인 대기 이후 서비스 이용이 가능합니다.');
+      }
     },
     ...mutationOptions,
   });
@@ -81,15 +102,25 @@ function useLogout(mutationOptions?: UseMutationCustomOptions) {
 }
 
 function useAuth() {
-  const signupMutation = useSignup();
+  const kakaoSignupMutation = useKakaoSignup();
+  const sellerSignupMutation = useSellerSignup();
   const loginMutation = useLogin();
   const refreshTokenQuery = useGetRefreshToken();
-  const { isSuccess: isLogin } = useGetProfile({
-    enabled: refreshTokenQuery.isSuccess, // 성공 시 프로필 반환
+  const { data: profile, isSuccess: isLogin } = useGetProfile({
+    enabled: refreshTokenQuery.isSuccess, // 토큰 갱신 성공 시 프로필 요청
   });
   const logoutMutation = useLogout();
+  const isSeller = profile?.role === 'ROLE_STORE';
 
-  return { signupMutation, loginMutation, isLogin, logoutMutation };
+  return {
+    kakaoSignupMutation,
+    sellerSignupMutation,
+    loginMutation,
+    isLogin,
+    isSeller,
+    profile,
+    logoutMutation,
+  };
 }
 
 export default useAuth;

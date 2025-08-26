@@ -44,7 +44,7 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
-        showToast('error', '사업자 등록 승인 대기 중', '승인 대기 이후 서비스 이용이 가능합니다.');
+        showToast('error', '사업자 등록 승인 대기 중', '승인 이후 서비스 이용이 가능합니다.');
       }
     },
     ...mutationOptions,

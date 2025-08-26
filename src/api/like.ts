@@ -6,6 +6,10 @@ interface GetFavoriteParams {
   sort: StoreSortOption;
   cursorId: number;
 }
+export interface FavoriteResponse {
+  dataId: number;
+  isFavored: boolean;
+}
 
 export const like = async ({ sort, cursorId }: GetFavoriteParams): Promise<ApiResponse<Like[]>> => {
   const { data } = await axiosInstance.get<ApiResponse<Like[]>>('/stores/favorites/me', {
@@ -15,4 +19,9 @@ export const like = async ({ sort, cursorId }: GetFavoriteParams): Promise<ApiRe
     },
   });
   return data;
+};
+
+export const toggleFavorite = async (storeId: number): Promise<FavoriteResponse> => {
+  const res = await axiosInstance.post<FavoriteResponse>(`/favorites/${storeId}`, {});
+  return res.data;
 };

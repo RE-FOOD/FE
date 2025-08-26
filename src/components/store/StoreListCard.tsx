@@ -26,17 +26,17 @@ const StoreListCard = ({ item, width = '100%', showDiscountBadge }: Props) => {
           </Text>
           <View style={styles.ratingBox}>
             <Star width={12} height={12} />
-            {item.ratingAvg ? (
+            {item.count ? (
               <View style={styles.ratingRow}>
-                <Text style={styles.meta}>{item.ratingAvg}</Text>
+                <Text style={styles.meta}>{item.ratingAvg ?? 0}</Text>
                 <Text style={styles.metaCnt}>{`(${item.count})`}</Text>
               </View>
             ) : (
-              <Text style={styles.meta}>{item.ratingAvg}</Text>
+              <Text style={styles.meta}>{item.ratingAvg ?? 0}</Text>
             )}
           </View>
         </View>
-        <Text style={styles.distance}>{item.distance}</Text>
+        <Text style={styles.distance}>{item.distance}km</Text>
       </View>
     </View>
   );

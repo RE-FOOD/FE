@@ -31,7 +31,7 @@ type NavigationProp = StackNavigationProp<LoggedOutStackParamList>;
 const nicknameRegex = /^[가-힣a-zA-Z0-9]{1,6}$/; // 한글/영문/숫자 + 1~6자
 
 const UserSignupScreen = () => {
-  const { signupMutation, loginMutation } = useAuth();
+  const { kakaoSignupMutation, loginMutation } = useAuth();
   const kakaoAccessToken = useAuthStore((s) => s.kakaoAccessToken);
   const navigation = useNavigation<NavigationProp>();
 
@@ -133,7 +133,7 @@ const UserSignupScreen = () => {
     if (hasError) return;
 
     const deviceToken = await getFcmToken();
-    signupMutation.mutate(
+    kakaoSignupMutation.mutate(
       { kakaoAccessToken, phone, nickname, address, roadAddress },
       {
         onSuccess: () => {

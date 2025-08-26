@@ -90,6 +90,7 @@ const LikeHomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+    paddingVertical: 15,
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',

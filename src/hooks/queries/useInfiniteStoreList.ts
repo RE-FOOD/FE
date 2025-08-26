@@ -2,7 +2,7 @@ import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
 import { getStoreList, StoreListResponse, StoreListParams } from '@/api/store';
 import { queryKeys } from '@/constants/keys';
 
-export type BaseFilters = Pick<StoreListParams, 'category' | 'keyWord' | 'sort' | 'limit'>;
+export type BaseFilters = Pick<StoreListParams, 'category' | 'keyword' | 'sort' | 'limit'>;
 type PageParam = { cursorId: number; direction: boolean };
 
 export function useInfiniteStoreList(filters: BaseFilters) {

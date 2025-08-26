@@ -4,7 +4,7 @@ import { Menu, Store, StoreCategory, StoreSort, StoreDetail } from '@/types/doma
 
 export type StoreListParams = {
   category?: StoreCategory | null;
-  keyWord?: string | null;
+  keyword?: string | null;
   sort?: StoreSort | null;
   cursorId?: number;
   direction?: boolean;
@@ -19,7 +19,7 @@ export type StoreListResponse = {
 
 const getStoreList = async ({
   category = null,
-  keyWord = null,
+  keyword = null,
   sort = 'NEAR',
   cursorId = 0,
   direction = true,
@@ -28,7 +28,7 @@ const getStoreList = async ({
   const res = await axiosInstance.get<ApiResponse<StoreListResponse>>('/stores', {
     params: {
       category: category ?? null,
-      keyWord: keyWord ?? null,
+      keyword: keyword ?? null,
       sort: sort ?? null,
       cursorId,
       direction,

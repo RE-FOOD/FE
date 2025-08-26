@@ -74,7 +74,7 @@ const CategoryListScreen = () => {
   const filters: BaseFilters = useMemo(
     () => ({
       category: categoryMap[selectedKey],
-      keyWord: keyword ?? null,
+      keyword: keyword ?? null,
       sort: sortMap[sort],
       limit: 15,
     }),
@@ -106,7 +106,7 @@ const CategoryListScreen = () => {
 
   // 스크롤 복원키
   const scrollKey = useMemo(
-    () => `${queryKeys.STORE}:${filters.category}:${filters.sort}:${filters.keyWord ?? ''}`,
+    () => `${queryKeys.STORE}:${filters.category}:${filters.sort}:${filters.keyword ?? ''}`,
     [filters]
   );
 

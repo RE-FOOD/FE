@@ -29,6 +29,7 @@ const userNavigations = {
   REPORT: 'GreenReport',
   PRIVATE: 'Private',
   RULE: 'Rule',
+  STORE_LIST: 'StoreList',
 } as const;
 
 export { loggedOutNavigations, userNavigations };

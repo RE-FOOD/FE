@@ -11,6 +11,7 @@ import HistoryDetailScreen from '@/screens/history/HistoryDetailScreen';
 import ReviewWriteScreen from '@/screens/history/ReviewWriteScreen';
 import LocationPostcodeScreen from '@/screens/location/LocationPostcodeScreen';
 import LocationScreen from '@/screens/location/LocationScreen';
+import NearStoreListScreen from '@/screens/map/NearStoreListScreen';
 import GreenReport from '@/screens/mypage/GreenReportScreen';
 import NicknameChangeScreen from '@/screens/mypage/NicknameChangeScreen';
 import Private from '@/screens/mypage/PrivateScreen';
@@ -47,6 +48,7 @@ export type UserStackParamList = {
   [userNavigations.REPORT]: undefined;
   [userNavigations.PRIVATE]: undefined;
   [userNavigations.RULE]: undefined;
+  [userNavigations.STORE_LIST]: undefined;
 };
 
 const Stack = createStackNavigator<UserStackParamList>();
@@ -133,6 +135,11 @@ function UserStackNavigator() {
         name={userNavigations.REVIEW}
         component={Review}
         options={{ title: '리뷰 관리' }}
+      />
+      <Stack.Screen
+        name={userNavigations.STORE_LIST}
+        component={NearStoreListScreen}
+        options={{ title: '가게 목록' }}
       />
       <Stack.Screen
         name={userNavigations.REPORT}

@@ -2,6 +2,12 @@ import axiosInstance from './axios';
 import { ApiResponse } from '@/types/api';
 import { Menu, Store, StoreCategory, StoreSort, StoreDetail } from '@/types/domain';
 
+export type OverviewResponse = {
+  cartCount: number;
+  notifications: boolean;
+  // locations: string;
+};
+
 export type StoreListParams = {
   category?: StoreCategory | null;
   keyword?: string | null;
@@ -27,9 +33,9 @@ const getStoreList = async ({
 }: StoreListParams) => {
   const res = await axiosInstance.get<ApiResponse<StoreListResponse>>('/stores', {
     params: {
-      category: category ?? null,
-      keyword: keyword ?? null,
-      sort: sort ?? null,
+      category: category ?? undefined,
+      keyword: keyword ?? undefined,
+      sort: sort,
       cursorId,
       direction,
       limit,

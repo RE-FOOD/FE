@@ -1,11 +1,13 @@
-import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
+import { useInfiniteQuery, InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { getStoreList, StoreListResponse, StoreListParams } from '@/api/store';
 import { queryKeys } from '@/constants/keys';
 
 export type BaseFilters = Pick<StoreListParams, 'category' | 'keyword' | 'sort' | 'limit'>;
 type PageParam = { cursorId: number; direction: boolean };
 
-export function useInfiniteStoreList(filters: BaseFilters) {
+export function useInfiniteStoreList(
+  filters: BaseFilters
+): UseInfiniteQueryResult<InfiniteData<StoreListResponse>, Error> {
   const limit = filters.limit ?? 15;
 
   return useInfiniteQuery<
@@ -36,10 +38,10 @@ export function useInfiniteStoreList(filters: BaseFilters) {
       return { cursorId: last.nextCursor, direction: true };
     },
 
-    getPreviousPageParam: (first) => {
-      if (first.prevCursor == null) return undefined;
-      return { cursorId: first.prevCursor, direction: false };
-    },
+    // getPreviousPageParam: (first) => {
+    //   if (first.prevCursor == null) return undefined;
+    //   return { cursorId: first.prevCursor, direction: false };
+    // },
 
     staleTime: 60_000,
     refetchOnMount: false,

@@ -12,6 +12,7 @@ import { CategoryKey } from '@/constants/categoryImages';
 import { colors } from '@/constants/colors';
 import { queryKeys } from '@/constants/keys';
 import { userNavigations } from '@/constants/navigations';
+import { useGetOverviews } from '@/hooks/queries/useMember';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 type NavigationProp = StackNavigationProp<UserStackParamList>;
@@ -25,26 +26,10 @@ const CATEGORIES: { key: CategoryKey; label: string }[] = [
   { key: 'dessert', label: '디저트' },
 ];
 
-const DISCOUNT_STORES: StoreItem[] = new Array(6).fill(null).map((_, i) => ({
-  id: i,
-  name: i % 2 ? '판떡볶이' : '잠봉베르 샌드위치',
-  rating: 4.5 + Math.random() * 0.4,
-  price: i % 2 ? '10,000원' : '4,000원',
-  salePrice: i % 2 ? '6,000원' : '2,700원',
-  discount: ['-40%', '-32%'][i % 2],
-  image: 'https://via.placeholder.com/300x180',
-}));
-
-const POPULAR_STORES: StoreItem[] = new Array(6).fill(null).map((_, i) => ({
-  id: i + 100,
-  name: i % 2 ? '517낙지&아구' : '능동타코집',
-  distance: `${(Math.random() * 3 + 0.2).toFixed(1)}km`,
-  rating: 4.3 + Math.random() * 0.6,
-  image: 'https://via.placeholder.com/300x180',
-}));
-
 const StoreHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
+  const { data } = useGetOverviews();
+  // const { data, refetch, isLoading, isError } = useGetOverviews();
 
   const goDetail = (item: StoreItem) => {
     queryClient.removeQueries({
@@ -53,6 +38,26 @@ const StoreHomeScreen = () => {
     });
     navigation.navigate(userNavigations.STORE_DETAIL, { storeId: item.id, storeName: item.name });
   };
+
+  const discountMenuItems: StoreItem[] =
+    data?.data?.discountMenu?.map((item: any) => ({
+      id: item.storeId,
+      name: item.menuName,
+      rating: item.ratingAvg,
+      price: `${item.price.toLocaleString()}원`,
+      salePrice: `${item.discountPrice.toLocaleString()}원`,
+      discount: `-${item.discountPercent}%`,
+      image: item.imageUrl,
+    })) ?? [];
+
+  const popularStoreItems: StoreItem[] =
+    data?.data?.popularStores?.map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      rating: item.ratingAvg,
+      distance: `${item.distance}km`,
+      image: item.imageUrl,
+    })) ?? [];
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -63,7 +68,7 @@ const StoreHomeScreen = () => {
       >
         <View style={styles.topSection}>
           <TopBar
-            locationLabel="서울 종로구 창경궁로 254"
+            locationLabel={data?.locations ?? ''}
             onPressLocation={() => navigation.navigate(userNavigations.LOCATION)}
             onPressCart={() => navigation.navigate(userNavigations.CART)}
             onPressNotification={() => navigation.navigate(userNavigations.NOTIFICATION)}
@@ -95,10 +100,14 @@ const StoreHomeScreen = () => {
           <HorizontalSnapList
             title="할인율 최고 💸"
             onPressItem={goDetail}
-            data={DISCOUNT_STORES}
+            data={discountMenuItems}
             showDiscountBadge
           />
-          <HorizontalSnapList title="인기 가게 🔥" onPressItem={goDetail} data={POPULAR_STORES} />
+          <HorizontalSnapList
+            title="인기 가게 🔥"
+            onPressItem={goDetail}
+            data={popularStoreItems}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

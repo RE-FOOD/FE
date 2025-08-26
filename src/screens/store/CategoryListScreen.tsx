@@ -7,6 +7,8 @@ import {
   Text,
   RefreshControl,
   LayoutChangeEvent,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -31,7 +33,6 @@ type Rt = RouteProp<UserStackParamList, typeof userNavigations.CATEGORY_LIST>;
 type StickyRow = { __type: 'sticky' };
 type Row = StickyRow | Store;
 
-// UI → 서버 매핑
 const categoryMap: Record<CategoryKey, StoreCategory> = {
   korean: 'KRFOOD',
   chinese: 'CHFOOD',
@@ -56,8 +57,6 @@ const CATEGORIES: { key: CategoryKey; label: string }[] = [
   { key: 'dessert', label: '디저트' },
 ];
 
-const TOP_THRESHOLD = 24;
-
 const CategoryListScreen = () => {
   const route = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
@@ -67,7 +66,6 @@ const CategoryListScreen = () => {
     navigation.setOptions({ title: label });
   }, [navigation, label]);
 
-  // 필터
   const [sort, setSort] = useState<SortKey>('distance');
   const [keyword, setKeyword] = useState<string | null>(null);
 
@@ -76,12 +74,11 @@ const CategoryListScreen = () => {
       category: categoryMap[selectedKey],
       keyword: keyword ?? null,
       sort: sortMap[sort],
-      limit: 15,
+      limit: 5,
     }),
     [selectedKey, keyword, sort]
   );
 
-  // 쿼리
   const {
     data,
     isLoading,
@@ -89,14 +86,10 @@ const CategoryListScreen = () => {
     refetch,
     isFetching,
     fetchNextPage,
-    fetchPreviousPage,
     hasNextPage,
-    hasPreviousPage,
     isFetchingNextPage,
-    isFetchingPreviousPage,
   } = useInfiniteStoreList(filters);
 
-  // 데이터 평탄화 + 중복 제거
   const stores: Store[] = useMemo(() => {
     const all = data?.pages.flatMap((p) => p.stores) ?? [];
     return all.filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i);
@@ -104,7 +97,6 @@ const CategoryListScreen = () => {
 
   const rows: Row[] = useMemo(() => [{ __type: 'sticky' }, ...stores], [stores]);
 
-  // 스크롤 복원키
   const scrollKey = useMemo(
     () => `${queryKeys.STORE}:${filters.category}:${filters.sort}:${filters.keyword ?? ''}`,
     [filters]
@@ -115,8 +107,6 @@ const CategoryListScreen = () => {
   const getOffset = useListScrollStore((s) => s.getOffset);
   const clearOffset = useListScrollStore((s) => s.clearOffset);
 
-  // 스크롤/레이아웃 관련 ref
-  const prevLockRef = useRef(false);
   const lastYRef = useRef(0);
   const isFirstFocusRef = useRef(true);
   const endReachedDuringMomentum = useRef(false);
@@ -125,7 +115,6 @@ const CategoryListScreen = () => {
 
   const isScrollable = () => contentHeightRef.current > layoutHeightRef.current + 8;
 
-  // 필터 변경 시: 항상 오프셋 초기화 + 맨 위
   useEffect(() => {
     isFirstFocusRef.current = true;
     clearOffset(scrollKey);
@@ -135,7 +124,6 @@ const CategoryListScreen = () => {
     });
   }, [scrollKey, clearOffset]);
 
-  // 포커스 시: 첫 진입은 0, 이후엔 오프셋 복원
   useFocusEffect(
     useCallback(() => {
       if (isFirstFocusRef.current) {
@@ -156,6 +144,8 @@ const CategoryListScreen = () => {
 
   const onSelectCategory = useCallback(
     (c: { key: CategoryKey; label: string }) => {
+      setSort('distance');
+      setKeyword(null);
       navigation.setParams({ key: c.key, label: c.label });
     },
     [navigation]
@@ -166,17 +156,16 @@ const CategoryListScreen = () => {
     return `store-${item.id}-${index}`;
   };
 
-  const navToResult = useCallback((q: string) => {
-    setKeyword(q);
-  }, []);
-
-  const goDetail = (item: Store) => {
-    queryClient.removeQueries({
-      queryKey: [queryKeys.STORE, queryKeys.GET_STORE_DETAIL],
-      exact: false,
-    });
-    navigation.navigate(userNavigations.STORE_DETAIL, { storeId: item.id, storeName: item.name });
-  };
+  const goDetail = useCallback(
+    (item: Store) => {
+      queryClient.removeQueries({
+        queryKey: [queryKeys.STORE, queryKeys.GET_STORE_DETAIL],
+        exact: false,
+      });
+      navigation.navigate(userNavigations.STORE_DETAIL, { storeId: item.id, storeName: item.name });
+    },
+    [navigation]
+  );
 
   const renderItem = useCallback(
     ({ item, index }: { item: Row; index: number }) => {
@@ -184,9 +173,9 @@ const CategoryListScreen = () => {
         return (
           <StickyControls
             sort={sort}
-            onChangeSort={(k) => setSort(k)} // 정렬 버튼 눌렀을 때 state 변경
+            onChangeSort={(k) => setSort(k)}
             searchDefaultValue={keyword ?? ''}
-            onSubmitKeyword={(q) => setKeyword(q)} // 검색창 엔터 시 state 변경
+            onSubmitKeyword={(q) => setKeyword(q)}
           />
         );
       }
@@ -205,41 +194,23 @@ const CategoryListScreen = () => {
         </Pressable>
       );
     },
-    [navToResult, rows.length, sort]
+    [rows.length, sort, goDetail, keyword]
   );
 
   const onScroll = useCallback(
-    (e: any) => {
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const y = e.nativeEvent.contentOffset.y;
-      const dy = y - lastYRef.current;
       lastYRef.current = y;
-
-      // 위로 당기며 상단 근처면 이전 페이지
-      if (
-        dy < 0 &&
-        y <= TOP_THRESHOLD &&
-        hasPreviousPage &&
-        !isFetchingPreviousPage &&
-        !prevLockRef.current
-      ) {
-        prevLockRef.current = true;
-        fetchPreviousPage().finally(() => {
-          prevLockRef.current = false;
-        });
-      }
-
       setOffset(scrollKey, y);
     },
-    [fetchPreviousPage, hasPreviousPage, isFetchingPreviousPage, scrollKey, setOffset]
+    [scrollKey, setOffset]
   );
 
-  // onEndReached 중복 호출/초기 호출 방지
   const onMomentumScrollBegin = () => {
     endReachedDuringMomentum.current = false;
   };
 
   const onEndReached = useCallback(() => {
-    // 스크롤 불가(컨텐츠가 화면보다 짧음)면 자동 로딩 금지
     if (!isScrollable()) return;
 
     if (endReachedDuringMomentum.current) return;
@@ -257,7 +228,6 @@ const CategoryListScreen = () => {
     contentHeightRef.current = h;
   }, []);
 
-  // 에러/로딩/빈 상태 처리
   if (isError) {
     return (
       <View style={[styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
@@ -328,11 +298,9 @@ const CategoryListScreen = () => {
         windowSize={10}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
-        // 상단에 이전 페이지 붙일 때 점프 방지
-        maintainVisibleContentPosition={{ minIndexForVisible: 1 }}
         refreshControl={
           <RefreshControl
-            refreshing={!!isFetching && !isFetchingNextPage && !isFetchingPreviousPage}
+            refreshing={!!isFetching && !isFetchingNextPage}
             onRefresh={() => refetch()}
           />
         }
@@ -344,13 +312,21 @@ const CategoryListScreen = () => {
 export default CategoryListScreen;
 
 const styles = StyleSheet.create({
-  rootContainer: { backgroundColor: colors.WHITE },
-  container: { flex: 1 },
+  rootContainer: {
+    backgroundColor: colors.WHITE,
+  },
+  container: {
+    flex: 1,
+  },
   cardContainer: {
     paddingHorizontal: 20,
     paddingVertical: 8,
     backgroundColor: colors.WHITE,
   },
-  storeListFirst: { marginTop: 15 },
-  storeListLast: { marginBottom: 15 },
+  storeListFirst: {
+    marginTop: 15,
+  },
+  storeListLast: {
+    marginBottom: 15,
+  },
 });

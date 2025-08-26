@@ -9,6 +9,8 @@ const queryKeys = {
   GET_MENU_DETAIL: 'getMenuDetail',
   CART: 'cart',
   GET_CART: 'getCart',
+  MEMBER: 'member',
+  GET_OVERVIEWS: 'getOverviews',
 } as const;
 
 const storageKeys = {

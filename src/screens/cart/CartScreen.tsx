@@ -16,6 +16,7 @@ import Arrow from '@/assets/icons/arrow-right.svg';
 import Bin from '@/assets/icons/bin.svg';
 import Minus from '@/assets/icons/minus.svg';
 import Plus from '@/assets/icons/plus.svg';
+import EmptyState from '@/components/_common/EmptyState';
 import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
 import { queryKeys } from '@/constants/keys';
@@ -47,9 +48,11 @@ const CartScreen = () => {
 
   if (store.menus.length === 0) {
     return (
-      <View>
-        <Text style={{ color: colors.BLACK }}>장바구니에 담긴 메뉴가 없습니다.</Text>
-      </View>
+      <EmptyState
+        icon={require('@/assets/images/empty-cart.webp')}
+        title="장바구니가 비어있어요"
+        subtitle="원하는 메뉴를 담아 음식을 구출해보세요!"
+      />
     );
   }
 

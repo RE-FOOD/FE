@@ -22,7 +22,7 @@ const GreenReport = () => {
           </Text>
         </View>
         <LevelProgress
-          value={me?.environmentScore}
+          value={me?.progressPercentage}
           labels={['씨앗', '묘목', '나무', '사과나무']}
           height={16}
           colors={['#FF6A3D', '#FFC0A3']}

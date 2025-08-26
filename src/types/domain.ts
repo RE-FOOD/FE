@@ -39,7 +39,9 @@ interface Mypage {
   environmentLevel: EnvironmentLevel;
   orderCount: number;
   dishCount: number;
-  environmentScore: number;
+  environmentPoint: number;
+  nextLevelPoint: number;
+  progressPercentage: number;
 }
 
 interface Menu {

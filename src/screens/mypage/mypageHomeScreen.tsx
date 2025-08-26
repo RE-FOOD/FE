@@ -51,11 +51,11 @@ const MypageHomeScreen = () => {
               </View>
               <View style={styles.levelRemindTextBox}>
                 <Text style={styles.grayRegularText}>다음 레벨까지 남은 환경 점수</Text>
-                <Text style={styles.orangeBoldText_13}>130점</Text>
+                <Text style={styles.orangeBoldText_13}>{me?.nextLevelPoint}</Text>
               </View>
             </View>
             <LevelProgress
-              value={me?.environmentScore} // %로 수정 요청
+              value={me?.progressPercentage}
               labels={['LEVEL1', 'LEVEL2', 'LEVEL3', 'LEVEL4']}
               height={16}
               colors={['#FF6A3D', '#FFC0A3']}

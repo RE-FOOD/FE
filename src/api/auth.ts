@@ -9,6 +9,7 @@ type requestLogin = {
 
 const kakaoLogin = async ({ accessToken, fcmToken }: requestLogin): Promise<ResponseToken> => {
   const res = await axiosInstance.post('/auth/login/members', { accessToken, fcmToken });
+  console.log(res.data);
   return res.data.data;
 };
 

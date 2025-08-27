@@ -31,4 +31,9 @@ const getOverviews = async (): Promise<Overview> => {
   };
 };
 
-export { checkNickname, getOverviews };
+const getCartCount = async (): Promise<number> => {
+  const res = await axiosInstance.get<ApiResponse<{ cartCount: number }>>('/members/cartCount');
+  return res.data.data.cartCount;
+};
+
+export { checkNickname, getOverviews, getCartCount };

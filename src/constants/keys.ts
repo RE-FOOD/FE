@@ -9,6 +9,7 @@ const queryKeys = {
   GET_MENU_DETAIL: 'getMenuDetail',
   CART: 'cart',
   GET_CART: 'getCart',
+  GET_CART_COUNT: 'getCartCount',
   MEMBER: 'member',
   GET_OVERVIEWS: 'getOverviews',
   ORDER: 'Order',

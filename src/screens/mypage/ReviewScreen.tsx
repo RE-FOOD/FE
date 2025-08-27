@@ -6,9 +6,10 @@ import Trash from '@/assets/icons/trash.svg';
 import { colors } from '@/constants/colors';
 import { useMyReviewFlat } from '@/hooks/queries/useReview';
 
-const Review = () => {
-  const { reviews, totalCount, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useMyReviewFlat();
+const ReviewScreen = () => {
+  const { reviews, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyReviewFlat();
+
+  console.log('리뷰 데이터:', JSON.stringify(reviews, null, 2));
 
   if (isLoading) {
     return (
@@ -18,48 +19,50 @@ const Review = () => {
     );
   }
 
-  const renderItem = ({ item }: any) => (
-    <View style={styles.listContainer}>
-      <View style={styles.storeInfoContainer}>
-        <View style={styles.titleRow}>
-          <Text style={styles.blackRegularText_15}>{item.memberNickname}</Text>
-          <TouchableOpacity style={styles.deleteButton}>
-            <Trash />
-            <Text style={styles.grayRegularText_13}>삭제</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.starContainer}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <FontAwesome
-                key={i}
-                name="star"
-                size={15}
-                color={i < item.rating ? '#FFD700' : '#ccc'}
-              />
-            ))}
+  const renderItem = ({ item }: any) => {
+    const formattedDate = item.createdAt.split('T')[0];
+    return (
+      <View style={styles.listContainer}>
+        <View style={styles.storeInfoContainer}>
+          <View style={styles.titleRow}>
+            <Text style={styles.blackRegularText_15}>{item.storeName}</Text>
+            <TouchableOpacity style={styles.deleteButton}>
+              <Trash />
+              <Text style={styles.grayRegularText_13}>삭제</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.grayRegularText_13}>{item.createdAt}</Text>
+          <View style={styles.infoContainer}>
+            <View style={styles.starContainer}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <FontAwesome
+                  key={i}
+                  name="star"
+                  size={15}
+                  color={i < item.rating ? '#FFD700' : '#ccc'}
+                />
+              ))}
+            </View>
+            <Text style={styles.grayRegularText_13}>{formattedDate}</Text>
+          </View>
+        </View>
+        <Text style={styles.blackRegularText_13}>{item.content}</Text>
+        <View style={styles.menuContainer}>
+          {item.menuList.map((menu: any) => (
+            <View key={menu.id} style={styles.menuInfo}>
+              <Text style={styles.grayRegularText_13}>{menu.name}</Text>
+            </View>
+          ))}
         </View>
       </View>
-      <Text style={styles.blackRegularText_13}>{item.content}</Text>
-      <View style={styles.menuContainer}>
-        {item.menuList.map((menu: any) => (
-          <View key={menu.id} style={styles.menuInfo}>
-            <Text style={styles.grayRegularText_13}>{menu.name}</Text>
-          </View>
-        ))}
-      </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.blackRegularText_20}>나의 리뷰 {totalCount}개</Text>
       <FlatList
         data={reviews}
         renderItem={renderItem}
-        keyExtractor={(item) => String(item.id)}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         onEndReached={() => {
           if (hasNextPage) {
             fetchNextPage();
@@ -88,12 +91,13 @@ const styles = StyleSheet.create({
   listContainer: {
     flexDirection: 'column',
     alignSelf: 'stretch',
-
-    gap: 8,
+    gap: 4,
+    marginBottom: 35,
   },
   storeInfoContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
+    gap: 4,
   },
   titleRow: {
     flexDirection: 'row',
@@ -182,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Review;
+export default ReviewScreen;

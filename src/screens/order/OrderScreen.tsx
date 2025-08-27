@@ -1,104 +1,63 @@
-import { useMemo, useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   SafeAreaView,
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
-  Image,
   FlatList,
   ScrollView,
 } from 'react-native';
 import TimePicker from 'react-native-date-picker';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import Check from '@/assets/icons/check.svg';
-import Eco from '@/assets/icons/eco.svg';
+import MenuItem from '@/components/order/MenuItem';
+import ReuseOption from '@/components/order/ReuseOption';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
-import { OrderMenu } from '@/types/domain';
+import {
+  MINUTE_STEP,
+  roundToStep,
+  parseHM,
+  buildDateWithHM,
+  minutesOfDay,
+  formatKoreanTime,
+} from '@/utils/date';
 
 type OrderScreenRouteProp = RouteProp<UserStackParamList, typeof userNavigations.ORDER>;
 
 const OrderScreen = () => {
   const { order } = useRoute<OrderScreenRouteProp>().params;
-
   const [ecoFriendly, setEcoFriendly] = useState(false);
-  const MINUTE_STEP = 10;
-  const roundToStep = (d: Date, step: number) => {
-    const ms = 1000 * 60 * step;
-    return new Date(Math.round(d.getTime() / ms) * ms);
-  };
   const [date, setDate] = useState<Date>(() => {
     const now = new Date();
-    const initialDate = new Date(now.getTime() + 10 * 60 * 1000);
-    return roundToStep(initialDate, MINUTE_STEP);
+    return roundToStep(new Date(now.getTime() + 10 * 60 * 1000), MINUTE_STEP);
   });
   const [open, setOpen] = useState(false);
-
-  const renderMenuItem = ({ item }: { item: OrderMenu }) => (
-    <View style={styles.menuRow}>
-      <Image source={{ uri: item.imageUrl }} style={styles.menuImage} />
-      <View style={{ flex: 1, gap: 2 }}>
-        <Text style={styles.menuName}>{item.name}</Text>
-        <Text style={styles.menuPrice}>
-          {item.discountPrice.toLocaleString()}원 · {item.orderQuantity}개
-        </Text>
-      </View>
-    </View>
-  );
-
-  const parseHM = (s: string) => {
-    // "HH:mm" 또는 "HH:mm:ss" 가정
-    const [hh, mm] = s.split(':').map(Number);
-    return { h: hh ?? 0, m: mm ?? 0 };
-  };
-
-  const buildDateWithHM = (base: Date, { h, m }: { h: number; m: number }, addDays = 0) =>
-    new Date(base.getFullYear(), base.getMonth(), base.getDate() + addDays, h, m, 0, 0);
-
-  const minutesOfDay = ({ h, m }: { h: number; m: number }) => h * 60 + m;
-
-  const _formatKoTime = (d: Date) => {
-    const h24 = d.getHours();
-    const m = String(d.getMinutes()).padStart(2, '0');
-    const ampm = h24 < 12 ? '오전' : '오후';
-    const h12 = ((h24 + 11) % 12) + 1;
-    return `${ampm} ${h12}:${m}`;
-  };
 
   const openHM = parseHM(order.openTime);
   const closeHM = parseHM(order.closeTime);
   const isOvernight = minutesOfDay(closeHM) <= minutesOfDay(openHM);
 
   const today = useMemo(() => new Date(), []);
-
   const minDate = useMemo(() => buildDateWithHM(today, openHM, 0), [openHM, today]);
   const maxDate = useMemo(
     () => buildDateWithHM(today, closeHM, isOvernight ? 1 : 0),
     [isOvernight, closeHM, today]
   );
 
-  const _toPickupDueAt = (d: Date) => d.toISOString();
-
-  const formatKoreanTime = (d: Date) => {
-    const h = d.getHours().toString().padStart(2, '0');
-    const m = d.getMinutes().toString().padStart(2, '0');
-    return `${h}시 ${m}분`;
-  };
-
   const handlePayments = () => {
     const payload = {
-      pickupDueAt: date.toISOString(), // 2025-05-26T12:00:00.000+00:00 형태
-      reuse: ecoFriendly, // 다회용기 여부
+      pickupDueAt: date.toISOString().replace('Z', '+00:00'),
+      reuse: ecoFriendly,
     };
-
-    console.log('📌 주문 요청 데이터 👉', JSON.stringify(payload, null, 2));
+    console.log('주문 요청 데이터', JSON.stringify(payload, null, 2));
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* 픽업 정보 */}
         <View style={styles.pickupInfo}>
           <View style={styles.titles}>
             <Text style={styles.sectionTitle}>픽업 정보</Text>
@@ -113,12 +72,13 @@ const OrderScreen = () => {
             <FlatList
               data={order.menus}
               keyExtractor={(item, idx) => `${item.name}-${idx}`}
-              renderItem={renderMenuItem}
+              renderItem={({ item }) => <MenuItem item={item} />}
               scrollEnabled={false}
               contentContainerStyle={{ gap: 15 }}
             />
           </View>
         </View>
+
         <View style={styles.pickupInfo}>
           <View style={styles.titles}>
             <Text style={styles.sectionTitle}>픽업 시간</Text>
@@ -143,7 +103,7 @@ const OrderScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-          {/* <Button title="Open" onPress={() => setOpen(true)} /> */}
+
           <TimePicker
             modal
             theme="light"
@@ -151,59 +111,20 @@ const OrderScreen = () => {
             date={date}
             mode="time"
             minuteInterval={MINUTE_STEP}
-            onConfirm={(date) => {
+            onConfirm={(d) => {
               setOpen(false);
-              setDate(date);
+              setDate(d);
             }}
-            onCancel={() => {
-              setOpen(false);
-            }}
+            onCancel={() => setOpen(false)}
             confirmText="확인"
             cancelText="취소"
-            title={'픽업 시간 선택'}
+            title="픽업 시간 선택"
             minimumDate={minDate}
             maximumDate={maxDate}
           />
         </View>
 
-        <View style={styles.ecoContainer}>
-          <View style={styles.titles}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Eco width={22} height={22} />
-              <Text style={styles.sectionTitle}>다회용기 사용</Text>
-            </View>
-            <Text style={styles.sectionSubtitle}>친환경 픽업에 참여하시겠어요?</Text>
-          </View>
-
-          <View style={styles.checkContainer}>
-            <TouchableOpacity
-              onPress={() => setEcoFriendly(!ecoFriendly)}
-              style={styles.checkboxRow}
-            >
-              <View style={[styles.checkbox, ecoFriendly && styles.checkboxChecked]}>
-                <Check width={13} height={11} />
-              </View>
-              <Text style={styles.checkboxLabel}>다회용기 사용하기</Text>
-            </TouchableOpacity>
-
-            <View style={styles.ecoGuide}>
-              <Text style={styles.ecoText}>
-                • 다회용기 사용 시 환경 포인트 50점이 추가로 적립됩니다.
-              </Text>
-
-              {ecoFriendly && (
-                <>
-                  <Text style={styles.ecoText}>
-                    • 주문 음식을 담을 수 있는 넉넉한 크기의 용기를 준비해주세요.
-                  </Text>
-                  <Text style={styles.ecoText}>
-                    • 매장 방문 시 사장님께 다회용기를 전달해주세요.
-                  </Text>
-                </>
-              )}
-            </View>
-          </View>
-        </View>
+        <ReuseOption ecoFriendly={ecoFriendly} toggleEco={() => setEcoFriendly(!ecoFriendly)} />
       </ScrollView>
 
       <TouchableOpacity style={styles.payButton} onPress={handlePayments}>
@@ -260,26 +181,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#EAEAEA',
   },
-  menuRow: {
-    gap: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  menuImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-  },
-  menuName: {
-    fontSize: 14,
-    fontFamily: 'Pretendard-SemiBold',
-    color: colors.BLACK,
-  },
-  menuPrice: {
-    fontSize: 12,
-    fontFamily: 'Pretendard-Regular',
-    color: colors.BLACK,
-  },
   timeRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -311,51 +212,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Pretendard-SemiBold',
     color: colors.WHITE,
-  },
-  placeholder: {
-    fontSize: 13,
-    color: colors.GRAY_500,
-    marginBottom: 20,
-  },
-  ecoContainer: {
-    gap: 20,
-  },
-  checkContainer: {
-    gap: 15,
-  },
-  checkboxRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 1.5,
-    borderColor: '#009943',
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkboxChecked: {
-    backgroundColor: '#009943',
-  },
-  checkboxLabel: {
-    fontSize: 14,
-    fontFamily: 'Pretendard-Regular',
-    color: '#121212',
-  },
-  ecoGuide: {
-    gap: 4,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 6,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  ecoText: {
-    fontSize: 12,
-    fontFamily: 'Pretendard-Regular',
-    color: colors.BLACK,
   },
   payButton: {
     backgroundColor: colors.GREEN,

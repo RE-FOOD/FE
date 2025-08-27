@@ -16,7 +16,10 @@ import BusinessNumberInput from '@/components/signup/BusinessNumberInput';
 import PhoneNumberInput from '@/components/signup/PhoneNumberInput';
 import { colors } from '@/constants/colors';
 import { loggedOutNavigations } from '@/constants/navigations';
+import useAuth from '@/hooks/queries/useAuth';
 import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
+import { showToast } from '@/utils/toast';
+import { useAuthStore } from '@/zustand/useAuthStore';
 
 type NavigationProp = StackNavigationProp<
   LoggedOutStackParamList,
@@ -25,6 +28,8 @@ type NavigationProp = StackNavigationProp<
 
 const SellerSignupScreen = () => {
   const navigation = useNavigation<NavigationProp>();
+  const kakaoAccessToken = useAuthStore((s) => s.kakaoAccessToken);
+  const { sellerSignupMutation } = useAuth();
 
   const [tel1, setTel1] = useState('');
   const [tel2, setTel2] = useState('');
@@ -77,15 +82,18 @@ const SellerSignupScreen = () => {
 
     if (hasError) return;
 
-    const _phoneNumber = `${telPrefix}${tel1}${tel2}`;
-    const _bizNumber = bizNumber;
-    // TODO: 임시 코드, 추후 회원가입 연결
-    setSuccessModalOpen(true);
-  };
-
-  const handleAfterSignup = () => {
-    setSuccessModalOpen(false);
-    navigation.navigate(loggedOutNavigations.LOGIN);
+    const phone = `${telPrefix}${tel1}${tel2}`;
+    sellerSignupMutation.mutate(
+      { kakaoAccessToken, businessNumber: bizNumber, phone },
+      {
+        onSuccess: () => {
+          setSuccessModalOpen(true);
+        },
+        onError: () => {
+          showToast('error', '회원가입에 실패하였습니다. 잠시 후 다시 시도해주세요.');
+        },
+      }
+    );
   };
 
   return (
@@ -128,7 +136,10 @@ const SellerSignupScreen = () => {
         state="SignUpSuccess"
         type="success"
         isOpen={successModalOpen}
-        onClose={handleAfterSignup}
+        onClose={() => {
+          setSuccessModalOpen(false);
+          navigation.navigate(loggedOutNavigations.LOGIN);
+        }}
       />
     </SafeAreaView>
   );

@@ -32,4 +32,10 @@ const userNavigations = {
   EMPTY_STATE: 'EmptyState',
 } as const;
 
-export { loggedOutNavigations, userNavigations };
+const sellerNavigations = {
+  MYPAGE_HOME: 'MypageHome',
+  ORDER_HOME: 'OrderHome',
+  MENU_HOME: 'MenuHome',
+};
+
+export { loggedOutNavigations, userNavigations, sellerNavigations };

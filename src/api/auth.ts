@@ -37,6 +37,21 @@ const kakaoSignup = async ({
   return data;
 };
 
+type RequestSeller = {
+  kakaoAccessToken: string | undefined;
+  phone: string;
+  businessNumber: string;
+};
+
+const sellerSignup = async ({ kakaoAccessToken, phone, businessNumber }: RequestSeller) => {
+  const { data } = await axiosInstance.post('/auth/signup/stores', {
+    accessToken: kakaoAccessToken,
+    businessLicenseNumber: businessNumber,
+    phone,
+  });
+  return data;
+};
+
 type ResponseToken = {
   accessToken: string;
   refreshToken: string;
@@ -46,7 +61,7 @@ type ResponseToken = {
 const getProfile = async (): Promise<Profile> => {
   const { data } = await axiosInstance.get('/members/profile');
   console.log(data);
-  return data;
+  return data.data;
 };
 
 const getAccessToken = async (): Promise<ResponseToken> => {
@@ -62,4 +77,4 @@ const logout = async () => {
   await axiosInstance.post('/auth/logout');
 };
 
-export { kakaoLogin, kakaoSignup, getProfile, getAccessToken, logout };
+export { kakaoLogin, kakaoSignup, sellerSignup, getProfile, getAccessToken, logout };

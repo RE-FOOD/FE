@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   Text,
@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
+import TimePicker from 'react-native-date-picker';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Check from '@/assets/icons/check.svg';
 import Eco from '@/assets/icons/eco.svg';
@@ -23,6 +24,15 @@ const OrderScreen = () => {
   const { order } = useRoute<OrderScreenRouteProp>().params;
 
   const [ecoFriendly, setEcoFriendly] = useState(false);
+  const now = new Date();
+  const MINUTE_STEP = 10;
+  const initialDate = new Date(now.getTime() + 10 * 60 * 1000);
+  const roundToStep = (d: Date, step: number) => {
+    const ms = 1000 * 60 * step;
+    return new Date(Math.round(d.getTime() / ms) * ms);
+  };
+  const [date, setDate] = useState<Date>(roundToStep(initialDate, MINUTE_STEP));
+  const [open, setOpen] = useState(false);
 
   const renderMenuItem = ({ item }: { item: OrderMenu }) => (
     <View style={styles.menuRow}>
@@ -35,6 +45,48 @@ const OrderScreen = () => {
       </View>
     </View>
   );
+
+  const parseHM = (s: string) => {
+    // "HH:mm" 또는 "HH:mm:ss" 가정
+    const [hh, mm] = s.split(':').map(Number);
+    return { h: hh ?? 0, m: mm ?? 0 };
+  };
+
+  const buildDateWithHM = (base: Date, { h, m }: { h: number; m: number }, addDays = 0) =>
+    new Date(base.getFullYear(), base.getMonth(), base.getDate() + addDays, h, m, 0, 0);
+
+  const minutesOfDay = ({ h, m }: { h: number; m: number }) => h * 60 + m;
+
+  const clampDate = (d: Date, min: Date, max: Date) => (d < min ? min : d > max ? max : d);
+
+  const _formatKoTime = (d: Date) => {
+    const h24 = d.getHours();
+    const m = String(d.getMinutes()).padStart(2, '0');
+    const ampm = h24 < 12 ? '오전' : '오후';
+    const h12 = ((h24 + 11) % 12) + 1;
+    return `${ampm} ${h12}:${m}`;
+  };
+
+  const openHM = parseHM(order.openTime); // 예: "08:00"
+  const closeHM = parseHM(order.closeTime); // 예: "02:00"
+  const isOvernight = minutesOfDay(closeHM) <= minutesOfDay(openHM); // 22:00 ~ 02:00 같은 경우
+
+  const today = new Date();
+  const minDate = buildDateWithHM(today, openHM, 0);
+  const maxDate = buildDateWithHM(today, closeHM, isOvernight ? 1 : 0);
+
+  const _toPickupDueAt = (d: Date) => d.toISOString();
+
+  const formatKoreanTime = (d: Date) => {
+    const h = d.getHours().toString().padStart(2, '0');
+    const m = d.getMinutes().toString().padStart(2, '0');
+    return `${h}시 ${m}분`;
+  };
+
+  useEffect(() => {
+    const initial = clampDate(roundToStep(new Date(), MINUTE_STEP), minDate, maxDate);
+    setDate(initial);
+  }, [order.openTime, order.closeTime, maxDate, minDate]); // 영업시간이 바뀌면 재계산
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,12 +111,52 @@ const OrderScreen = () => {
             />
           </View>
         </View>
+        <View style={styles.pickupInfo}>
+          <View style={styles.titles}>
+            <Text style={styles.sectionTitle}>픽업 시간</Text>
+            <Text style={styles.sectionSubtitle}>가게에 방문하실 시간을 선택해주세요.</Text>
+          </View>
 
-        <View style={styles.titles}>
-          <Text style={styles.sectionTitle}>픽업 시간</Text>
-          <Text style={styles.sectionSubtitle}>가게에 방문하실 시간을 선택해주세요.</Text>
+          <View style={styles.storeBox}>
+            <View style={{ gap: 3 }}>
+              <Text style={styles.timeInfo}>픽업 가능 시간</Text>
+              <Text style={styles.timeText}>
+                {order.openTime.slice(0, 5)} - {order.closeTime.slice(0, 5)}
+              </Text>
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.timeRow}>
+              <View style={{ gap: 3 }}>
+                <Text style={styles.timeInfo}>선택하신 픽업 시간</Text>
+                <Text style={styles.selectTime}>{formatKoreanTime(date)}</Text>
+              </View>
+              <TouchableOpacity style={styles.editButton} onPress={() => setOpen(true)}>
+                <Text style={styles.editText}>변경하기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* <Button title="Open" onPress={() => setOpen(true)} /> */}
+          <TimePicker
+            modal
+            theme="light"
+            open={open}
+            date={date}
+            mode="time"
+            minuteInterval={MINUTE_STEP}
+            onConfirm={(date) => {
+              setOpen(false);
+              setDate(date);
+            }}
+            onCancel={() => {
+              setOpen(false);
+            }}
+            confirmText="확인"
+            cancelText="취소"
+            title={'픽업 시간 선택'}
+            minimumDate={minDate}
+            maximumDate={maxDate}
+          />
         </View>
-        <Text style={styles.placeholder}>픽업 시간 선택 UI 추가 예정</Text>
 
         <View style={styles.ecoContainer}>
           <View style={styles.titles}>
@@ -87,12 +179,10 @@ const OrderScreen = () => {
             </TouchableOpacity>
 
             <View style={styles.ecoGuide}>
-              {/* 항상 노출되는 안내 */}
               <Text style={styles.ecoText}>
-                • 다회용기 사용 시 환경 포인트 nn점이 추가로 적립됩니다.
+                • 다회용기 사용 시 환경 포인트 50점이 추가로 적립됩니다.
               </Text>
 
-              {/* 체크했을 때만 노출되는 안내 */}
               {ecoFriendly && (
                 <>
                   <Text style={styles.ecoText}>
@@ -108,7 +198,6 @@ const OrderScreen = () => {
         </View>
       </ScrollView>
 
-      {/* 결제 버튼 */}
       <TouchableOpacity style={styles.payButton}>
         <Text style={styles.payButtonText}>{order.totalCoast.toLocaleString()}원 결제하기</Text>
       </TouchableOpacity>
@@ -139,8 +228,8 @@ const styles = StyleSheet.create({
   },
   sectionSubtitle: {
     fontSize: 14,
-    fontFamily: 'Pretendard-Medium',
-    color: '#929292',
+    fontFamily: 'Pretendard-Regular',
+    color: '#7a7a7a',
   },
   storeBox: {
     padding: 20,
@@ -183,6 +272,38 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     color: colors.BLACK,
   },
+  timeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  timeInfo: {
+    fontSize: 13,
+    fontFamily: 'Pretendard-Regular',
+    color: colors.BLACK,
+  },
+  timeText: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-SemiBold',
+    color: colors.BLACK,
+  },
+  selectTime: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#009D44',
+  },
+  editButton: {
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: '#00A146',
+    paddingHorizontal: 20,
+  },
+  editText: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-SemiBold',
+    color: colors.WHITE,
+  },
   placeholder: {
     fontSize: 13,
     color: colors.GRAY_500,
@@ -218,14 +339,19 @@ const styles = StyleSheet.create({
   },
   ecoGuide: {
     gap: 4,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
   ecoText: {
     fontSize: 12,
-    color: colors.GRAY_500,
+    fontFamily: 'Pretendard-Regular',
+    color: colors.BLACK,
   },
   payButton: {
     backgroundColor: colors.GREEN,
-    padding: 18,
+    padding: 23,
     alignItems: 'center',
     position: 'absolute',
     bottom: 0,
@@ -234,7 +360,7 @@ const styles = StyleSheet.create({
   },
   payButtonText: {
     color: colors.WHITE,
-    fontSize: 18,
+    fontSize: 19,
     fontFamily: 'Pretendard-Bold',
   },
 });

@@ -47,7 +47,7 @@ const HorizontalSnapList = ({
       <FlatList
         horizontal
         data={data}
-        keyExtractor={(item) => String(item.id)}
+        keyExtractor={(item, index) => `${item.id}-${item.name}-${index}`}
         showsHorizontalScrollIndicator={false}
         snapToInterval={SNAP_INTERVAL}
         decelerationRate="fast"

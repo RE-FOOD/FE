@@ -1,6 +1,48 @@
 import axiosInstance from './axios';
 import { ApiResponse } from '@/types/api';
-import { Menu, StoreDetail } from '@/types/domain';
+import { Menu, Store, StoreCategory, StoreSort, StoreDetail } from '@/types/domain';
+
+export type OverviewResponse = {
+  cartCount: number;
+  notifications: boolean;
+};
+
+export type StoreListParams = {
+  category?: StoreCategory | null;
+  keyword?: string | null;
+  sort?: StoreSort | null;
+  cursorId?: number;
+  direction?: boolean;
+  limit?: number;
+};
+
+export type StoreListResponse = {
+  prevCursor: number | null;
+  nextCursor: number | null;
+  stores: Store[];
+};
+
+const getStoreList = async ({
+  category = null,
+  keyword = null,
+  sort = 'NEAR',
+  cursorId = 0,
+  direction = true,
+  limit = 15,
+}: StoreListParams) => {
+  const res = await axiosInstance.get<ApiResponse<StoreListResponse>>('/stores', {
+    params: {
+      category: category ?? undefined,
+      keyword: keyword ?? undefined,
+      sort: sort,
+      cursorId,
+      direction,
+      limit,
+    },
+  });
+  console.log(res.data);
+  return res.data.data;
+};
 
 const getStoreDetail = async (storeId: number) => {
   const res = await axiosInstance.get<ApiResponse<StoreDetail>>(`/stores/${storeId}`);
@@ -18,4 +60,4 @@ const getMenuDetail = async (storeId: number, menuId: number) => {
   return res.data.data;
 };
 
-export { getStoreDetail, getMenuDetail };
+export { getStoreList, getStoreDetail, getMenuDetail };

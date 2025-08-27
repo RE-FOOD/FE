@@ -22,10 +22,6 @@ const LoginScreen = () => {
   const { loginMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
 
-  const handlePressSignup = () => {
-    navigation.navigate(loggedOutNavigations.SIGNUP_TYPE);
-  };
-
   const getFcmToken = async () => {
     const fcmToken = await getToken(getMessaging());
     return fcmToken;
@@ -118,13 +114,6 @@ const LoginScreen = () => {
             <View style={styles.kakaoIcon} />
           </View>
         </TouchableOpacity>
-
-        {/* TODO: 테스트 코드 추후 삭제 */}
-        <View style={{ flexDirection: 'row', gap: 15, paddingHorizontal: 30 }}>
-          <TouchableOpacity onPress={handlePressSignup}>
-            <Text>{'Test: 회원가입 유형 선택'}</Text>
-          </TouchableOpacity>
-        </View>
       </SafeAreaView>
     </LinearGradient>
   );

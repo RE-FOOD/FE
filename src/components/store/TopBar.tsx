@@ -7,10 +7,11 @@ import Region from '@/assets/icons/region.svg';
 import { colors } from '@/constants/colors';
 
 interface TopBarProps {
-  locationLabel: string; // 현재 지역명
+  locationLabel: string;
   onPressLocation?: () => void;
   onPressNotification?: () => void;
   onPressCart?: () => void;
+  cartCount?: number;
 }
 
 const TopBar = ({
@@ -18,6 +19,7 @@ const TopBar = ({
   onPressLocation,
   onPressNotification,
   onPressCart,
+  cartCount = 0,
 }: TopBarProps) => {
   return (
     <View style={styles.topBar}>
@@ -34,7 +36,14 @@ const TopBar = ({
       </View>
       <View style={styles.topBarRight}>
         <TouchableOpacity onPress={onPressCart}>
-          <Cart width={27} height={26} />
+          <View style={styles.cartWrapper}>
+            <Cart width={27} height={26} />
+            {cartCount > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{cartCount > 99 ? '99+' : cartCount}</Text>
+              </View>
+            )}
+          </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressNotification}>
           <AlertOff width={23} height={23} />
@@ -74,6 +83,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     columnGap: 11,
+  },
+  cartWrapper: {
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -4,
+    right: -6,
+    backgroundColor: '#EA575B',
+    borderRadius: 50,
+    minWidth: 18,
+    height: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeText: {
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#fff',
+    fontSize: 9.5,
   },
 });
 

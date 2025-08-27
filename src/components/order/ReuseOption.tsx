@@ -30,8 +30,12 @@ const ReuseOption = ({ ecoFriendly, toggleEco }: Props) => (
         <Text style={styles.ecoText}>• 다회용기 사용 시 환경 포인트 50점이 추가로 적립됩니다.</Text>
         {ecoFriendly && (
           <>
-            <Text style={styles.ecoText}>• 담을 수 있는 넉넉한 크기의 용기를 준비해주세요.</Text>
-            <Text style={styles.ecoText}>• 매장 방문 시 사장님께 다회용기를 전달해주세요.</Text>
+            <Text style={styles.ecoText}>
+              • 주문 음식을 담을 수 있는 넉넉한 크기의 용기를 준비해주세요.
+            </Text>
+            <Text style={styles.ecoText}>
+              • 매장에 방문하시면 사장님께 다회용기를 전달해주세요.
+            </Text>
           </>
         )}
       </View>

@@ -17,6 +17,7 @@ const userNavigations = {
   MAP_HOME: 'MapHome',
   LIKE_HOME: 'LikeHome',
   HISTORY_HOME: 'HistoryHome',
+  ORDER: 'Order',
   ORDER_DETAIL: 'OrderDetail',
   REVIEW_WRITE: 'ReviewWrite',
   MYPAGE_HOME: 'MypageHome',

@@ -11,6 +11,8 @@ const queryKeys = {
   GET_CART: 'getCart',
   MEMBER: 'member',
   GET_OVERVIEWS: 'getOverviews',
+  ORDER: 'Order',
+  GET_ORDER: 'getOrder',
 } as const;
 
 const storageKeys = {

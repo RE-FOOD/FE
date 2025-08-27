@@ -20,12 +20,6 @@ const SORT_OPTIONS: { k: SortKey; t: string }[] = [
 
 const StickyControls = ({ sort, onChangeSort, searchDefaultValue, onSubmitKeyword }: Props) => {
   return (
-    // <Shadow
-    //   distance={5} // elevation 비슷하게 (5 정도)
-    //   startColor="rgba(0,0,0,0.05)" // shadowColor + shadowOpacity 반영
-    //   endColor="rgba(0,0,0,0)" // 투명하게 자연스럽게 끝나도록
-    //   style={{ width: '100%', borderRadius: 10 }} // 카드 모양 유지
-    // >
     <View style={styles.wrap}>
       <SearchSection defaultValue={searchDefaultValue} onSubmitKeyword={onSubmitKeyword} />
       <View style={styles.sortBar}>
@@ -44,7 +38,6 @@ const StickyControls = ({ sort, onChangeSort, searchDefaultValue, onSubmitKeywor
       </View>
       <View style={styles.overlay} />
     </View>
-    // </Shadow>
   );
 };
 
@@ -72,9 +65,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E6E6E6',
   },
-  sortActive: { backgroundColor: '#E8F8EF', borderColor: '#16a34a' },
-  sortText: { fontSize: 12, color: '#666', fontFamily: 'Pretendard-Medium' },
-  sortActiveText: { color: '#16a34a', fontFamily: 'Pretendard-SemiBold' },
+  sortActive: {
+    backgroundColor: '#E8F8EF',
+    borderColor: '#16a34a',
+  },
+  sortText: {
+    fontSize: 12,
+    color: '#666',
+    fontFamily: 'Pretendard-Medium',
+  },
+  sortActiveText: {
+    color: '#16a34a',
+    fontFamily: 'Pretendard-SemiBold',
+  },
   overlay: {
     position: 'absolute',
     top: -15,

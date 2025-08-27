@@ -62,7 +62,6 @@ const MenuDetailScreen = () => {
   };
 
   const handleModalClick = (btnIndex: number) => {
-    console.log(btnIndex);
     // 0 = 취소
     if (btnIndex === 0) return;
     // 5 = 새로 담기
@@ -78,7 +77,7 @@ const MenuDetailScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ borderWidth: 1, borderColor: colors.RED }}>
+      <View>
         <Image source={{ uri: menu.imageUrl }} style={styles.image} resizeMode="cover" />
       </View>
 

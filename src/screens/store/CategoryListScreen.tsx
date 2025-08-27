@@ -22,7 +22,7 @@ import { CategoryKey } from '@/constants/categoryImages';
 import { colors } from '@/constants/colors';
 import { queryKeys } from '@/constants/keys';
 import { userNavigations } from '@/constants/navigations';
-import { useInfiniteStoreList, type BaseFilters } from '@/hooks/queries/useInfiniteStoreList';
+import useStore, { BaseFilters } from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { Store, StoreCategory, StoreSort } from '@/types/domain';
 import { useListScrollStore } from '@/zustand/useListScrollStore';
@@ -58,6 +58,7 @@ const CATEGORIES: { key: CategoryKey; label: string }[] = [
 ];
 
 const CategoryListScreen = () => {
+  const { useInfiniteStoreList } = useStore();
   const route = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
   const { key: selectedKey, label } = route.params;

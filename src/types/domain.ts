@@ -84,11 +84,37 @@ interface StoreDetail {
   count: number;
 }
 
+interface DiscountMenu {
+  storeId: number;
+  menuName: string;
+  ratingAvg: number;
+  price: number;
+  discountPrice: number;
+  discountPercent: number;
+  imageUrl: string;
+}
+
+interface PopularStore {
+  id: number;
+  name: string;
+  ratingAvg: number;
+  distance: number;
+  imageUrl: string;
+}
+
 type CartMenu = Menu & {
   orderQuantity: number;
 };
 
 interface Cart {
+  id: number;
+  name: string;
+  imageUrl: string;
+  totalCoast: number;
+  menus: CartMenu[];
+}
+
+interface CartStore {
   id: number;
   name: string;
   imageUrl: string;
@@ -105,6 +131,13 @@ interface Review {
   menus: string[];
 }
 
+interface Overviews {
+  cartCount: number;
+  discountMenu: DiscountMenu[];
+  locations: LocationFull;
+  popularStores: PopularStore[];
+}
+
 export type {
   Member,
   Profile,
@@ -116,8 +149,12 @@ export type {
   StoreSort,
   Store,
   StoreDetail,
+  DiscountMenu,
+  PopularStore,
   CartMenu,
   Cart,
+  CartStore,
   Review,
   EnvironmentLevel,
+  Overviews,
 };

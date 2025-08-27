@@ -1,6 +1,6 @@
 import axiosInstance from './axios';
 import { ApiResponse } from '@/types/api';
-// import { LocationFull } from '@/types/domain';
+import { Overviews } from '@/types/domain';
 
 const checkNickname = async (nickname: string) => {
   const { data } = await axiosInstance.get<ApiResponse<boolean>>('/members/check/nickname', {
@@ -9,15 +9,25 @@ const checkNickname = async (nickname: string) => {
   return data;
 };
 
-// type OverviewLocation = Omit<LocationFull, 'roadAddress'>;
+interface OverviewResponse {
+  statusCode: number;
+  message: string;
+  data: Overviews;
+}
 
-const getOverviews = async () => {
-  const res = await axiosInstance.get('/members/me/overviews');
-  const payload = res.data;
+interface Overview extends OverviewResponse {
+  locationLabel: string | undefined;
+}
+
+const getOverviews = async (): Promise<Overview> => {
+  const res = await axiosInstance.get<ApiResponse<OverviewResponse['data']>>(
+    '/members/me/overviews'
+  );
+  const payload: OverviewResponse = res.data;
 
   return {
     ...payload,
-    locations: payload.data.locations?.address,
+    locationLabel: payload.data.locations?.address,
   };
 };
 

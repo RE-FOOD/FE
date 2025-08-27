@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import queryClient from '@/api/queryClient';
 import CategoryCarousel from '@/components/store/CategoryCarousel';
@@ -28,8 +28,14 @@ const CATEGORIES: { key: CategoryKey; label: string }[] = [
 
 const StoreHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { data } = useGetOverviews();
   // const { data, refetch, isLoading, isError } = useGetOverviews();
+  const { data, refetch } = useGetOverviews();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   const goDetail = (item: StoreItem) => {
     queryClient.removeQueries({
@@ -68,7 +74,8 @@ const StoreHomeScreen = () => {
       >
         <View style={styles.topSection}>
           <TopBar
-            locationLabel={data?.locations ?? ''}
+            locationLabel={data?.locationLabel ?? ''}
+            cartCount={data?.data.cartCount ?? 0}
             onPressLocation={() => navigation.navigate(userNavigations.LOCATION)}
             onPressCart={() => navigation.navigate(userNavigations.CART)}
             onPressNotification={() => navigation.navigate(userNavigations.NOTIFICATION)}

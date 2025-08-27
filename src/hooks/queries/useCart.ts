@@ -43,6 +43,7 @@ function useUpdateCartItem() {
     mutationFn: (data: UpdateCartRequest) => updateCartItem(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.CART, queryKeys.GET_CART] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_OVERVIEWS] });
     },
   });
 }

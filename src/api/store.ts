@@ -5,7 +5,6 @@ import { Menu, Store, StoreCategory, StoreSort, StoreDetail } from '@/types/doma
 export type OverviewResponse = {
   cartCount: number;
   notifications: boolean;
-  // locations: string;
 };
 
 export type StoreListParams = {

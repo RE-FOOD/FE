@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   SafeAreaView,
   Text,
@@ -24,14 +24,16 @@ const OrderScreen = () => {
   const { order } = useRoute<OrderScreenRouteProp>().params;
 
   const [ecoFriendly, setEcoFriendly] = useState(false);
-  const now = new Date();
   const MINUTE_STEP = 10;
-  const initialDate = new Date(now.getTime() + 10 * 60 * 1000);
   const roundToStep = (d: Date, step: number) => {
     const ms = 1000 * 60 * step;
     return new Date(Math.round(d.getTime() / ms) * ms);
   };
-  const [date, setDate] = useState<Date>(roundToStep(initialDate, MINUTE_STEP));
+  const [date, setDate] = useState<Date>(() => {
+    const now = new Date();
+    const initialDate = new Date(now.getTime() + 10 * 60 * 1000);
+    return roundToStep(initialDate, MINUTE_STEP);
+  });
   const [open, setOpen] = useState(false);
 
   const renderMenuItem = ({ item }: { item: OrderMenu }) => (
@@ -57,8 +59,6 @@ const OrderScreen = () => {
 
   const minutesOfDay = ({ h, m }: { h: number; m: number }) => h * 60 + m;
 
-  const clampDate = (d: Date, min: Date, max: Date) => (d < min ? min : d > max ? max : d);
-
   const _formatKoTime = (d: Date) => {
     const h24 = d.getHours();
     const m = String(d.getMinutes()).padStart(2, '0');
@@ -67,13 +67,17 @@ const OrderScreen = () => {
     return `${ampm} ${h12}:${m}`;
   };
 
-  const openHM = parseHM(order.openTime); // 예: "08:00"
-  const closeHM = parseHM(order.closeTime); // 예: "02:00"
-  const isOvernight = minutesOfDay(closeHM) <= minutesOfDay(openHM); // 22:00 ~ 02:00 같은 경우
+  const openHM = parseHM(order.openTime);
+  const closeHM = parseHM(order.closeTime);
+  const isOvernight = minutesOfDay(closeHM) <= minutesOfDay(openHM);
 
-  const today = new Date();
-  const minDate = buildDateWithHM(today, openHM, 0);
-  const maxDate = buildDateWithHM(today, closeHM, isOvernight ? 1 : 0);
+  const today = useMemo(() => new Date(), []);
+
+  const minDate = useMemo(() => buildDateWithHM(today, openHM, 0), [openHM, today]);
+  const maxDate = useMemo(
+    () => buildDateWithHM(today, closeHM, isOvernight ? 1 : 0),
+    [isOvernight, closeHM, today]
+  );
 
   const _toPickupDueAt = (d: Date) => d.toISOString();
 
@@ -83,10 +87,14 @@ const OrderScreen = () => {
     return `${h}시 ${m}분`;
   };
 
-  useEffect(() => {
-    const initial = clampDate(roundToStep(new Date(), MINUTE_STEP), minDate, maxDate);
-    setDate(initial);
-  }, [order.openTime, order.closeTime, maxDate, minDate]); // 영업시간이 바뀌면 재계산
+  const handlePayments = () => {
+    const payload = {
+      pickupDueAt: date.toISOString(), // 2025-05-26T12:00:00.000+00:00 형태
+      reuse: ecoFriendly, // 다회용기 여부
+    };
+
+    console.log('📌 주문 요청 데이터 👉', JSON.stringify(payload, null, 2));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -198,7 +206,7 @@ const OrderScreen = () => {
         </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.payButton}>
+      <TouchableOpacity style={styles.payButton} onPress={handlePayments}>
         <Text style={styles.payButtonText}>{order.totalCoast.toLocaleString()}원 결제하기</Text>
       </TouchableOpacity>
     </SafeAreaView>

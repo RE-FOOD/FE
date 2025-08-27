@@ -37,8 +37,7 @@ export const useMyReviewInfiniteQuery = () => {
 
 export const useMyReviewFlat = () => {
   const query = useMyReviewInfiniteQuery();
-  const reviews = query.data?.pages.flatMap((page) => page.stores) ?? [];
-
+  const reviews = query.data?.pages.flatMap((page) => page.list) ?? [];
   return {
     ...query,
     reviews,

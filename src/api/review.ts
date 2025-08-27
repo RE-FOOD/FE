@@ -3,7 +3,6 @@ import { Review } from '@/types/domain';
 
 export type MyReviewResponse = Pick<Review, 'id' | 'rating' | 'content' | 'createdAt'> & {
   memberId: number;
-  memberNickName: string;
   menuList: {
     id: number;
     name: string;
@@ -15,7 +14,7 @@ export type CreateReviewRequest = Pick<Review, 'rating' | 'content'>;
 export interface MyReviewsApiResponse {
   prevCursor: number;
   nextCursor: number;
-  stores: MyReviewResponse[];
+  list: MyReviewResponse[];
 }
 
 export interface CreateReviewResponse {
@@ -28,7 +27,7 @@ export const getReview = async (cursor?: number): Promise<MyReviewsApiResponse> 
   const response = await axiosInstance.get('/stores/reviews/me', {
     params,
   });
-  return response.data;
+  return response.data.data;
 };
 
 export const createReview = async (

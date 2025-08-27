@@ -74,7 +74,7 @@ interface StoreDetail {
 
 interface Review {
   id: number;
-  nickname: string;
+  storeName: string;
   rating: number;
   content: string;
   createdAt: string;

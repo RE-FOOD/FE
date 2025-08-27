@@ -42,6 +42,10 @@ interface Mypage {
   environmentScore: number;
 }
 
+type StoreCategory = 'ENFOOD' | 'CHFOOD' | 'KRFOOD' | 'JPFOOD' | 'SNACKFOOD' | 'DESSERT';
+
+type StoreSort = 'NEAR' | 'REVIEW' | 'RATING';
+
 interface Menu {
   id: number;
   name: string;
@@ -50,6 +54,16 @@ interface Menu {
   discountPrice: number;
   dailyQuantity: number;
   imageUrl: string;
+}
+
+interface Store {
+  id: number;
+  name: string;
+  imageUrl: string;
+  discountPercent: number;
+  ratingAvg: number;
+  count: number;
+  distance: number;
 }
 
 interface StoreDetail {
@@ -70,6 +84,44 @@ interface StoreDetail {
   count: number;
 }
 
+interface DiscountMenu {
+  storeId: number;
+  menuName: string;
+  ratingAvg: number;
+  price: number;
+  discountPrice: number;
+  discountPercent: number;
+  imageUrl: string;
+}
+
+interface PopularStore {
+  id: number;
+  name: string;
+  ratingAvg: number;
+  distance: number;
+  imageUrl: string;
+}
+
+type CartMenu = Menu & {
+  orderQuantity: number;
+};
+
+interface Cart {
+  id: number;
+  name: string;
+  imageUrl: string;
+  totalCoast: number;
+  menus: CartMenu[];
+}
+
+interface CartStore {
+  id: number;
+  name: string;
+  imageUrl: string;
+  totalCoast: number;
+  menus: CartMenu[];
+}
+
 interface Review {
   id: number;
   nickname: string;
@@ -79,6 +131,13 @@ interface Review {
   menus: string[];
 }
 
+interface Overviews {
+  cartCount: number;
+  discountMenu: DiscountMenu[];
+  locations: LocationFull;
+  popularStores: PopularStore[];
+}
+
 export type {
   Member,
   Profile,
@@ -86,7 +145,16 @@ export type {
   LocationFull,
   Location,
   Menu,
+  StoreCategory,
+  StoreSort,
+  Store,
   StoreDetail,
+  DiscountMenu,
+  PopularStore,
+  CartMenu,
+  Cart,
+  CartStore,
   Review,
   EnvironmentLevel,
+  Overviews,
 };

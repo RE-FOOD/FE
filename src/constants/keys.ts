@@ -7,6 +7,10 @@ const queryKeys = {
   STORE: 'store',
   GET_STORE_DETAIL: 'getStoreDetail',
   GET_MENU_DETAIL: 'getMenuDetail',
+  CART: 'cart',
+  GET_CART: 'getCart',
+  MEMBER: 'member',
+  GET_OVERVIEWS: 'getOverviews',
 } as const;
 
 const storageKeys = {

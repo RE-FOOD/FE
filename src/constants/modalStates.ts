@@ -53,6 +53,17 @@ export const stateMap: StateMap = {
     subtitle: '주소는 최대 10개까지 등록할 수 있습니다.\n기존 주소를 삭제 후 추가해주세요.',
     btn: [1],
   },
+  ResetCart: {
+    title: '장바구니 초기화 안내',
+    subtitle: '같은 가게의 메뉴만 담을 수 있습니다.',
+    desc: '선택하신 메뉴를 장바구니에 담을 경우\n이전에 담은 메뉴가 삭제됩니다.',
+    btn: [0, 5],
+  },
+  DeleteMenu: {
+    title: '메뉴 삭제',
+    subtitle: '선택하신 메뉴를 삭제하시겠습니까?',
+    btn: [0, 1],
+  },
 };
 
 export const buttonMap: ButtonMap = {

@@ -1,6 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { checkNickname } from '@/api/member';
+import { checkNickname, getOverviews } from '@/api/member';
+import { queryKeys } from '@/constants/keys';
 import { ApiResponse, UseQueryCustomOptions } from '@/types/api';
+
+function useGetOverviews() {
+  return useQuery({
+    queryKey: [queryKeys.MEMBER, queryKeys.GET_OVERVIEWS],
+    queryFn: () => getOverviews(),
+  });
+}
 
 function useCheckNickname(
   nickname: string,
@@ -14,4 +22,4 @@ function useCheckNickname(
   });
 }
 
-export { useCheckNickname };
+export { useGetOverviews, useCheckNickname };

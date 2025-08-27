@@ -53,11 +53,15 @@ const StoreHeader = ({
       </View>
 
       <View style={styles.rowBetween}>
-        <TouchableOpacity style={styles.ratingBox} onPress={onPressReview}>
+        <TouchableOpacity
+          style={styles.ratingBox}
+          onPress={count > 0 ? onPressReview : undefined}
+          activeOpacity={count > 0 ? 0.7 : 1}
+        >
           <View style={styles.ratingRow}>
             <Star width={16} height={16} />
             <View style={{ flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-              <Text style={styles.ratingAvg}>{ratingAvg.toFixed(1)}</Text>
+              <Text style={styles.ratingAvg}>{(ratingAvg ?? 0).toFixed(1)}</Text>
               <Text style={styles.ratingCnt}>({formatNumber(count)})</Text>
             </View>
           </View>

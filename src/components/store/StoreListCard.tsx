@@ -2,32 +2,21 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, DimensionValue } from 'react-native';
 import Star from '@/assets/icons/star.svg';
 import { colors } from '@/constants/colors';
-
-export type StoreItem = {
-  id: string;
-  name: string;
-  distance?: string;
-  rating: number;
-  ratingCnt?: string;
-  price?: string;
-  salePrice?: string;
-  discount?: string;
-  image: string; // uri
-};
+import { Store } from '@/types/domain';
 
 interface Props {
-  item: StoreItem;
+  item: Store;
   width?: DimensionValue;
   showDiscountBadge?: boolean;
 }
 
-const StoreCard = ({ item, width = '100%', showDiscountBadge }: Props) => {
+const StoreListCard = ({ item, width = '100%', showDiscountBadge }: Props) => {
   return (
     <View style={[styles.card, { width }]}>
-      <Image source={{ uri: item.image }} style={styles.image} />
-      {showDiscountBadge && item.discount && (
+      <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      {showDiscountBadge && item.discountPercent && (
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>{item.discount}</Text>
+          <Text style={styles.badgeText}>{item.discountPercent}</Text>
         </View>
       )}
       <View style={{ paddingHorizontal: 12, paddingTop: 8, paddingBottom: 12, gap: 3 }}>
@@ -37,30 +26,23 @@ const StoreCard = ({ item, width = '100%', showDiscountBadge }: Props) => {
           </Text>
           <View style={styles.ratingBox}>
             <Star width={12} height={12} />
-            {item.ratingCnt ? (
+            {item.count ? (
               <View style={styles.ratingRow}>
-                <Text style={styles.meta}>{item.rating.toFixed(1)}</Text>
-                <Text style={styles.metaCnt}>{`(${item.ratingCnt})`}</Text>
+                <Text style={styles.meta}>{item.ratingAvg ?? 0}</Text>
+                <Text style={styles.metaCnt}>{`(${item.count})`}</Text>
               </View>
             ) : (
-              <Text style={styles.meta}>{item.rating.toFixed(1)}</Text>
+              <Text style={styles.meta}>{item.ratingAvg ?? 0}</Text>
             )}
           </View>
         </View>
-        {item.distance ? (
-          <Text style={styles.distance}>{item.distance}</Text>
-        ) : (
-          <View style={{ flexDirection: 'row', gap: 5 }}>
-            {!!item.price && <Text style={styles.price}>{item.price}</Text>}
-            {!!item.salePrice && <Text style={styles.sale}>{item.salePrice}</Text>}
-          </View>
-        )}
+        <Text style={styles.distance}>{item.distance}km</Text>
       </View>
     </View>
   );
 };
 
-export default StoreCard;
+export default StoreListCard;
 
 const styles = StyleSheet.create({
   card: {

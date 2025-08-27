@@ -1,4 +1,5 @@
 import React from 'react';
+import { ImageSourcePropType } from 'react-native';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import UserBottomTabsNavigator, {
@@ -6,6 +7,7 @@ import UserBottomTabsNavigator, {
 } from '../bottomTabs/UserBottomTabsNavigator';
 import { CategoryKey } from '@/constants/categoryImages';
 import { userNavigations } from '@/constants/navigations';
+import EmptyStateScreen from '@/screens/_common/EmptyStateScreen';
 import CartScreen from '@/screens/cart/CartScreen';
 import HistoryDetailScreen from '@/screens/history/HistoryDetailScreen';
 import ReviewWriteScreen from '@/screens/history/ReviewWriteScreen';
@@ -47,6 +49,12 @@ export type UserStackParamList = {
   [userNavigations.REPORT]: undefined;
   [userNavigations.PRIVATE]: undefined;
   [userNavigations.RULE]: undefined;
+  [userNavigations.EMPTY_STATE]: {
+    icon: ImageSourcePropType;
+    headerTitle: string;
+    title: string;
+    subtitle?: string;
+  };
 };
 
 const Stack = createStackNavigator<UserStackParamList>();
@@ -145,6 +153,11 @@ function UserStackNavigator() {
         options={{ title: '개인정보 처리방침' }}
       />
       <Stack.Screen name={userNavigations.RULE} component={Rule} options={{ title: '운영 약관' }} />
+      <Stack.Screen
+        name={userNavigations.EMPTY_STATE}
+        component={EmptyStateScreen}
+        options={{ title: '' }}
+      />
     </Stack.Navigator>
   );
 }

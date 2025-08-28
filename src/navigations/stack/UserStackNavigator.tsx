@@ -47,7 +47,7 @@ export type UserStackParamList = {
   [userNavigations.CART]: undefined;
   [userNavigations.NOTIFICATION]: undefined;
   [userNavigations.REVIEW]: undefined;
-  [userNavigations.REPORT]: undefined;
+  [userNavigations.REPORT]: { percent: number };
   [userNavigations.PRIVATE]: undefined;
   [userNavigations.RULE]: undefined;
   [userNavigations.STORE_LIST]: undefined;

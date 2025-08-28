@@ -14,14 +14,41 @@ import { toLevelLabel, getLevelImage } from '@/utils/level';
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
 
+const levelRanges = [
+  { min: 0, max: 799 },
+  { min: 800, max: 2399 },
+  { min: 2400, max: 5599 },
+  { min: 5600, max: 5600 },
+];
+
+function getLevelProgress(point: number) {
+  let total = 0;
+  const n = levelRanges.length;
+
+  for (let i = 0; i < n; i++) {
+    const { min, max } = levelRanges[i];
+    const perLevelFraction = 1 / n;
+
+    if (point <= max) {
+      const levelFraction = (point - min) / (max - min);
+      return total + levelFraction * perLevelFraction;
+    }
+    total += perLevelFraction;
+  }
+
+  return 1;
+}
+
 const MypageHomeScreen = () => {
   const { logoutMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
   const { data, isLoading, error } = useMyPage();
+  const me = data?.data;
+  const percent = me ? getLevelProgress(me.environmentPoint) : 0;
+  console.log(percent);
 
   if (isLoading) return <Text>로딩중</Text>;
   if (error) return <Text>불러오기 실패</Text>;
-  const me = data?.data;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,7 +82,7 @@ const MypageHomeScreen = () => {
               </View>
             </View>
             <LevelProgress
-              value={me?.progressPercentage}
+              value={percent}
               labels={['LEVEL1', 'LEVEL2', 'LEVEL3', 'LEVEL4']}
               height={16}
               colors={['#FF6A3D', '#FFC0A3']}
@@ -76,7 +103,11 @@ const MypageHomeScreen = () => {
 
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => navigation.navigate('GreenReport')}
+          onPress={() =>
+            navigation.navigate('GreenReport', {
+              percent: percent,
+            })
+          }
         >
           <View style={styles.itemTextContainer}>
             <Text style={styles.blackRegularText_16}>환경 리포트</Text>

@@ -5,7 +5,11 @@ import { colors } from '@/constants/colors';
 import { useMyPage } from '@/hooks/queries/useMyPage';
 import { toLevelLabel, getLevelImage } from '@/utils/level';
 
-const GreenReport = () => {
+type GreenReportProps = {
+  percent: number;
+};
+
+const GreenReport = ({ percent }: GreenReportProps) => {
   const { data } = useMyPage();
   const me = data?.data;
 
@@ -22,7 +26,7 @@ const GreenReport = () => {
           </Text>
         </View>
         <LevelProgress
-          value={me?.progressPercentage}
+          value={percent}
           labels={['씨앗', '묘목', '나무', '사과나무']}
           height={16}
           colors={['#FF6A3D', '#FFC0A3']}

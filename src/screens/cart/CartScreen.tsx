@@ -13,6 +13,7 @@ import { colors } from '@/constants/colors';
 import { queryKeys } from '@/constants/keys';
 import { userNavigations } from '@/constants/navigations';
 import useCart from '@/hooks/queries/useCart';
+import useOrder from '@/hooks/queries/useOrder';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { CartMenu } from '@/types/domain';
 import { showToast } from '@/utils/toast';
@@ -26,6 +27,7 @@ const CartScreen = () => {
   const navigation = useNavigation<Nav>();
   const { cartListQuery, updateCartMutation } = useCart();
   const { data: store, isLoading, isError } = cartListQuery;
+  const { orderQuery } = useOrder();
 
   if (isLoading) return <Text>Loading...</Text>;
   if (isError || !store) return <Text>장바구니를 불러올 수 없습니다</Text>;
@@ -71,6 +73,15 @@ const CartScreen = () => {
     setSelectedMenuId(null);
   };
 
+  const handleOrderClick = async () => {
+    try {
+      const res = await orderQuery.mutateAsync();
+      navigation.navigate(userNavigations.ORDER, { order: res });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const originalTotal = calculateOriginalTotal(store.menus);
 
   return (
@@ -111,6 +122,7 @@ const CartScreen = () => {
       <CartFooter
         originalTotal={originalTotal}
         total={store.totalCoast}
+        onClick={handleOrderClick}
         disabled={store.menus.every((m) => m.dailyQuantity === 0)}
       />
     </SafeAreaView>

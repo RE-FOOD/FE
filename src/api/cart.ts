@@ -3,9 +3,7 @@ import { ApiResponse } from '@/types/api';
 import { Cart } from '@/types/domain';
 
 const getCarts = async () => {
-  console.log('start');
   const res = await axiosInstance.get<ApiResponse<Cart>>('/carts');
-  console.log(res.data);
   return res.data.data;
 };
 
@@ -34,7 +32,6 @@ export type AddMenuRequest = {
 
 const addMenuToCart = async (data: AddMenuRequest) => {
   const res = await axiosInstance.post<ApiResponse<string>>(`/carts`, data);
-  console.log(res.data);
   return res.data;
 };
 
@@ -48,7 +45,6 @@ export type UpdateCartRequest = {
 
 const updateCartItem = async (data: UpdateCartRequest) => {
   const res = await axiosInstance.put<ApiResponse<string>>(`/carts`, data);
-  console.log(res.data);
   return res.data;
 };
 

@@ -5,15 +5,17 @@ type Props = {
   originalTotal: number;
   total: number;
   disabled: boolean;
+  onClick: () => void;
 };
 
-const CartFooter = ({ originalTotal, total, disabled }: Props) => (
+const CartFooter = ({ originalTotal, total, disabled, onClick }: Props) => (
   <View style={styles.footer}>
     <View>
       <Text style={styles.originalTotal}>{originalTotal.toLocaleString()}원</Text>
       <Text style={styles.total}>{total.toLocaleString()}원</Text>
     </View>
     <TouchableOpacity
+      onPress={onClick}
       disabled={disabled}
       style={[styles.orderButton, disabled && styles.disabledButton]}
     >

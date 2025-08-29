@@ -1,12 +1,18 @@
 import { useState, useMemo, useRef } from 'react';
 import { StyleSheet, FlatList, ActivityIndicator, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { MyLikePage } from '@/api/like';
 import RestaurantList, { RestaurantListData } from '@/components/_common/RestaurantList';
 import Sort from '@/components/_common/Sort';
 import { colors } from '@/constants/colors';
+import { userNavigations } from '@/constants/navigations';
 import { useMyLikesInfinite } from '@/hooks/queries/useLike';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { StoreSortOption, Like } from '@/types/domain';
+
+type Nav = StackNavigationProp<UserStackParamList>;
 
 const transformLikeToRestaurant = (like: Like): RestaurantListData => ({
   id: like.id,
@@ -20,6 +26,7 @@ const transformLikeToRestaurant = (like: Like): RestaurantListData => ({
 });
 
 const LikeHomeScreen = () => {
+  const navigation = useNavigation<Nav>();
   const [sortType, setSortType] = useState<StoreSortOption>('NEAR');
   const listRef = useRef<FlatList<RestaurantListData>>(null);
 
@@ -51,6 +58,7 @@ const LikeHomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <Sort onSortChange={handleSortChange} currentSort={sortType} />
       <FlatList
+        ref={listRef}
         data={restaurants}
         keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
@@ -66,8 +74,16 @@ const LikeHomeScreen = () => {
             </View>
           ) : null
         }
-        renderItem={({ item }: { item: RestaurantListData }) => (
-          <RestaurantList restaurant={item} />
+        renderItem={({ item }) => (
+          <RestaurantList
+            restaurant={item}
+            onPress={(r) =>
+              navigation.navigate(userNavigations.STORE_DETAIL, {
+                storeId: r.id,
+                storeName: r.name,
+              })
+            }
+          />
         )}
       />
     </SafeAreaView>
@@ -85,10 +101,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   footer: { paddingVertical: 16, alignItems: 'center', justifyContent: 'center' },
-  centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  centered: { justifyContent: 'center', alignItems: 'center' },
 });
 
 export default LikeHomeScreen;

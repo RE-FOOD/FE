@@ -72,11 +72,11 @@ const RestaurantList = ({ restaurant, onPress }: Props) => {
 
 const styles = StyleSheet.create({
   imgContainer: {
-    gap: 20,
     alignSelf: 'stretch',
   },
   list: {
     borderRadius: 10,
+    marginBottom: 15,
   },
   img: {
     width: 320,

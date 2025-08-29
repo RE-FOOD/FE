@@ -16,15 +16,21 @@ export type RestaurantListData = {
 type Props = {
   restaurant: RestaurantListData;
   onPress?: (restaurant: RestaurantListData) => void;
+  soldOut?: boolean;
+  soldOutText?: string;
 };
-const RestaurantList = ({ restaurant, onPress }: Props) => {
-  const closed = (restaurant?.status ?? 'OPEN') !== 'OPEN';
+const RestaurantList = ({
+  restaurant,
+  onPress,
+  soldOut = false,
+  soldOutText = '판매 중인 메뉴가 없습니다.',
+}: Props) => {
+  const handlePress = () => {
+    if (soldOut) return;
+    onPress?.(restaurant);
+  };
   return (
-    <TouchableOpacity
-      key={restaurant?.id}
-      style={styles.list}
-      onPress={() => onPress?.(restaurant)}
-    >
+    <TouchableOpacity key={restaurant?.id} style={styles.list} onPress={handlePress}>
       {restaurant?.imageUrl ? (
         <ImageBackground
           source={{ uri: restaurant.imageUrl }}
@@ -34,14 +40,14 @@ const RestaurantList = ({ restaurant, onPress }: Props) => {
             borderTopRightRadius: 10,
           }}
         >
-          {!closed && (
+          {typeof restaurant?.maxPercent === 'number' && restaurant.maxPercent > 0 && !soldOut && (
             <View style={styles.sale}>
-              <Text style={styles.redRegularText_15}>{restaurant?.maxPercent ?? 0}%</Text>
+              <Text style={styles.redRegularText_15}>{restaurant.maxPercent}%</Text>
             </View>
           )}
-          {closed && (
+          {soldOut && (
             <View style={styles.overlay}>
-              <Text style={styles.overlayText}>판매 중인 메뉴가 없어요</Text>
+              <Text style={styles.overlayText}>{soldOutText}</Text>
             </View>
           )}
         </ImageBackground>
@@ -60,11 +66,11 @@ const RestaurantList = ({ restaurant, onPress }: Props) => {
           <Text style={styles.blackRegularText_14}>{restaurant?.name}</Text>
           <View style={styles.review}>
             <Star />
-            <Text style={styles.blackRegularText_11}>{restaurant?.rating.toFixed(1)}</Text>
+            <Text style={styles.blackRegularText_11}>{restaurant?.rating}</Text>
             <Text style={styles.grayRegularText}>({restaurant?.reviewCount})</Text>
           </View>
         </View>
-        <Text style={styles.grayRegularText}>{restaurant?.distance.toFixed(1)}km</Text>
+        <Text style={styles.grayRegularText}>{restaurant?.distance}km</Text>
       </View>
     </TouchableOpacity>
   );

@@ -1,88 +1,75 @@
-import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { useState, useMemo, useRef } from 'react';
+import { StyleSheet, FlatList, ActivityIndicator, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Image from '@/components/_common/RestaurantList';
+import { MyLikePage } from '@/api/like';
+import RestaurantList, { RestaurantListData } from '@/components/_common/RestaurantList';
 import Sort from '@/components/_common/Sort';
 import { colors } from '@/constants/colors';
+import { useMyLikesInfinite } from '@/hooks/queries/useLike';
 import { StoreSortOption, Like } from '@/types/domain';
 
-const restaurantData: Like[] = [
-  {
-    id: 1,
-    name: '비스티버거',
-    status: 'OPEN',
-    ratingAvg: 3.5,
-    count: 1030,
-    distance: 1.9,
-    salePercent: 40,
-    imageUrl: 'https://picsum.photos/300/200?random=2',
-  },
-  {
-    id: 2,
-    name: '비스티버거',
-    status: 'CLOSE',
-    ratingAvg: 4.2,
-    count: 1,
-    distance: 0.8,
-    salePercent: 20,
-    imageUrl: 'https://picsum.photos/300/200?random=2',
-  },
-  {
-    id: 3,
-    name: '버거킹',
-    status: 'OPEN',
-    ratingAvg: 4.2,
-    count: 1200,
-    distance: 2.5,
-    salePercent: 20,
-    imageUrl: 'https://picsum.photos/300/200?random=2',
-  },
-  {
-    id: 4,
-    name: '비스티버거',
-    status: 'OPEN',
-    ratingAvg: 3.8,
-    count: 1200,
-    distance: 1.2,
-    salePercent: 20,
-    imageUrl: 'https://picsum.photos/300/200?random=2',
-  },
-  {
-    id: 5,
-    name: '쉑쉑버거',
-    status: 'CLOSE',
-    ratingAvg: 4.5,
-    count: 2100,
-    distance: 3.1,
-    salePercent: 15,
-    imageUrl: 'https://picsum.photos/300/200?random=2',
-  },
-];
+const transformLikeToRestaurant = (like: Like): RestaurantListData => ({
+  id: like.id,
+  name: like.name,
+  imageUrl: like.imageUrl ?? '',
+  distance: like.distance,
+  rating: like.ratingAvg,
+  reviewCount: like.count,
+  status: like.status,
+  maxPercent: like.salePercent,
+});
 
 const LikeHomeScreen = () => {
   const [sortType, setSortType] = useState<StoreSortOption>('NEAR');
-  const [restaurants, setRestaurants] = useState(restaurantData);
+  const listRef = useRef<FlatList<RestaurantListData>>(null);
+
+  const { data, isRefetching, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useMyLikesInfinite({ sort: sortType });
+
+  const likes: Like[] = useMemo(
+    () => (data ? data.pages.flatMap((p: MyLikePage) => p.stores) : []),
+    [data]
+  );
+
+  const restaurants: RestaurantListData[] = useMemo(
+    () => likes.map(transformLikeToRestaurant),
+    [likes]
+  );
 
   const handleSortChange = (type: StoreSortOption) => {
     setSortType(type);
-    //정렬 로직
-    const sortedData = [...restaurants].sort((a, b) => {
-      switch (type) {
-        case 'NEAR':
-          return a.distance - b.distance;
-        case 'REVIEW':
-          return b.count - a.count;
-        case 'RATING':
-          return b.ratingAvg - a.ratingAvg;
-      }
-    });
-    setRestaurants(sortedData);
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  };
+
+  const handleEndReached = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Sort onSortChange={handleSortChange} currentSort={sortType} />
-      <Image restaurants={restaurants} />
+      <FlatList
+        data={restaurants}
+        keyExtractor={(item) => String(item.id)}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 16 }}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
+        refreshing={isRefetching}
+        onRefresh={() => refetch()}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View style={styles.footer}>
+              <ActivityIndicator size="small" color={colors.GREEN} />
+            </View>
+          ) : null
+        }
+        renderItem={({ item }: { item: RestaurantListData }) => (
+          <RestaurantList restaurant={item} />
+        )}
+      />
     </SafeAreaView>
   );
 };
@@ -96,6 +83,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: colors.WHITE,
     gap: 20,
+  },
+  footer: { paddingVertical: 16, alignItems: 'center', justifyContent: 'center' },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

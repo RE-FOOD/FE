@@ -1,6 +1,6 @@
 import axiosInstance from './axios';
 import { ApiResponse } from '@/types/api';
-import { Order } from '@/types/domain';
+import { EnvironmentLevel, Order } from '@/types/domain';
 
 const getOrder = async (): Promise<Order> => {
   const res = await axiosInstance.get<ApiResponse<Order>>('/orders');
@@ -16,7 +16,7 @@ type ResponseOrder = string;
 
 const createOrder = async (payload: CreateOrderPayload) => {
   try {
-    const res = await axiosInstance.post<ApiResponse<ResponseOrder>>('/order', payload);
+    const res = await axiosInstance.post<ApiResponse<ResponseOrder>>('/orders', payload);
     return res.data.data;
   } catch (error) {
     throw error;
@@ -29,16 +29,18 @@ interface RequestPayments {
   amount: number;
 }
 
+interface ResponsePayments {
+  level: EnvironmentLevel;
+  levelCheck: boolean;
+}
+
 const confirmPayments = async ({ paymentKey, orderId, amount }: RequestPayments) => {
   try {
-    const res = await axiosInstance.post<ApiResponse<string>>('/payments/confirm', {
-      params: {
-        paymentKey,
-        orderId,
-        amount,
-      },
+    const res = await axiosInstance.post<ApiResponse<ResponsePayments>>('/payments/confirm', {
+      paymentKey,
+      orderId,
+      amount,
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error(error);

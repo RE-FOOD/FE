@@ -9,7 +9,6 @@ import {
 } from '@tosspayments/widget-sdk-react-native';
 import { confirmPayments } from '@/api/order';
 
-// 실제로 띄울 화면
 function CheckoutPage({ sessionId, totalAmount }: { sessionId: string; totalAmount: number }) {
   const paymentWidgetControl = usePaymentWidget();
   const [ready, setReady] = useState(false);
@@ -43,7 +42,7 @@ function CheckoutPage({ sessionId, totalAmount }: { sessionId: string; totalAmou
             return;
           }
           const result = await paymentWidgetControl.requestPayment?.({
-            orderId: sessionId, // 서버에서 생성한 주문 세션 ID
+            orderId: sessionId,
             orderName: '테스트 주문',
           });
 

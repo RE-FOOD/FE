@@ -14,10 +14,12 @@ const userNavigations = {
   MENU_DETAIL: 'MenuDetail',
   CATEGORY_LIST: 'CategoryList',
   SEARCH_RESULT: 'SearchResult',
+  ORDER: 'Order',
+  TOSS_PAYMENT: 'TossPayment',
+  ORDER_SUCCESS: 'OrderSuccess',
   MAP_HOME: 'MapHome',
   LIKE_HOME: 'LikeHome',
   HISTORY_HOME: 'HistoryHome',
-  ORDER: 'Order',
   ORDER_DETAIL: 'OrderDetail',
   REVIEW_WRITE: 'ReviewWrite',
   MYPAGE_HOME: 'MypageHome',
@@ -31,7 +33,6 @@ const userNavigations = {
   PRIVATE: 'Private',
   RULE: 'Rule',
   EMPTY_STATE: 'EmptyState',
-  TOSS_PAYMENT: 'TossPayment',
 } as const;
 
 const sellerNavigations = {

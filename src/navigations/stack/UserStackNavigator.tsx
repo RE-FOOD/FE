@@ -20,6 +20,7 @@ import Review from '@/screens/mypage/ReviewScreen';
 import Rule from '@/screens/mypage/RuleScreen';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
 import OrderScreen from '@/screens/order/OrderScreen';
+import OrderSuccessScreen from '@/screens/order/OrderSuccessScreen';
 import TossPaymentScreen from '@/screens/order/TossPaymentScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
 import MenuDetailScreen from '@/screens/store/MenuDetailScreen';
@@ -38,6 +39,8 @@ export type UserStackParamList = {
   [userNavigations.STORE_INFO]: { storeId: number; storeName: string };
   [userNavigations.MENU_DETAIL]: { storeId: number; storeName: string; menuId: number };
   [userNavigations.ORDER]: { order: Order };
+  [userNavigations.TOSS_PAYMENT]: { sessionId: string; totalAmount: number };
+  [userNavigations.ORDER_SUCCESS]: undefined;
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
   };
@@ -59,7 +62,6 @@ export type UserStackParamList = {
     title: string;
     subtitle?: string;
   };
-  [userNavigations.TOSS_PAYMENT]: { sessionId: string; totalAmount: number };
 };
 
 const Stack = createStackNavigator<UserStackParamList>();
@@ -101,6 +103,16 @@ function UserStackNavigator() {
         name="Order"
         component={OrderScreen}
         options={{ title: '픽업 주문', headerShown: true }}
+      />
+      <Stack.Screen
+        name={userNavigations.TOSS_PAYMENT}
+        component={TossPaymentScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={userNavigations.ORDER_SUCCESS}
+        component={OrderSuccessScreen}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="OrderDetail"
@@ -167,11 +179,6 @@ function UserStackNavigator() {
         name={userNavigations.EMPTY_STATE}
         component={EmptyStateScreen}
         options={{ title: '' }}
-      />
-      <Stack.Screen
-        name={userNavigations.TOSS_PAYMENT}
-        component={TossPaymentScreen}
-        options={{ title: '결제', headerShown: false }}
       />
     </Stack.Navigator>
   );

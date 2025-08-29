@@ -23,6 +23,17 @@ function useCreateOrder() {
   });
 }
 
+// function useConfirmPayments() {
+//   const navigation = useNavigation();
+
+//   return useMutation({
+//     mutationFn: confirmPayments,
+//     onError: () => {
+//       showToast('error', '결제 실패', '선택하신 메뉴 중 재고가 부족한 제품이 존재합니다.');
+//     },
+//   });
+// }
+
 function useOrder() {
   const orderQuery = useOrderCheck();
   const createOrderMutation = useCreateOrder();

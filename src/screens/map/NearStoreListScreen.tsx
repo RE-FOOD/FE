@@ -1,18 +1,19 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StackScreenProps } from '@react-navigation/stack';
 import RestaurantList from '@/components/_common/RestaurantList';
 import Sort from '@/components/_common/Sort';
 import { colors } from '@/constants/colors';
+import { userNavigations } from '@/constants/navigations';
 import mapHooks from '@/hooks/queries/useMap';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { StoreSortOption } from '@/types/domain';
 
-type Props = {
-  latitude: number;
-  longitude: number;
-};
+type Props = StackScreenProps<UserStackParamList, typeof userNavigations.STORE_LIST>;
 
-const NearStoreListScreen = ({ latitude, longitude }: Props) => {
+const NearStoreListScreen = ({ route }: Props) => {
+  const { latitude, longitude } = route.params;
   const [sortType, setSortType] = useState<StoreSortOption>('NEAR');
 
   const { stores, isLoadingMore, hasNextPage, fetchNextPage, refetch } = mapHooks.useInfiniteStores(
@@ -26,13 +27,24 @@ const NearStoreListScreen = ({ latitude, longitude }: Props) => {
     }
   );
 
+  useEffect(() => {
+    refetch();
+  }, [sortType, refetch]);
+
   const handleEndReached = useCallback(() => {
     if (hasNextPage && !isLoadingMore) fetchNextPage();
   }, [hasNextPage, isLoadingMore, fetchNextPage]);
 
-  const handleSortChange = useCallback((t: StoreSortOption) => {
-    setSortType(t);
-  }, []);
+  const handleSortChange = useCallback(
+    (t: StoreSortOption) => {
+      setSortType(t);
+
+      setTimeout(() => {
+        refetch();
+      }, 0);
+    },
+    [refetch]
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,6 +55,7 @@ const NearStoreListScreen = ({ latitude, longitude }: Props) => {
         renderItem={({ item }) => <RestaurantList restaurant={item} />}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
+        showsVerticalScrollIndicator={false}
         ListFooterComponent={
           isLoadingMore ? (
             <View style={styles.footer}>

@@ -62,11 +62,12 @@ const useInfiniteStores = ({
         };
         return mapApi.getSortedStores(request);
       },
-      initialPageParam: null,
+      initialPageParam: undefined,
       getNextPageParam: (lastPage) => {
         return lastPage.data.hasNext ? lastPage.data.nextCursor : undefined;
       },
       enabled: enabled && !!latitude && !!longitude,
+      staleTime: 0,
     });
 
   const stores = data?.pages.flatMap((page) => page.data.stores) ?? [];

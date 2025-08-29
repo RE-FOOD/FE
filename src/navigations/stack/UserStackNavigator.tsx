@@ -38,7 +38,7 @@ export type UserStackParamList = {
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
   };
-  [userNavigations.REVIEW_WRITE]: undefined;
+  [userNavigations.REVIEW_WRITE]: { storeId: number; orderId: number };
   [userNavigations.NiCKNAME_CHANGE]: undefined;
   [userNavigations.CATEGORY_LIST]: { key: CategoryKey; label: string };
   [userNavigations.SEARCH_RESULT]: { keyword: string };
@@ -47,10 +47,10 @@ export type UserStackParamList = {
   [userNavigations.CART]: undefined;
   [userNavigations.NOTIFICATION]: undefined;
   [userNavigations.REVIEW]: undefined;
-  [userNavigations.REPORT]: { percent: number };
+  [userNavigations.REPORT]: { progress: number };
   [userNavigations.PRIVATE]: undefined;
   [userNavigations.RULE]: undefined;
-  [userNavigations.STORE_LIST]: undefined;
+  [userNavigations.STORE_LIST]: { latitude: number; longitude: number };
   [userNavigations.EMPTY_STATE]: {
     icon: ImageSourcePropType;
     headerTitle: string;

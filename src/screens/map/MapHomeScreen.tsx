@@ -17,7 +17,7 @@ import useToggleFavorite from '@/hooks/queries/useLike';
 import mapHooks from '@/hooks/queries/useMap';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
-type Navigation = StackNavigationProp<UserStackParamList>;
+type Navigation = StackNavigationProp<UserStackParamList, typeof userNavigations.STORE_LIST>;
 
 const MapHomeScreen = () => {
   const navigation = useNavigation<Navigation>();
@@ -133,7 +133,10 @@ const MapHomeScreen = () => {
   const handleNavigateToList = () => {
     closePopup();
     setTimeout(() => {
-      navigation.navigate(userNavigations.STORE_LIST);
+      navigation.navigate(userNavigations.STORE_LIST, {
+        latitude: currentLocation!.latitude,
+        longitude: currentLocation!.longitude,
+      });
     }, 100);
   };
 

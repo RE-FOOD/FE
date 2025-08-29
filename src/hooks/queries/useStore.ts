@@ -2,6 +2,7 @@ import {
   InfiniteData,
   useInfiniteQuery,
   UseInfiniteQueryResult,
+  useMutation,
   useQuery,
 } from '@tanstack/react-query';
 import {
@@ -11,6 +12,7 @@ import {
   MenuDetail,
   StoreListParams,
   StoreListResponse,
+  toggleStoreLike,
 } from '@/api/store';
 import { queryKeys } from '@/constants/keys';
 import { UseQueryCustomOptions } from '@/types/api';
@@ -27,8 +29,8 @@ function useGetStoreDetail(storeId: number, queryOptions?: UseQueryCustomOptions
   return useQuery({
     queryKey: [queryKeys.STORE, queryKeys.GET_STORE_DETAIL, storeId], // storeId queryKey에서 제외: 항상 한 개의 데이터만 유지
     queryFn: () => getStoreDetail(storeId),
-    staleTime: Infinity,
-    gcTime: Infinity,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     retry: 1,
     ...queryOptions,
   });
@@ -90,16 +92,24 @@ function useInfiniteStoreList(
   });
 }
 
+function useToggleLike() {
+  return useMutation({
+    mutationFn: (storeId: number) => toggleStoreLike(storeId),
+  });
+}
+
 function useStore(storeId?: number, menuId?: number) {
   const storeListQuery = useGetStoreList();
   const storeDetailQuery = useGetStoreDetail(storeId!);
   const menuDetailQuery = useGetMenuDetail(storeId!, menuId!);
+  const toggleLikeMutation = useToggleLike();
 
   return {
     storeListQuery,
     storeDetailQuery,
     menuDetailQuery,
     useInfiniteStoreList,
+    toggleLikeMutation,
   };
 }
 

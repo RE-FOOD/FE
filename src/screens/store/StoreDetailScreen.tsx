@@ -17,14 +17,15 @@ const StoreDetailScreen = () => {
   const { params } = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
   const { storeId, storeName } = params;
-  const { storeDetailQuery } = useStore(storeId);
+  const { storeDetailQuery, toggleLikeMutation } = useStore(storeId);
   const { data: store, isLoading, isError } = storeDetailQuery;
+
+  const [liked, setLiked] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: storeName });
   }, [navigation, storeName]);
 
-  const [liked, setLiked] = useState<boolean>(false);
   useEffect(() => {
     if (typeof store?.like === 'boolean') setLiked(store.like);
   }, [store?.like]);
@@ -43,6 +44,16 @@ const StoreDetailScreen = () => {
     );
   }
 
+  const handleToggleLike = () => {
+    setLiked((prev) => !prev);
+
+    toggleLikeMutation.mutate(storeId, {
+      onError: () => {
+        setLiked((prev) => !prev);
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       {heroImage ? (
@@ -58,7 +69,7 @@ const StoreDetailScreen = () => {
         ratingAvg={store.ratingAvg}
         count={store.count}
         liked={liked}
-        onToggleLike={() => setLiked((prev) => !prev)}
+        onToggleLike={handleToggleLike}
         onPressReview={() => navigation.navigate(userNavigations.STORE_REVIEW, { storeId })}
         onPressOrigin={() =>
           navigation.navigate(userNavigations.STORE_INFO, { storeId, storeName: store.name })

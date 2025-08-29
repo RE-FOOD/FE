@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { checkNickname, getOverviews } from '@/api/member';
+import { checkNickname, getCartCount, getOverviews } from '@/api/member';
 import { queryKeys } from '@/constants/keys';
 import { ApiResponse, UseQueryCustomOptions } from '@/types/api';
 
@@ -22,4 +22,11 @@ function useCheckNickname(
   });
 }
 
-export { useGetOverviews, useCheckNickname };
+function useGetCartCount() {
+  return useQuery({
+    queryKey: [queryKeys.CART, queryKeys.GET_CART_COUNT],
+    queryFn: getCartCount,
+  });
+}
+
+export { useGetOverviews, useCheckNickname, useGetCartCount };

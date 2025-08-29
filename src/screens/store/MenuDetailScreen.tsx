@@ -9,6 +9,7 @@ import Plus from '@/assets/icons/plus.svg';
 import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
 import useCart from '@/hooks/queries/useCart';
+import { useGetCartCount } from '@/hooks/queries/useMember';
 import useStore from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { showToast } from '@/utils/toast';
@@ -20,6 +21,7 @@ const MenuDetailScreen = () => {
   const { params } = useRoute<Rt>();
   const navigation = useNavigation<Nav>();
   const { storeId, storeName, menuId } = params;
+  const { data: cartCount } = useGetCartCount();
 
   const { menuDetailQuery } = useStore(storeId, menuId);
   const { checkCartStoreMutation, addMenuMutation } = useCart();
@@ -40,6 +42,16 @@ const MenuDetailScreen = () => {
   const totalPrice = discountedPrice * count;
 
   const addToCart = async () => {
+    if (cartCount === 0) {
+      addMenuMutation.mutate({
+        checkNew: true,
+        storeId,
+        menuId,
+        quantity: count,
+      });
+      return;
+    }
+
     const result = await checkCartStoreMutation.mutateAsync(storeId);
 
     if (result.httpStatus === 200) {

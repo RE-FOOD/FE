@@ -160,6 +160,17 @@ interface Overviews {
   popularStores: PopularStore[];
 }
 
+type OrderMenu = Pick<CartMenu, 'name' | 'orderQuantity' | 'imageUrl' | 'discountPrice'>;
+
+interface Order {
+  name: string;
+  address: string;
+  totalCoast: number;
+  openTime: string;
+  closeTime: string;
+  menus: OrderMenu[];
+}
+
 export type {
   Member,
   Profile,
@@ -181,4 +192,6 @@ export type {
   Like,
   Map,
   Overviews,
+  Order,
+  OrderMenu,
 };

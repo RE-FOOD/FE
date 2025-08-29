@@ -20,6 +20,7 @@ import Private from '@/screens/mypage/PrivateScreen';
 import Review from '@/screens/mypage/ReviewScreen';
 import Rule from '@/screens/mypage/RuleScreen';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
+import OrderScreen from '@/screens/order/OrderScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
 import MenuDetailScreen from '@/screens/store/MenuDetailScreen';
 import SearchResultScreen from '@/screens/store/SearchResultScreen';
@@ -27,6 +28,7 @@ import StoreDetailScreen from '@/screens/store/StoreDetailScreen';
 import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
 import StoreInfoScreen from '@/screens/store/StoreInfoScreen';
 import StoreReviewScreen from '@/screens/store/StoreReviewScreen';
+import { Order } from '@/types/domain';
 
 export type UserStackParamList = {
   UserTabs: NavigatorScreenParams<UserBottomTabsParamList>;
@@ -35,6 +37,7 @@ export type UserStackParamList = {
   [userNavigations.STORE_REVIEW]: { storeId: number };
   [userNavigations.STORE_INFO]: { storeId: number; storeName: string };
   [userNavigations.MENU_DETAIL]: { storeId: number; storeName: string; menuId: number };
+  [userNavigations.ORDER]: { order: Order };
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
   };
@@ -93,6 +96,11 @@ function UserStackNavigator() {
         name="MenuDetail"
         component={MenuDetailScreen}
         options={{ title: '', headerShown: true }}
+      />
+      <Stack.Screen
+        name="Order"
+        component={OrderScreen}
+        options={{ title: '픽업 주문', headerShown: true }}
       />
       <Stack.Screen
         name="OrderDetail"

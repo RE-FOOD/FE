@@ -14,11 +14,20 @@ type Props = {
 
 const CartMenuItem = ({ menu, onDecrease, onIncrease, onRemove }: Props) => {
   const soldOut = menu.dailyQuantity === 0;
+  const shortage = menu.dailyQuantity < menu.orderQuantity;
+
+  const disableDecrease = menu.orderQuantity <= 1;
+  const disableIncrease = soldOut || shortage || menu.orderQuantity >= menu.dailyQuantity;
 
   return (
     <View style={styles.cardItem}>
       <View style={[styles.menuCard, soldOut && styles.soldOutCard]}>
         {soldOut && <Text style={styles.soldOutLabel}>품절된 메뉴입니다</Text>}
+        {shortage && (
+          <Text
+            style={styles.soldOutLabel}
+          >{`재고가 부족합니다. [현재 재고: ${menu.dailyQuantity}]`}</Text>
+        )}
         <View style={styles.menuContainer}>
           <Image source={{ uri: menu.imageUrl }} style={styles.image} />
           <View style={styles.menuInfo}>
@@ -44,8 +53,8 @@ const CartMenuItem = ({ menu, onDecrease, onIncrease, onRemove }: Props) => {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
           <Pressable
             onPress={onDecrease}
-            disabled={menu.orderQuantity === 1}
-            style={[styles.counterBtn, menu.orderQuantity === 1 && { opacity: 0.3 }]}
+            disabled={disableDecrease}
+            style={[styles.counterBtn, disableDecrease && { opacity: 0.3 }]}
           >
             <Minus width={18} height={18} />
           </Pressable>
@@ -54,7 +63,11 @@ const CartMenuItem = ({ menu, onDecrease, onIncrease, onRemove }: Props) => {
             <Text style={styles.countText}>{menu.orderQuantity}</Text>
           </View>
 
-          <Pressable onPress={onIncrease} style={styles.counterBtn}>
+          <Pressable
+            onPress={onIncrease}
+            disabled={disableIncrease}
+            style={[styles.counterBtn, disableIncrease && { opacity: 0.3 }]}
+          >
             <Plus width={18} height={18} />
           </Pressable>
         </View>

@@ -32,11 +32,8 @@ const MapHomeScreen = () => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const { data: nearByStores } = mapHooks.useMap({
-    latitude: currentLocation?.latitude,
-    longitude: currentLocation?.longitude,
-    queryOptions: {
-      enabled: !!currentLocation,
-    },
+    latitude: currentLocation?.latitude ?? 0,
+    longitude: currentLocation?.longitude ?? 0,
   });
 
   const { data: storeSummary } = mapHooks.useStoreSummary(

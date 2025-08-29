@@ -1,57 +1,74 @@
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
-//import { Image } from 'react-native-svg';
 import Star from '@/assets/icons/star.svg';
 import { colors } from '@/constants/colors';
-import { Like } from '@/types/domain';
 
-interface ImageProps {
-  restaurants: Like[];
-}
+export type RestaurantListData = {
+  id: number;
+  name: string;
+  imageUrl: string;
+  distance: number;
+  rating: number;
+  reviewCount: number;
+  status?: 'OPEN' | 'CLOSE' | string;
+  maxPercent?: number;
+};
 
-export default function RestaurantList({ restaurants }: ImageProps) {
+type Props = {
+  restaurant: RestaurantListData;
+  onPress?: (restaurant: RestaurantListData) => void;
+};
+const RestaurantList = ({ restaurant, onPress }: Props) => {
+  const closed = (restaurant?.status ?? 'OPEN') !== 'OPEN';
   return (
-    <View style={styles.imgContainer}>
-      {restaurants.map((restaurant) => {
-        const closed = restaurant.status === 'CLOSE';
-
-        return (
-          <TouchableOpacity key={restaurant.id} style={styles.list}>
-            <ImageBackground
-              source={{ uri: restaurant.imageUrl }}
-              style={styles.img}
-              imageStyle={{
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-              }}
-            >
-              {!closed && (
-                <View style={styles.sale}>
-                  <Text style={styles.redRegularText_15}>{restaurant.salePercent}%</Text>
-                </View>
-              )}
-              {closed && (
-                <View style={styles.overlay}>
-                  <Text style={styles.overlayText}>판매 중인 메뉴가 없어요</Text>
-                </View>
-              )}
-            </ImageBackground>
-            <View style={styles.info}>
-              <View style={styles.rate}>
-                <Text style={styles.blackRegularText_14}>{restaurant.name}</Text>
-                <View style={styles.review}>
-                  <Star />
-                  <Text style={styles.blackRegularText_11}>{restaurant.ratingAvg}</Text>
-                  <Text style={styles.grayRegularText}>({restaurant.count})</Text>
-                </View>
-              </View>
-              <Text style={styles.grayRegularText}>{restaurant.distance}km</Text>
+    <TouchableOpacity
+      key={restaurant?.id}
+      style={styles.list}
+      onPress={() => onPress?.(restaurant)}
+    >
+      {restaurant?.imageUrl ? (
+        <ImageBackground
+          source={{ uri: restaurant.imageUrl }}
+          style={styles.img}
+          imageStyle={{
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+          }}
+        >
+          {!closed && (
+            <View style={styles.sale}>
+              <Text style={styles.redRegularText_15}>{restaurant?.maxPercent ?? 0}%</Text>
             </View>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+          )}
+          {closed && (
+            <View style={styles.overlay}>
+              <Text style={styles.overlayText}>판매 중인 메뉴가 없어요</Text>
+            </View>
+          )}
+        </ImageBackground>
+      ) : (
+        <View
+          style={[
+            styles.img,
+            { backgroundColor: colors.GRAY_200, justifyContent: 'center', alignItems: 'center' },
+          ]}
+        >
+          <Text style={styles.grayRegularText}>이미지 없음</Text>
+        </View>
+      )}
+      <View style={styles.info}>
+        <View style={styles.rate}>
+          <Text style={styles.blackRegularText_14}>{restaurant?.name}</Text>
+          <View style={styles.review}>
+            <Star />
+            <Text style={styles.blackRegularText_11}>{restaurant?.rating.toFixed(1)}</Text>
+            <Text style={styles.grayRegularText}>({restaurant?.reviewCount})</Text>
+          </View>
+        </View>
+        <Text style={styles.grayRegularText}>{restaurant?.distance.toFixed(1)}km</Text>
+      </View>
+    </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   imgContainer: {
@@ -62,6 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   img: {
+    width: 320,
     height: 140,
     borderTopStartRadius: 10,
     borderTopEndRadius: 10,
@@ -146,3 +164,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Bold', // 폰트는 프로젝트에 맞게 조절
   },
 });
+
+export default RestaurantList;

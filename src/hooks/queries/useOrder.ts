@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { getOrder } from '@/api/order';
+import { createOrder, getOrder } from '@/api/order';
 import { queryKeys } from '@/constants/keys';
 import { showToast } from '@/utils/toast';
 
@@ -16,11 +16,20 @@ function useOrderCheck() {
     },
   });
 }
+
+function useCreateOrder() {
+  return useMutation({
+    mutationFn: (payload: { pickupDueAt: string; reuse: boolean }) => createOrder(payload),
+  });
+}
+
 function useOrder() {
   const orderQuery = useOrderCheck();
+  const createOrderMutation = useCreateOrder();
 
   return {
     orderQuery,
+    createOrderMutation,
   };
 }
 

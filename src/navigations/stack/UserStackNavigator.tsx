@@ -20,6 +20,7 @@ import Review from '@/screens/mypage/ReviewScreen';
 import Rule from '@/screens/mypage/RuleScreen';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
 import OrderScreen from '@/screens/order/OrderScreen';
+import TossPaymentScreen from '@/screens/order/TossPaymentScreen';
 import CategoryListScreen from '@/screens/store/CategoryListScreen';
 import MenuDetailScreen from '@/screens/store/MenuDetailScreen';
 import SearchResultScreen from '@/screens/store/SearchResultScreen';
@@ -58,6 +59,7 @@ export type UserStackParamList = {
     title: string;
     subtitle?: string;
   };
+  [userNavigations.TOSS_PAYMENT]: { sessionId: string; totalAmount: number };
 };
 
 const Stack = createStackNavigator<UserStackParamList>();
@@ -165,6 +167,11 @@ function UserStackNavigator() {
         name={userNavigations.EMPTY_STATE}
         component={EmptyStateScreen}
         options={{ title: '' }}
+      />
+      <Stack.Screen
+        name={userNavigations.TOSS_PAYMENT}
+        component={TossPaymentScreen}
+        options={{ title: '결제', headerShown: false }}
       />
     </Stack.Navigator>
   );

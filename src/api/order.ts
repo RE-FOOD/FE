@@ -7,4 +7,42 @@ const getOrder = async (): Promise<Order> => {
   return res.data.data;
 };
 
-export { getOrder };
+interface CreateOrderPayload {
+  pickupDueAt: string;
+  reuse: boolean;
+}
+
+type ResponseOrder = string;
+
+const createOrder = async (payload: CreateOrderPayload) => {
+  try {
+    const res = await axiosInstance.post<ApiResponse<ResponseOrder>>('/order', payload);
+    return res.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+interface RequestPayments {
+  paymentKey: string;
+  orderId: string;
+  amount: number;
+}
+
+const confirmPayments = async ({ paymentKey, orderId, amount }: RequestPayments) => {
+  try {
+    const res = await axiosInstance.post<ApiResponse<string>>('/payments/confirm', {
+      params: {
+        paymentKey,
+        orderId,
+        amount,
+      },
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getOrder, createOrder, confirmPayments };

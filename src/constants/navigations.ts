@@ -31,6 +31,7 @@ const userNavigations = {
   PRIVATE: 'Private',
   RULE: 'Rule',
   EMPTY_STATE: 'EmptyState',
+  TOSS_PAYMENT: 'TossPayment',
 } as const;
 
 const sellerNavigations = {

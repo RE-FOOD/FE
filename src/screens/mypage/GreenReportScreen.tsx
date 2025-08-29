@@ -1,15 +1,18 @@
 import { StyleSheet, Image, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import LevelProgress from '@/components/mypage/LevelProgress';
 import { colors } from '@/constants/colors';
 import { useMyPage } from '@/hooks/queries/useMyPage';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { toLevelLabel, getLevelImage } from '@/utils/level';
 
-type GreenReportProps = {
-  percent: number;
-};
+type GreenReportRouteProp = RouteProp<UserStackParamList, 'GreenReport'>;
 
-const GreenReport = ({ percent }: GreenReportProps) => {
+const GreenReport = () => {
+  const route = useRoute<GreenReportRouteProp>();
+  const { progress } = route.params;
+
   const { data } = useMyPage();
   const me = data?.data;
 
@@ -26,7 +29,7 @@ const GreenReport = ({ percent }: GreenReportProps) => {
           </Text>
         </View>
         <LevelProgress
-          value={percent}
+          value={progress}
           labels={['씨앗', '묘목', '나무', '사과나무']}
           height={16}
           colors={['#FF6A3D', '#FFC0A3']}

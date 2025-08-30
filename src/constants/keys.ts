@@ -14,6 +14,8 @@ const queryKeys = {
   GET_OVERVIEWS: 'getOverviews',
   ORDER: 'Order',
   GET_ORDER: 'getOrder',
+  ENVIRONMENT: 'environment',
+  GET_REPORT: 'getReport',
 } as const;
 
 const storageKeys = {

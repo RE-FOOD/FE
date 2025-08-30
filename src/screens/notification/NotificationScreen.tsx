@@ -14,7 +14,7 @@ const NotificationScreen = () => {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Notification Screen</Text>
 
-      {/* ✅ 테스트 버튼 */}
+      {/* // TODO: 테스트 버튼 추후 삭제 */}
       <TouchableOpacity
         style={styles.button}
         onPress={() =>

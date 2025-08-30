@@ -112,7 +112,7 @@ function UserStackNavigator() {
       <Stack.Screen
         name={userNavigations.ORDER_SUCCESS}
         component={OrderSuccessScreen}
-        options={{ headerShown: false }}
+        options={{ title: '결제 완료', headerShown: true, headerLeft: () => null }}
       />
       <Stack.Screen
         name="OrderDetail"

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { createOrder, getOrder } from '@/api/order';
+import { confirmPayment, createOrder, getOrder } from '@/api/order';
 import { queryKeys } from '@/constants/keys';
 import { showToast } from '@/utils/toast';
 
@@ -23,24 +23,24 @@ function useCreateOrder() {
   });
 }
 
-// function useConfirmPayments() {
-//   const navigation = useNavigation();
-
-//   return useMutation({
-//     mutationFn: confirmPayments,
-//     onError: () => {
-//       showToast('error', '결제 실패', '선택하신 메뉴 중 재고가 부족한 제품이 존재합니다.');
-//     },
-//   });
-// }
+function useConfirmPayment() {
+  return useMutation({
+    mutationFn: confirmPayment,
+    onError: () => {
+      showToast('error', '결제 실패', '잠시 후 다시 시도해주세요.');
+    },
+  });
+}
 
 function useOrder() {
   const orderQuery = useOrderCheck();
   const createOrderMutation = useCreateOrder();
+  const confirmPaymentMutation = useConfirmPayment();
 
   return {
     orderQuery,
     createOrderMutation,
+    confirmPaymentMutation,
   };
 }
 

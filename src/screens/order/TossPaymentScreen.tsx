@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
-import { Button, Alert, ScrollView } from 'react-native';
+import { Button, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   PaymentWidgetProvider,
   usePaymentWidget,
   PaymentMethodWidget,
   AgreementWidget,
 } from '@tosspayments/widget-sdk-react-native';
-import { confirmPayments } from '@/api/order';
+import { userNavigations } from '@/constants/navigations';
+import useOrder from '@/hooks/queries/useOrder';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+
+type Nav = StackNavigationProp<UserStackParamList, typeof userNavigations.TOSS_PAYMENT>;
 
 function CheckoutPage({ sessionId, totalAmount }: { sessionId: string; totalAmount: number }) {
+  const navigation = useNavigation<Nav>();
   const paymentWidgetControl = usePaymentWidget();
+  const { confirmPaymentMutation } = useOrder();
   const [ready, setReady] = useState(false);
 
   return (
@@ -38,7 +46,6 @@ function CheckoutPage({ sessionId, totalAmount }: { sessionId: string; totalAmou
         title="결제하기"
         onPress={async () => {
           if (!ready) {
-            Alert.alert('약관이 준비되지 않았습니다.');
             return;
           }
           const result = await paymentWidgetControl.requestPayment?.({
@@ -47,24 +54,18 @@ function CheckoutPage({ sessionId, totalAmount }: { sessionId: string; totalAmou
           });
 
           if (result?.success) {
-            try {
-              await confirmPayments({
+            confirmPaymentMutation.mutate(
+              {
                 orderId: result.success.orderId,
                 paymentKey: result.success.paymentKey,
                 amount: result.success.amount,
-              });
-              Toast.show({
-                type: 'success',
-                text1: '결제 성공',
-                text2: `주문번호: ${result.success.orderId}`,
-              });
-            } catch {
-              Toast.show({
-                type: 'error',
-                text1: '승인 실패',
-                text2: '서버 승인 API 호출 중 오류',
-              });
-            }
+              },
+              {
+                onSuccess: () => {
+                  navigation.navigate(userNavigations.ORDER_SUCCESS);
+                },
+              }
+            );
           } else if (result?.fail) {
             Toast.show({
               type: 'error',
@@ -88,7 +89,7 @@ export default function TossPaymentScreen({
   return (
     <PaymentWidgetProvider
       clientKey="test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"
-      customerKey={`user-${Date.now()}`} // 무작위 UUID 권장
+      customerKey={`user-${Date.now()}`}
     >
       <CheckoutPage sessionId={sessionId} totalAmount={totalAmount} />
     </PaymentWidgetProvider>

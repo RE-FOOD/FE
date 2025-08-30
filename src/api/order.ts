@@ -34,7 +34,7 @@ interface ResponsePayments {
   levelCheck: boolean;
 }
 
-const confirmPayments = async ({ paymentKey, orderId, amount }: RequestPayments) => {
+const confirmPayment = async ({ paymentKey, orderId, amount }: RequestPayments) => {
   try {
     const res = await axiosInstance.post<ApiResponse<ResponsePayments>>('/payments/confirm', {
       paymentKey,
@@ -47,4 +47,4 @@ const confirmPayments = async ({ paymentKey, orderId, amount }: RequestPayments)
   }
 };
 
-export { getOrder, createOrder, confirmPayments };
+export { getOrder, createOrder, confirmPayment };

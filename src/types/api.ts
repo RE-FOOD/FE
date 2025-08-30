@@ -15,7 +15,9 @@ type UseMutationCustomOptions<TData = unknown, TVariables = unknown> = Omit<
 type UseQueryCustomOptions<TQueryFnData = unknown, TData = TQueryFnData> = Omit<
   UseQueryOptions<TQueryFnData, ResponseError, TData, QueryKey>,
   'queryKey'
->;
+> & {
+  keepPreviousData?: boolean;
+};
 
 interface ApiResponse<T> {
   statusCode: number;

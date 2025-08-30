@@ -1,74 +1,79 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Trash from '@/assets/icons/trash.svg';
 import { colors } from '@/constants/colors';
+import { useMyReviewFlat } from '@/hooks/queries/useReview';
 
-const Review = () => {
+const ReviewScreen = () => {
+  const { reviews, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyReviewFlat();
+
+  console.log('리뷰 데이터:', JSON.stringify(reviews, null, 2));
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color={colors.GREEN} />
+      </SafeAreaView>
+    );
+  }
+
+  const renderItem = ({ item }: any) => {
+    const formattedDate = item.createdAt.split('T')[0];
+    return (
+      <View style={styles.listContainer}>
+        <View style={styles.storeInfoContainer}>
+          <View style={styles.titleRow}>
+            <Text style={styles.blackRegularText_15}>{item.storeName}</Text>
+            <TouchableOpacity style={styles.deleteButton}>
+              <Trash />
+              <Text style={styles.grayRegularText_13}>삭제</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.infoContainer}>
+            <View style={styles.starContainer}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <FontAwesome
+                  key={i}
+                  name="star"
+                  size={15}
+                  color={i < item.rating ? '#FFD700' : '#ccc'}
+                />
+              ))}
+            </View>
+            <Text style={styles.grayRegularText_13}>{formattedDate}</Text>
+          </View>
+        </View>
+        <Text style={styles.blackRegularText_13}>{item.content}</Text>
+        <View style={styles.menuContainer}>
+          {item.menuList.map((menu: any) => (
+            <View key={menu.id} style={styles.menuInfo}>
+              <Text style={styles.grayRegularText_13}>{menu.name}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.blackRegularText_20}>나의 리뷰 17개</Text>
-      <View style={styles.listContainer}>
-        <View style={styles.storeInfoContainer}>
-          <View style={styles.titleRow}>
-            <Text style={styles.blackRegularText_15}>알렉스 플레이스</Text>
-            <TouchableOpacity style={styles.deleteButton}>
-              <Trash />
-              <Text style={styles.grayRegularText_13}>삭제</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.infoContainer}>
-            <View style={styles.starContainer}>
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-            </View>
-            <Text style={styles.grayRegularText_13}>2025-07-30</Text>
-          </View>
-        </View>
-        <Text style={styles.blackRegularText_13}>항상 맛있게 잘 먹고있습니다.</Text>
-        <View style={styles.menuContainer}>
-          <View style={styles.menuInfo}>
-            <Text style={styles.grayRegularText_13}>더블 치즈 버거</Text>
-          </View>
-          <View style={styles.menuInfo}>
-            <Text style={styles.grayRegularText_13}>더블 치즈 버거</Text>
-          </View>
-        </View>
-      </View>
-      <View style={styles.listContainer}>
-        <View style={styles.storeInfoContainer}>
-          <View style={styles.titleRow}>
-            <Text style={styles.blackRegularText_15}>알렉스 플레이스</Text>
-            <TouchableOpacity style={styles.deleteButton}>
-              <Trash />
-              <Text style={styles.grayRegularText_13}>삭제</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.infoContainer}>
-            <View style={styles.starContainer}>
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-              <FontAwesome name="star" size={15} color={'#FFD700'} />
-            </View>
-            <Text style={styles.grayRegularText_13}>2025-07-30</Text>
-          </View>
-        </View>
-        <Text style={styles.blackRegularText_13}>항상 맛있게 잘 먹고있습니다.</Text>
-        <View style={styles.menuContainer}>
-          <View style={styles.menuInfo}>
-            <Text style={styles.grayRegularText_13}>더블 치즈 버거</Text>
-          </View>
-          <View style={styles.menuInfo}>
-            <Text style={styles.grayRegularText_13}>더블 치즈 버거</Text>
-          </View>
-        </View>
-      </View>
+      <FlatList
+        data={reviews}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        showsVerticalScrollIndicator={false}
+        ListFooterComponent={
+          isFetchingNextPage ? <ActivityIndicator size="small" color={colors.GREEN} /> : null
+        }
+      />
     </SafeAreaView>
   );
 };
@@ -86,12 +91,13 @@ const styles = StyleSheet.create({
   listContainer: {
     flexDirection: 'column',
     alignSelf: 'stretch',
-
-    gap: 8,
+    gap: 4,
+    marginBottom: 35,
   },
   storeInfoContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
+    gap: 4,
   },
   titleRow: {
     flexDirection: 'row',
@@ -180,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Review;
+export default ReviewScreen;

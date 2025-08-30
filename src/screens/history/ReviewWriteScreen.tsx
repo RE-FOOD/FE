@@ -7,37 +7,55 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
+import { useCreateReview } from '@/hooks/queries/useReview';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
-
-type StarState = {
-  [key: string]: boolean;
-};
 
 type NavigationProp = StackNavigationProp<UserStackParamList>;
 
-const ReviewWriteScreen = () => {
-  const [stars, setStars] = useState<StarState>({
-    '1': true,
-    '2': true,
-    '3': true,
-    '4': true,
-    '5': true,
-  });
+interface ReviewWriteScreenProps {
+  route: {
+    params: {
+      storeId: number;
+      orderId: number;
+    };
+  };
+}
 
+const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
+  const { storeId, orderId } = route.params;
+
+  const [rating, setRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
 
-  const handleStarPress = (starId: string) => {
-    setStars((prevStars) => ({
-      ...prevStars, // 이전 별들의 상태는 그대로 복사하고
-      [starId]: !prevStars[starId], // 클릭된 별의 상태(true/false)만 뒤집기
-    }));
+  const navigation = useNavigation<NavigationProp>();
+
+  const { mutate: createReview } = useCreateReview({ storeId, orderId });
+
+  const handleStarPress = (starId: number) => {
+    if (rating === starId) {
+      setRating(starId - 1);
+    } else {
+      setRating(starId);
+    }
   };
 
-  const navigation = useNavigation<NavigationProp>();
   const handleRegistration = () => {
-    navigation.navigate('UserTabs', {
-      screen: userNavigations.HISTORY_HOME,
-    });
+    createReview(
+      {
+        rating,
+        content: reviewText,
+      },
+      {
+        onSuccess: () => {
+          navigation.navigate('UserTabs', {
+            screen: userNavigations.HISTORY_HOME,
+          });
+        },
+        onError: (error) => {
+          console.error('리뷰 등록 실패', error);
+        },
+      }
+    );
   };
 
   return (
@@ -46,19 +64,15 @@ const ReviewWriteScreen = () => {
         <View style={styles.titleContainer}>
           <Text style={styles.blackBoldText_16}>이 가게를 추천하시겠어요?</Text>
           <View style={styles.starContainer}>
-            {Object.keys(stars).map(
-              (
-                starId // `Object.keys`는 string 배열을 반환합니다.
-              ) => (
-                <TouchableOpacity key={starId} onPress={() => handleStarPress(starId)}>
-                  <FontAwesome
-                    name="star"
-                    size={30}
-                    color={stars[starId] ? '#FFD700' : colors.GRAY_700}
-                  />
-                </TouchableOpacity>
-              )
-            )}
+            {Array.from({ length: 5 }, (_, i) => i + 1).map((starId) => (
+              <TouchableOpacity key={starId} onPress={() => handleStarPress(starId)}>
+                <FontAwesome
+                  name="star"
+                  size={30}
+                  color={starId <= rating ? '#FFD700' : colors.GRAY_700}
+                />
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
         <TextInput

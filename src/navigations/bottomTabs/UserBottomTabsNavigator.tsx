@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-  // BottomTabNavigationProp,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
-// import {UserStackParamList} from '../stack/UserStackNavigator';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { userNavigations } from '@/constants/navigations';
 import HistoryHomeScreen from '@/screens/history/HistoryHomeScreen';
 import LikeHomeScreen from '@/screens/like/LikeHomeScreen';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import MypageHomeScreen from '@/screens/mypage/MypageHomeScreen';
 import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
-
-// interface UserBottomTabsNavigatorProps {
-//   navigation: BottomTabNavigationProp<UserStackParamList>;
-// }
 
 export type UserBottomTabsParamList = {
   [userNavigations.STORE_HOME]: undefined;

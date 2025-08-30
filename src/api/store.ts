@@ -40,7 +40,6 @@ const getStoreList = async ({
       limit,
     },
   });
-  console.log(res.data);
   return res.data.data;
 };
 
@@ -60,4 +59,16 @@ const getMenuDetail = async (storeId: number, menuId: number) => {
   return res.data.data;
 };
 
-export { getStoreList, getStoreDetail, getMenuDetail };
+export type ToggleStoreResponse = {
+  storeId: number;
+  isFavored: boolean;
+};
+
+const toggleStoreLike = async (storeId: number) => {
+  const res = await axiosInstance.patch<ApiResponse<ToggleStoreResponse>>(
+    `/stores/${storeId}/favorites`
+  );
+  return res.data;
+};
+
+export { getStoreList, getStoreDetail, getMenuDetail, toggleStoreLike };

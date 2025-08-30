@@ -14,14 +14,20 @@ import { toLevelLabel, getLevelImage } from '@/utils/level';
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
 
+const levelMap = ['SPROUT', 'BUD', 'SEEDLING', 'TREE'];
+
 const MypageHomeScreen = () => {
   const { logoutMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
   const { data, isLoading, error } = useMyPage();
+  const me = data?.data;
+
+  const levelIndex = me ? levelMap.indexOf(me.environmentLevel) : 0;
+  const levelWidth = 1 / levelMap.length; // 4레벨이면 0.25
+  const progress = me ? levelIndex * levelWidth + (me.progressPercentage ?? 0) * levelWidth : 0.01;
 
   if (isLoading) return <Text>로딩중</Text>;
   if (error) return <Text>불러오기 실패</Text>;
-  const me = data?.data;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,11 +57,11 @@ const MypageHomeScreen = () => {
               </View>
               <View style={styles.levelRemindTextBox}>
                 <Text style={styles.grayRegularText}>다음 레벨까지 남은 환경 점수</Text>
-                <Text style={styles.orangeBoldText_13}>130점</Text>
+                <Text style={styles.orangeBoldText_13}>{me?.nextLevelPoint}</Text>
               </View>
             </View>
             <LevelProgress
-              value={me?.environmentScore} // %로 수정 요청
+              value={progress}
               labels={['LEVEL1', 'LEVEL2', 'LEVEL3', 'LEVEL4']}
               height={16}
               colors={['#FF6A3D', '#FFC0A3']}
@@ -76,7 +82,7 @@ const MypageHomeScreen = () => {
 
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => navigation.navigate('GreenReport')}
+          onPress={() => navigation.navigate('GreenReport', { progress })}
         >
           <View style={styles.itemTextContainer}>
             <Text style={styles.blackRegularText_16}>환경 리포트</Text>

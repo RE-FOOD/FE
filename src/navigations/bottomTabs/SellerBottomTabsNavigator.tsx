@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator<SellerBottomTabsParamList>();
 function SellerBottomTabsNavigator() {
   return (
     <Tab.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: true, headerTitleAlign: 'center' }}
       initialRouteName={sellerNavigations.MYPAGE_HOME}
     >
       <Tab.Screen

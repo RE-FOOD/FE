@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SellerBottomTabsNavigator, {
   SellerBottomTabsParamList,
 } from '../bottomTabs/SellerBottomTabsNavigator';
+import { BackButton } from '@/components/_common/BackButton';
 import { sellerNavigations } from '@/constants/navigations';
 
 export type SellerStackparamList = {
@@ -19,6 +20,11 @@ function SellerStackNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'Pretendard-Medium',
+          fontSize: 17,
+        },
+        headerLeft: BackButton,
       }}
     >
       <Stack.Screen

@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { BackButton } from '@/components/_common/BackButton';
 import { loggedOutNavigations } from '@/constants/navigations';
 import LoginScreen from '@/screens/auth/LoginScreen';
 import DaumPostcodeScreen from '@/screens/signup/DaumPostcodeScreen';
@@ -23,6 +24,11 @@ function LoggedOutStackNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        headerTitleStyle: {
+          fontFamily: 'Pretendard-Medium',
+          fontSize: 17,
+        },
+        headerLeft: BackButton,
       }}
     >
       <Stack.Screen name={loggedOutNavigations.LOGIN} component={LoginScreen} />

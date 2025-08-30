@@ -9,6 +9,7 @@ import StoreMenuItem from '@/components/store/StoreMenuItem';
 import { userNavigations } from '@/constants/navigations';
 import useStore from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { renderHeaderCartButton } from '@/utils/navigation';
 
 type Rt = RouteProp<UserStackParamList, 'StoreDetail'>;
 type Nav = StackNavigationProp<UserStackParamList, 'StoreDetail'>;
@@ -23,7 +24,7 @@ const StoreDetailScreen = () => {
   const [liked, setLiked] = useState<boolean>(false);
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: storeName });
+    navigation.setOptions({ title: storeName, headerRight: renderHeaderCartButton });
   }, [navigation, storeName]);
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import UserBottomTabsNavigator, {
   UserBottomTabsParamList,
 } from '../bottomTabs/UserBottomTabsNavigator';
+import { BackButton } from '@/components/_common/BackButton';
 import { CategoryKey } from '@/constants/categoryImages';
 import { userNavigations } from '@/constants/navigations';
 import EmptyStateScreen from '@/screens/_common/EmptyStateScreen';
@@ -71,6 +72,11 @@ function UserStackNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'Pretendard-Medium',
+          fontSize: 17,
+        },
+        headerLeft: BackButton,
       }}
     >
       <Stack.Screen

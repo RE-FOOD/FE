@@ -8,6 +8,7 @@ import StoreCard, { StoreItem } from '@/components/store/StoreCard';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { renderHeaderCartButton } from '@/utils/navigation';
 
 type Nav = StackNavigationProp<UserStackParamList, typeof userNavigations.SEARCH_RESULT>;
 type Rt = RouteProp<UserStackParamList, typeof userNavigations.SEARCH_RESULT>;
@@ -31,7 +32,7 @@ const SearchResultScreen = () => {
   const { keyword } = route.params;
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: '검색 결과' });
+    navigation.setOptions({ title: '검색 결과', headerRight: renderHeaderCartButton });
   }, [navigation]);
 
   const [sort, setSort] = useState<SortKey>('distance');

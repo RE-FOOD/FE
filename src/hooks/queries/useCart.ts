@@ -6,6 +6,7 @@ import {
   updateCartItem,
   AddMenuRequest,
   UpdateCartRequest,
+  getCartCount,
 } from '@/api/cart';
 import { queryKeys } from '@/constants/keys';
 import { showToast } from '@/utils/toast';
@@ -14,6 +15,13 @@ function useGetCarts() {
   return useQuery({
     queryKey: [queryKeys.CART, queryKeys.GET_CART],
     queryFn: getCarts,
+  });
+}
+
+function useGetCartCount() {
+  return useQuery({
+    queryKey: [queryKeys.CART, queryKeys.GET_CART_COUNT],
+    queryFn: getCartCount,
   });
 }
 
@@ -53,12 +61,14 @@ function useCart() {
   const checkCartStoreMutation = useCheckCartStore();
   const addMenuMutation = useAddMenuToCart();
   const updateCartMutation = useUpdateCartItem();
+  const cartCountQuery = useGetCartCount();
 
   return {
     cartListQuery,
     checkCartStoreMutation,
     addMenuMutation,
     updateCartMutation,
+    cartCountQuery,
   };
 }
 

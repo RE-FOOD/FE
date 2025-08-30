@@ -48,4 +48,9 @@ const updateCartItem = async (data: UpdateCartRequest) => {
   return res.data;
 };
 
-export { getCarts, checkCartStore, addMenuToCart, updateCartItem };
+const getCartCount = async () => {
+  const res = await axiosInstance.get<ApiResponse<{ cartCount: number }>>('/members/cartCount');
+  return res.data.data.cartCount;
+};
+
+export { getCarts, checkCartStore, addMenuToCart, updateCartItem, getCartCount };

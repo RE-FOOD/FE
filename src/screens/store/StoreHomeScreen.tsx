@@ -14,6 +14,7 @@ import { queryKeys } from '@/constants/keys';
 import { userNavigations } from '@/constants/navigations';
 import { useGetOverviews } from '@/hooks/queries/useMember';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { DiscountMenu, PopularStore } from '@/types/domain';
 
 type NavigationProp = StackNavigationProp<UserStackParamList>;
 
@@ -46,7 +47,7 @@ const StoreHomeScreen = () => {
   };
 
   const discountMenuItems: StoreItem[] =
-    data?.data?.discountMenu?.map((item: any) => ({
+    data?.data?.discountMenu?.map((item: DiscountMenu) => ({
       id: item.storeId,
       name: item.menuName,
       rating: item.ratingAvg,
@@ -57,7 +58,7 @@ const StoreHomeScreen = () => {
     })) ?? [];
 
   const popularStoreItems: StoreItem[] =
-    data?.data?.popularStores?.map((item: any) => ({
+    data?.data?.popularStores?.map((item: PopularStore) => ({
       id: item.id,
       name: item.name,
       rating: item.ratingAvg,

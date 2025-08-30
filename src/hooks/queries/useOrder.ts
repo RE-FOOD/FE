@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { getOrder } from '@/api/order';
+import { confirmPayment, createOrder, getOrder } from '@/api/order';
 import { queryKeys } from '@/constants/keys';
 import { showToast } from '@/utils/toast';
 
@@ -17,11 +17,30 @@ function useOrderCheck() {
   });
 }
 
+function useCreateOrder() {
+  return useMutation({
+    mutationFn: (payload: { pickupDueAt: string; reuse: boolean }) => createOrder(payload),
+  });
+}
+
+function useConfirmPayment() {
+  return useMutation({
+    mutationFn: confirmPayment,
+    onError: () => {
+      showToast('error', '결제 실패', '잠시 후 다시 시도해주세요.');
+    },
+  });
+}
+
 function useOrder() {
   const orderQuery = useOrderCheck();
+  const createOrderMutation = useCreateOrder();
+  const confirmPaymentMutation = useConfirmPayment();
 
   return {
     orderQuery,
+    createOrderMutation,
+    confirmPaymentMutation,
   };
 }
 

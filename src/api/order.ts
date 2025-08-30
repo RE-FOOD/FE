@@ -41,6 +41,7 @@ const confirmPayment = async ({ paymentKey, orderId, amount }: RequestPayments) 
       orderId,
       amount,
     });
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error(error);

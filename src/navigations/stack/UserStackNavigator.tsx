@@ -26,21 +26,19 @@ import CategoryListScreen from '@/screens/store/CategoryListScreen';
 import MenuDetailScreen from '@/screens/store/MenuDetailScreen';
 import SearchResultScreen from '@/screens/store/SearchResultScreen';
 import StoreDetailScreen from '@/screens/store/StoreDetailScreen';
-import StoreHomeScreen from '@/screens/store/StoreHomeScreen';
 import StoreInfoScreen from '@/screens/store/StoreInfoScreen';
 import StoreReviewScreen from '@/screens/store/StoreReviewScreen';
 import { Order } from '@/types/domain';
 
 export type UserStackParamList = {
   UserTabs: NavigatorScreenParams<UserBottomTabsParamList>;
-  [userNavigations.STORE_HOME]: undefined;
   [userNavigations.STORE_DETAIL]: { storeId: number; storeName: string };
   [userNavigations.STORE_REVIEW]: { storeId: number };
   [userNavigations.STORE_INFO]: { storeId: number; storeName: string };
   [userNavigations.MENU_DETAIL]: { storeId: number; storeName: string; menuId: number };
   [userNavigations.ORDER]: { order: Order };
   [userNavigations.TOSS_PAYMENT]: { sessionId: string; totalAmount: number };
-  [userNavigations.ORDER_SUCCESS]: undefined;
+  [userNavigations.ORDER_SUCCESS]: { level: string | undefined; levelCheck: boolean | undefined };
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
   };
@@ -78,7 +76,6 @@ function UserStackNavigator() {
         component={UserBottomTabsNavigator}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="StoreHome" component={StoreHomeScreen} options={{ headerShown: false }} />
       <Stack.Screen
         name="StoreDetail"
         component={StoreDetailScreen}

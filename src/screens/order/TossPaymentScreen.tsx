@@ -61,8 +61,11 @@ function CheckoutPage({ sessionId, totalAmount }: { sessionId: string; totalAmou
                 amount: result.success.amount,
               },
               {
-                onSuccess: () => {
-                  navigation.navigate(userNavigations.ORDER_SUCCESS);
+                onSuccess: (data) => {
+                  navigation.navigate(userNavigations.ORDER_SUCCESS, {
+                    level: data?.data.level,
+                    levelCheck: data?.data.levelCheck,
+                  });
                 },
               }
             );

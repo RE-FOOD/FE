@@ -1,19 +1,48 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProgressIndicator } from './ProgressIndicator';
+import LevelUpPopup from '@/components/order/LevelUpPopup';
 import { colors } from '@/constants/colors';
+import { LEVEL_INFO } from '@/constants/environmentLevel';
 import { userNavigations } from '@/constants/navigations';
 import { useRippleAnimation } from '@/hooks/useAnimation/useRippleAnimation';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { EnvironmentLevel } from '@/types/domain';
 
+type Rt = RouteProp<UserStackParamList, typeof userNavigations.ORDER_SUCCESS>;
 type Nav = StackNavigationProp<UserStackParamList, typeof userNavigations.ORDER_SUCCESS>;
 
 const OrderSuccessScreen = () => {
+  const route = useRoute<Rt>();
+  const { level, levelCheck } = route.params || {};
   const navigation = useNavigation<Nav>();
-  const ripples = [useRippleAnimation(0), useRippleAnimation(1200)];
+  const ripples = [useRippleAnimation(0), useRippleAnimation(600), useRippleAnimation(1200)];
+  const [showPopup, setShowPopup] = useState(false);
+  const [lottieFinished, setLottieFinished] = useState(false);
+  const isFocused = useIsFocused();
+
+  const { image }: { image: ImageSourcePropType } = level
+    ? LEVEL_INFO[level as EnvironmentLevel]
+    : { image: require('@/assets/images/level1.webp') };
+
+  useEffect(() => {
+    if (isFocused && levelCheck) {
+      setShowPopup(true);
+      setLottieFinished(false);
+    }
+  }, [isFocused, levelCheck]);
+
+  const handleLottieAnimationFinish = () => {
+    setLottieFinished(true);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+    setLottieFinished(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,12 +68,25 @@ const OrderSuccessScreen = () => {
           <Text style={styles.disabledText}>주문 상세</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(userNavigations.STORE_HOME)}
+          onPress={() =>
+            navigation.navigate('UserTabs', {
+              screen: userNavigations.STORE_HOME,
+            })
+          }
           style={[styles.button, styles.confirmButton]}
         >
           <Text style={styles.confirmText}>확인</Text>
         </TouchableOpacity>
       </View>
+
+      <LevelUpPopup
+        visible={showPopup}
+        level={level as EnvironmentLevel}
+        image={image}
+        lottieFinished={lottieFinished}
+        onClose={handlePopupClose}
+        onLottieFinish={handleLottieAnimationFinish}
+      />
     </SafeAreaView>
   );
 };

@@ -8,9 +8,10 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import closedPin from '../../assets/images/closedPin.png';
 import pinImage from '../../assets/images/pin.png';
+import LikeIcon from '@/assets/icons/like.svg';
 import List from '@/assets/icons/list.svg';
 import StarIcon from '@/assets/icons/star.svg';
-import HeartIcon from '@/components/map/HearIcon';
+import UnlikeIcon from '@/assets/icons/unlike.svg';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
 import useToggleFavorite from '@/hooks/queries/useLike';
@@ -208,7 +209,13 @@ const MapHomeScreen = () => {
                   <View style={styles.infoContainer}>
                     <View style={styles.heartContainer}>
                       <Text style={styles.popupTitle}>{storeSummary?.data?.name}</Text>
-                      <HeartIcon isFavorite={isFavorite} onPress={handleToggleFavorite} />
+                      <Pressable onPress={handleToggleFavorite}>
+                        {isFavorite ? (
+                          <LikeIcon width={24} height={24} />
+                        ) : (
+                          <UnlikeIcon width={24} height={24} />
+                        )}
+                      </Pressable>
                     </View>
                     <Text style={styles.popupTime}>{storeSummary?.data?.pickupTime}</Text>
                     <View style={styles.info}>

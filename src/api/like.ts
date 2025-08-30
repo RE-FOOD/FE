@@ -18,7 +18,6 @@ export type LikeList = Pick<
 >;
 
 export type MyLikePage = {
-  pages: any;
   prevCursor: number | null;
   nextCursor: number | null;
   hasPrev: boolean;

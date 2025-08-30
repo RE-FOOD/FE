@@ -13,6 +13,7 @@ import HistoryDetailScreen from '@/screens/history/HistoryDetailScreen';
 import ReviewWriteScreen from '@/screens/history/ReviewWriteScreen';
 import LocationPostcodeScreen from '@/screens/location/LocationPostcodeScreen';
 import LocationScreen from '@/screens/location/LocationScreen';
+import NearStoreListScreen from '@/screens/map/NearStoreListScreen';
 import GreenReport from '@/screens/mypage/GreenReportScreen';
 import NicknameChangeScreen from '@/screens/mypage/NicknameChangeScreen';
 import Private from '@/screens/mypage/PrivateScreen';
@@ -40,7 +41,7 @@ export type UserStackParamList = {
   [userNavigations.ORDER_DETAIL]: {
     orderId: number;
   };
-  [userNavigations.REVIEW_WRITE]: undefined;
+  [userNavigations.REVIEW_WRITE]: { storeId: number; orderId: number };
   [userNavigations.NiCKNAME_CHANGE]: undefined;
   [userNavigations.CATEGORY_LIST]: { key: CategoryKey; label: string };
   [userNavigations.SEARCH_RESULT]: { keyword: string };
@@ -49,9 +50,10 @@ export type UserStackParamList = {
   [userNavigations.CART]: undefined;
   [userNavigations.NOTIFICATION]: undefined;
   [userNavigations.REVIEW]: undefined;
-  [userNavigations.REPORT]: undefined;
+  [userNavigations.REPORT]: { progress: number };
   [userNavigations.PRIVATE]: undefined;
   [userNavigations.RULE]: undefined;
+  [userNavigations.STORE_LIST]: { latitude: number; longitude: number };
   [userNavigations.EMPTY_STATE]: {
     icon: ImageSourcePropType;
     headerTitle: string;
@@ -149,6 +151,11 @@ function UserStackNavigator() {
         name={userNavigations.REVIEW}
         component={Review}
         options={{ title: '리뷰 관리' }}
+      />
+      <Stack.Screen
+        name={userNavigations.STORE_LIST}
+        component={NearStoreListScreen}
+        options={{ title: '가게 목록' }}
       />
       <Stack.Screen
         name={userNavigations.REPORT}

@@ -30,6 +30,7 @@ const userNavigations = {
   REPORT: 'GreenReport',
   PRIVATE: 'Private',
   RULE: 'Rule',
+  STORE_LIST: 'StoreList',
   EMPTY_STATE: 'EmptyState',
 } as const;
 

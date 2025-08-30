@@ -39,7 +39,9 @@ interface Mypage {
   environmentLevel: EnvironmentLevel;
   orderCount: number;
   dishCount: number;
-  environmentScore: number;
+  environmentPoint: number;
+  nextLevelPoint: number;
+  progressPercentage: number;
 }
 
 type StoreCategory = 'ENFOOD' | 'CHFOOD' | 'KRFOOD' | 'JPFOOD' | 'SNACKFOOD' | 'DESSERT';
@@ -124,13 +126,33 @@ interface CartStore {
 
 interface Review {
   id: number;
-  nickname: string;
-  rating: number; // 1~5
+  storeName: string;
+  rating: number;
   content: string;
   createdAt: string;
   menus: string[];
 }
 
+export type StoreSortOption = 'NEAR' | 'REVIEW' | 'RATING';
+interface Like {
+  id: number;
+  name: string;
+  status: 'OPEN' | 'CLOSE';
+  ratingAvg: number;
+  count: number;
+  distance: number;
+  salePercent: number;
+  imageUrl?: string;
+}
+
+interface Map {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  status: 'OPEN' | 'CLOSED';
+  maxPercent: number;
+}
 interface Overviews {
   cartCount: number;
   discountMenu: DiscountMenu[];
@@ -167,6 +189,8 @@ export type {
   CartStore,
   Review,
   EnvironmentLevel,
+  Like,
+  Map,
   Overviews,
   Order,
   OrderMenu,

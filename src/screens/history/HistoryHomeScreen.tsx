@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -46,6 +46,7 @@ const HistoryHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const [orders, setOrders] = useState(() => initialOrders.filter((o) => !deletedIds.has(o.id)));
+  const [query, setQuery] = useState('');
 
   const handleCancel = async (targetId: number) => {
     deletedIds.add(targetId);
@@ -57,7 +58,12 @@ const HistoryHomeScreen = () => {
       <View style={styles.searchContainer}>
         <View style={styles.search}>
           <View style={styles.innerContainer}>
-            <Text style={styles.searchText}>메뉴·가게 검색하기</Text>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="가게 검색하기"
+              value={query}
+              onChangeText={setQuery}
+            />
             <FontAwesome name="search" size={20} color={colors.GREEN} />
           </View>
         </View>
@@ -68,9 +74,6 @@ const HistoryHomeScreen = () => {
             <View style={styles.orderInnerContainer}>
               <View style={styles.textInnerContainer}>
                 <View style={styles.dateInnerContainer}>
-                  <View style={styles.rectangle}>
-                    <Text style={styles.rectangleText}>{order.type}</Text>
-                  </View>
                   <Text style={styles.dateText}>{order.date}</Text>
                 </View>
                 <Text style={styles.statusText}>{order.status}</Text>
@@ -111,7 +114,7 @@ const HistoryHomeScreen = () => {
                       <TouchableOpacity
                         style={styles.buttonGreen}
                         onPress={() => {
-                          navigation.navigate('ReviewWrite');
+                          navigation.navigate('ReviewWrite'); //api 연결 후 수정예정
                         }}
                       >
                         <Text style={styles.buttonGreenText}>리뷰쓰기</Text>
@@ -152,10 +155,12 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flexDirection: 'row',
+    paddingHorizontal: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: 153,
-    marginVertical: 10,
-    marginHorizontal: 20,
   },
+
   titleText: {
     color: colors.GRAY_700,
     fontFamily: 'Pretendard-Regular',
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
   textInnerContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 125,
+    gap: 200,
   },
   dateInnerContainer: {
     flexDirection: 'row',
@@ -281,6 +286,9 @@ const styles = StyleSheet.create({
     color: colors.GREEN,
     fontFamily: 'Pretendard-Regular',
     fontSize: 10,
+  },
+  searchInput: {
+    flex: 1,
   },
 });
 

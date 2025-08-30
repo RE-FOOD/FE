@@ -108,12 +108,10 @@ const HistoryDetailScreen = ({ route }: Props) => {
 
           {data.items.map((item: any) => (
             <View key={item.id} style={styles.menuPictureContainer}>
-              <View style={styles.picture} />
               <View style={styles.menuPictureTextContainer}>
                 <Text style={styles.blackBoldText_11}>{item.name}</Text>
                 <Text style={styles.blackRegularText}>수량: {item.quantity}</Text>
                 <Text style={styles.blackRegularText}>가격: {fmtWon(item.unitPrice)}원</Text>
-                <Text style={styles.greenBoldText}>{item.status}</Text>
               </View>
             </View>
           ))}
@@ -122,14 +120,11 @@ const HistoryDetailScreen = ({ route }: Props) => {
           <View style={styles.menuInfoPriceContainer}>
             <View style={styles.leftCol}>
               <Text style={styles.blackRegularText}>상품 합계</Text>
-              <Text style={styles.blackRegularText}>할인 쿠폰</Text>
               <Text style={styles.blackRegularText}>총 금액</Text>
             </View>
             <View style={styles.rightCol}>
               <Text style={styles.blackRegularText}>{fmtWon(data.pricing.subtotal)}원</Text>
-              <Text style={styles.greenRegularText_11}>
-                {Math.round(data.pricing.discountRate * 100)}%
-              </Text>
+
               <Text style={styles.blackRegularText}>{fmtWon(data.pricing.total)}원</Text>
             </View>
           </View>
@@ -141,13 +136,11 @@ const HistoryDetailScreen = ({ route }: Props) => {
           <View style={styles.accountInfoContainer}>
             <View style={styles.leftCol}>
               <Text style={styles.blackRegularText}>결제 수단</Text>
-              <Text style={styles.blackRegularText}>결제 정보</Text>
               <Text style={styles.blackRegularText}>결제 금액</Text>
               <Text style={styles.blackRegularText}>결제 시간</Text>
             </View>
             <View style={styles.rightCol}>
               <Text style={styles.blackRegularText}>신용카드</Text>
-              <Text style={styles.greenRegularText_11}>{data.payment.cardName} 승인</Text>
               <Text style={styles.blackRegularText}>{fmtWon(data.pricing.total)}원</Text>
               <Text style={styles.blackRegularText}>{data.payment.approvedAt}</Text>
             </View>
@@ -224,7 +217,7 @@ const styles = StyleSheet.create({
   },
 
   menuPictureContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     gap: 10,
   },

@@ -1,17 +1,27 @@
 import { Text, StyleSheet, View, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import Pencil from '@/assets/icons/Pencil.svg';
 import Plus from '@/assets/icons/plus.svg';
 import { colors } from '@/constants/colors';
+import { sellerNavigations } from '@/constants/navigations';
+import { SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
+
+type Navigation = StackNavigationProp<SellerStackparamList>;
 
 const SellerMenuScreen = () => {
+  const navigation = useNavigation<Navigation>();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
-        <TouchableOpacity style={styles.topContainer}>
+        <TouchableOpacity
+          style={styles.topContainer}
+          onPress={() => navigation.navigate(sellerNavigations.MENU_REGISTER)}
+        >
           <Plus stroke={colors.GREEN} width={24} height={24} />
-          <Text style={styles.greenRegularText_15}>메뉴추가</Text>
+          <Text style={styles.greenRegularText_15}>메뉴등록</Text>
         </TouchableOpacity>
         <View style={styles.listContainer}>
           <View style={styles.innerListContainer}>
@@ -26,7 +36,10 @@ const SellerMenuScreen = () => {
                 <Text style={styles.grayRegularText_13}>10,000원</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.deleteButton}>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => navigation.navigate(sellerNavigations.MENU_MODIFY)}
+            >
               <Pencil width={15} height={15} />
               <Text style={styles.grayRegularText_13}>수정</Text>
             </TouchableOpacity>

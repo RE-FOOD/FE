@@ -14,17 +14,13 @@ import { toLevelLabel, getLevelImage } from '@/utils/level';
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
 
-const levelMap = ['SPROUT', 'BUD', 'SEEDLING', 'TREE'];
-
 const MypageHomeScreen = () => {
   const { logoutMutation } = useAuth();
   const navigation = useNavigation<NavigationProp>();
   const { data, isLoading, error } = useMyPage();
   const me = data?.data;
 
-  const levelIndex = me ? levelMap.indexOf(me.environmentLevel) : 0;
-  const levelWidth = 1 / levelMap.length; // 4레벨이면 0.25
-  const progress = me ? levelIndex * levelWidth + (me.progressPercentage ?? 0) * levelWidth : 0.01;
+  const progress = me ? (me.progressPercentage ?? 0) / 100 : 0.0;
 
   if (isLoading) return <Text>로딩중</Text>;
   if (error) return <Text>불러오기 실패</Text>;

@@ -8,16 +8,19 @@ export interface GetFavoriteParams {
   limit?: number;
 }
 export interface FavoriteResponse {
-  dataId: number;
+  storeId: number;
   isFavored: boolean;
 }
 
 export type LikeList = Pick<
   Like,
   'id' | 'name' | 'status' | 'ratingAvg' | 'count' | 'distance' | 'salePercent' | 'imageUrl'
->;
+> & {
+  isFavored: boolean;
+};
 
 export type MyLikePage = {
+  pages: MyLikePage[];
   prevCursor: number | null;
   nextCursor: number | null;
   hasPrev: boolean;
@@ -36,8 +39,11 @@ export const like = async ({ sort, cursorId }: GetFavoriteParams): Promise<ApiRe
 };
 
 export const toggleFavorite = async (storeId: number): Promise<FavoriteResponse> => {
-  const res = await axiosInstance.post<FavoriteResponse>(`/favorites/${storeId}`, {});
-  return res.data;
+  const res = await axiosInstance.patch<ApiResponse<FavoriteResponse>>(
+    `/stores/${storeId}/favorites`,
+    {}
+  );
+  return res.data.data;
 };
 
 export async function fetchMyLikes(params?: GetFavoriteParams): Promise<MyLikePage> {

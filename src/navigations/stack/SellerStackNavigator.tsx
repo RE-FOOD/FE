@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SellerBottomTabsNavigator, {
   SellerBottomTabsParamList,
 } from '../bottomTabs/SellerBottomTabsNavigator';
+import { BackButton } from '@/components/_common/BackButton';
 import { sellerNavigations } from '@/constants/navigations';
 import SellerMenuModifyScreen from '@/screens/seller/SellerMenuModifyScreen';
 import SellerMenuRegisterScreen from '@/screens/seller/SellerMenuRegisterScreen';
@@ -24,6 +25,11 @@ function SellerStackNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'Pretendard-Medium',
+          fontSize: 17,
+        },
+        headerLeft: BackButton,
       }}
     >
       <Stack.Screen

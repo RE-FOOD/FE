@@ -12,6 +12,7 @@ import useCart from '@/hooks/queries/useCart';
 import { useGetCartCount } from '@/hooks/queries/useMember';
 import useStore from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { renderHeaderCartButton } from '@/utils/navigation';
 import { showToast } from '@/utils/toast';
 
 type Rt = RouteProp<UserStackParamList, 'MenuDetail'>;
@@ -31,7 +32,7 @@ const MenuDetailScreen = () => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: storeName });
+    navigation.setOptions({ title: storeName, headerRight: renderHeaderCartButton });
   }, [navigation, storeName]);
 
   if (isLoading || !menu) {

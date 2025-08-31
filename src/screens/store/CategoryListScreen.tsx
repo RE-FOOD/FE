@@ -25,6 +25,7 @@ import { userNavigations } from '@/constants/navigations';
 import useStore, { BaseFilters } from '@/hooks/queries/useStore';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import { Store, StoreCategory, StoreSort } from '@/types/domain';
+import { renderHeaderCartButton } from '@/utils/navigation';
 import { useListScrollStore } from '@/zustand/useListScrollStore';
 
 type Nav = StackNavigationProp<UserStackParamList, typeof userNavigations.CATEGORY_LIST>;
@@ -64,7 +65,10 @@ const CategoryListScreen = () => {
   const { key: selectedKey, label } = route.params;
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: label });
+    navigation.setOptions({
+      title: label,
+      headerRight: renderHeaderCartButton,
+    });
   }, [navigation, label]);
 
   const [sort, setSort] = useState<SortKey>('distance');

@@ -9,11 +9,14 @@ import {
   ScrollView,
 } from 'react-native';
 import TimePicker from 'react-native-date-picker';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import CustomModal from '@/components/_modal/CustomModal';
 import MenuItem from '@/components/order/MenuItem';
 import ReuseOption from '@/components/order/ReuseOption';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
+import useOrder from '@/hooks/queries/useOrder';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 import {
   MINUTE_STEP,
@@ -23,17 +26,23 @@ import {
   minutesOfDay,
   formatKoreanTime,
 } from '@/utils/date';
+import { showToast } from '@/utils/toast';
 
-type OrderScreenRouteProp = RouteProp<UserStackParamList, typeof userNavigations.ORDER>;
+type Rt = RouteProp<UserStackParamList, typeof userNavigations.ORDER>;
+type Nav = StackNavigationProp<UserStackParamList, 'TossPayment'>;
 
 const OrderScreen = () => {
-  const { order } = useRoute<OrderScreenRouteProp>().params;
+  const { order } = useRoute<Rt>().params;
+  const navigation = useNavigation<Nav>();
+  const { createOrderMutation } = useOrder();
+
   const [ecoFriendly, setEcoFriendly] = useState(false);
   const [date, setDate] = useState<Date>(() => {
     const now = new Date();
     return roundToStep(new Date(now.getTime() + 10 * 60 * 1000), MINUTE_STEP);
   });
   const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const openHM = parseHM(order.openTime);
   const closeHM = parseHM(order.closeTime);
@@ -46,12 +55,24 @@ const OrderScreen = () => {
     [isOvernight, closeHM, today]
   );
 
-  const handlePayments = () => {
-    const payload = {
-      pickupDueAt: date.toISOString().replace('Z', '+00:00'),
-      reuse: ecoFriendly,
-    };
-    console.log('주문 요청 데이터', JSON.stringify(payload, null, 2));
+  const handlePayments = async (index: number) => {
+    if (index === 0) {
+      setModalOpen(false);
+      return;
+    }
+
+    try {
+      const sessionId = await createOrderMutation.mutateAsync({
+        pickupDueAt: new Date().toISOString().replace('Z', '+00:00'),
+        reuse: ecoFriendly,
+      });
+
+      const totalAmount = order.totalCoast;
+      navigation.navigate(userNavigations.TOSS_PAYMENT, { sessionId, totalAmount });
+    } catch (err) {
+      console.error(err);
+      showToast('error', '주문 실패', '주문 생성에 실패했습니다.');
+    }
   };
 
   return (
@@ -126,8 +147,19 @@ const OrderScreen = () => {
 
         <ReuseOption ecoFriendly={ecoFriendly} toggleEco={() => setEcoFriendly(!ecoFriendly)} />
       </ScrollView>
+      <CustomModal
+        state="ConfirmPayment"
+        type="check"
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onButtonClick={handlePayments}
+      />
 
-      <TouchableOpacity style={styles.payButton} onPress={handlePayments}>
+      <TouchableOpacity
+        style={styles.payButton}
+        onPress={() => setModalOpen(true)}
+        disabled={createOrderMutation.isPending}
+      >
         <Text style={styles.payButtonText}>{order.totalCoast.toLocaleString()}원 결제하기</Text>
       </TouchableOpacity>
     </SafeAreaView>

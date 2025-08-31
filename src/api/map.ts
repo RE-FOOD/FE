@@ -12,6 +12,7 @@ type StoreSummary = Pick<Map, 'id' | 'name' | 'status' | 'maxPercent'> & {
   rating: number;
   reviewCount: number;
   address: string;
+  isFavored: boolean;
 };
 
 type GetSortedStoreRequest = Pick<Map, 'latitude' | 'longitude'> & {

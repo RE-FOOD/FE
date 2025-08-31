@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   img: {
-    width: 320,
     height: 140,
     borderTopStartRadius: 10,
     borderTopEndRadius: 10,
@@ -122,8 +121,6 @@ const styles = StyleSheet.create({
   sale: {
     paddingHorizontal: 8,
     paddingVertical: 5,
-    width: 50,
-    height: 30,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.WHITE,

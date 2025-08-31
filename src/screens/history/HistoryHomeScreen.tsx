@@ -7,6 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
 
+import { userNavigations } from '@/constants/navigations';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
 export const initialOrders = [
@@ -114,7 +115,10 @@ const HistoryHomeScreen = () => {
                       <TouchableOpacity
                         style={styles.buttonGreen}
                         onPress={() => {
-                          navigation.navigate('ReviewWrite'); //api 연결 후 수정예정
+                          navigation.navigate(userNavigations.REVIEW_WRITE, {
+                            storeId: order.id,
+                            orderId: order.id,
+                          }); //api 연결 후 수정예정
                         }}
                       >
                         <Text style={styles.buttonGreenText}>리뷰쓰기</Text>
@@ -184,8 +188,9 @@ const styles = StyleSheet.create({
   },
   textInnerContainer: {
     alignItems: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    gap: 200,
+    width: '100%',
   },
   dateInnerContainer: {
     flexDirection: 'row',
@@ -209,8 +214,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   picture: {
-    width: 85,
-    height: 85,
+    width: 110,
+    height: 110,
     backgroundColor: colors.GRAY_200,
   },
   rectangle: {
@@ -224,7 +229,7 @@ const styles = StyleSheet.create({
   },
   horizontalLine: {
     height: 1,
-    backgroundColor: colors.GREEN, // 원하는 선 색상
+    backgroundColor: colors.GREEN,
     width: '100%',
   },
   buttonGray: {

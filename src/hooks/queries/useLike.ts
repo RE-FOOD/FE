@@ -6,19 +6,63 @@ import {
   type GetFavoriteParams,
   type MyLikePage,
 } from '@/api/like';
-import { ResponseError, UseMutationCustomOptions } from '@/types/api';
+import { StoreSummary } from '@/api/map';
+import { ApiResponse, ResponseError, UseMutationCustomOptions } from '@/types/api';
 
 const useToggleFavorite = (options?: UseMutationCustomOptions<FavoriteResponse, number>) => {
   const queryClient = useQueryClient();
 
   return useMutation<FavoriteResponse, ResponseError, number>({
     mutationFn: toggleFavorite,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ['like', data.dataId],
+
+    onMutate: async (storeId) => {
+      await queryClient.cancelQueries({ queryKey: ['likes', 'me'] });
+
+      const prevData = queryClient.getQueryData<{
+        pages: MyLikePage[];
+        pageParams: (number | null)[];
+      }>(['likes', 'me']);
+
+      if (prevData) {
+        queryClient.setQueryData(['likes', 'me'], {
+          ...prevData,
+          pages: prevData.pages.map((page) => ({
+            ...page,
+            stores: page.stores.map((s) =>
+              s.id === storeId ? { ...s, isFavored: !s.isFavored } : s
+            ),
+          })),
+        });
+      }
+
+      return { prevData };
+    },
+
+    onSuccess: (data, storeId) => {
+      const keys = queryClient
+        .getQueryCache()
+        .getAll()
+        .map((q) => q.queryKey)
+        .filter((key) => Array.isArray(key) && key[0] === 'storeSummary' && key[1] === storeId);
+
+      keys.forEach((key) => {
+        queryClient.setQueryData<ApiResponse<StoreSummary>>(key, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              isFavored: data.isFavored,
+            },
+          };
+        });
       });
+    },
+
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['likes', 'me'] });
     },
+
     ...options,
   });
 };

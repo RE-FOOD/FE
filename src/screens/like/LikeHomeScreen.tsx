@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'flex-start',
     backgroundColor: colors.WHITE,
     gap: 20,
   },

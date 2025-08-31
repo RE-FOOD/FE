@@ -33,7 +33,8 @@ function SellerBottomTabsNavigator() {
       screenOptions={{
         tabBarActiveTintColor: '#00A146',
         tabBarInactiveTintColor: '#9C9C9C',
-        headerShown: false,
+        headerShown: true,
+        headerTitleAlign: 'center',
         tabBarStyle: {
           height: 73,
           justifyContent: 'center',

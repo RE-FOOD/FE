@@ -64,10 +64,15 @@ export const stateMap: StateMap = {
     subtitle: '선택하신 메뉴를 삭제하시겠습니까?',
     btn: [0, 1],
   },
+  Order: {
+    title: '주문 접수',
+    subtitle: '주문을 수락하시겠습니까?',
+    btn: [0, 6],
+  },
   ConfirmPayment: {
     title: '결제 전 확인',
     subtitle: '결제 완료 후에는 환불이 불가능합니다.\n계속 진행하시겠습니까?',
-    btn: [0, 6],
+    btn: [0, 7],
   },
 };
 
@@ -78,5 +83,6 @@ export const buttonMap: ButtonMap = {
   3: { color: '#0FB758', label: '확인' }, // green
   4: { color: '#EA575B', label: '삭제' },
   5: { color: '#EA575B', label: '새로 담기' },
-  6: { color: '#0FB758', label: '결제' },
+  6: { color: '#0FB758', label: '수락' },
+  7: { color: '#0FB758', label: '결제' },
 };

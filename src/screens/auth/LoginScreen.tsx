@@ -1,5 +1,6 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getMessaging, getToken } from '@react-native-firebase/messaging';
@@ -7,113 +8,128 @@ import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import axios from 'axios';
-import Kakao from '@/assets/icons/kakao.svg';
+import LottieView from 'lottie-react-native';
+import KakaoButton from '@/components/environment/KakaoButton';
+import MetricBox from '@/components/environment/MetricBox';
+import { colors } from '@/constants/colors';
 import { loggedOutNavigations } from '@/constants/navigations';
 import useAuth from '@/hooks/queries/useAuth';
+import { useGetReport } from '@/hooks/queries/useEnvironment';
 import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
 import { useAuthStore } from '@/zustand/useAuthStore';
 
-type NavigationProp = StackNavigationProp<
-  LoggedOutStackParamList,
-  typeof loggedOutNavigations.LOGIN
->;
+type Nav = StackNavigationProp<LoggedOutStackParamList, typeof loggedOutNavigations.LOGIN>;
 
 const LoginScreen = () => {
   const { loginMutation } = useAuth();
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<Nav>();
+  const lottieRef = useRef<LottieView>(null);
+  const { data } = useGetReport();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      lottieRef.current?.play();
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const getFcmToken = async () => {
     const fcmToken = await getToken(getMessaging());
     return fcmToken;
   };
 
+  const orderCount = data?.orderCount ?? 0;
+  const dishCount = data?.dishCount ?? 0;
+  const totalTreesSaved = data?.totalTreesSaved ?? 0;
+  const totalCarbonSaved = data?.totalCarbonSaved ?? 0;
+
   const handleKakaoLogin = async (): Promise<void> => {
     const deviceToken = await getFcmToken();
     let kakaoAccessToken: string | undefined;
-    console.log(`deviceToken: ${deviceToken}`);
 
-    // 1) 카카오톡 로그인 시도
     KakaoLogin.login()
-      // 2) 사용자가 톡에서 취소하면 계정(웹뷰)으로 폴백
       .catch((err) => {
         if (err?.code === 'E_CANCELLED_OPERATION') {
-          return KakaoLogin.loginWithKakaoAccount()
-            .then((res) => Promise.resolve(res))
-            .catch((err2) => Promise.reject(err2));
+          return KakaoLogin.loginWithKakaoAccount();
         }
-        // 그 외 에러는 상위 catch로
         return Promise.reject(err);
       })
-      // 3) 카카오 로그인 성공 시 백엔드로 교환
       .then((res) => {
-        if (!res?.accessToken) {
-          return Promise.reject(new Error('No Kakao access token'));
-        }
+        if (!res?.accessToken) throw new Error('No Kakao access token');
         kakaoAccessToken = res.accessToken;
-        return loginMutation.mutateAsync({
-          accessToken: kakaoAccessToken,
-          fcmToken: deviceToken,
-        });
-        // return kakaoLogin(kakaoAccessToken, deviceToken);
-        // setAccessToken(res.accessToken);
-        // return kakaoLogin(accessToken);
+        return loginMutation.mutateAsync({ accessToken: kakaoAccessToken, fcmToken: deviceToken });
       })
-      // 4) 우리 토큰 수령 → 저장/네비게이션
-      .then((_tokens) => {
-        // saveTokens(tokens);
-        // navigation.replace('UserTabs');
-        // setAsyncData(storageKeys)
-        console.log('서버 토큰 발급 성공');
-      })
-      // 5) 에러 공통 처리(404 → 회원가입)
+      .then(() => console.log('서버 토큰 발급 성공'))
       .catch((e) => {
         if (axios.isAxiosError(e) && e.response?.status === 404) {
           useAuthStore.getState().setKakaoAccessToken(kakaoAccessToken);
-          // 카카오 프로필 프리필
-          return KakaoLogin.getProfile()
-            .then(() => {
-              navigation.navigate(loggedOutNavigations.SIGNUP_TYPE);
-            })
-            .catch(() => {
-              navigation.navigate(loggedOutNavigations.SIGNUP_TYPE);
-            });
+          return KakaoLogin.getProfile().finally(() =>
+            navigation.navigate(loggedOutNavigations.SIGNUP_TYPE)
+          );
         }
-        if (e?.code === 'E_CANCELLED_OPERATION') {
-          // 계정(웹뷰)에서도 사용자가 취소한 경우
-          console.log('사용자 취소');
-          return;
-        }
+        if (e?.code === 'E_CANCELLED_OPERATION') return;
         console.log('로그인 오류:', e?.message || String(e));
       });
   };
 
   return (
     <LinearGradient
-      colors={['#88DE46', '#02B856']}
+      colors={['#A3F06A', '#33be6f']}
       start={{ x: 1, y: 0 }}
       end={{ x: 0, y: 1 }}
       style={styles.gradientBackground}
     >
       <SafeAreaView style={styles.container}>
-        <View style={styles.loginView}>
-          <Image source={require('@/assets/images/refood.webp')} style={styles.logo} />
-          <View>
-            <Text style={styles.title}>{'Walk, Eat, Save'}</Text>
-            <Text style={styles.subTitle}>{'환경과 함께하는 똑똑한 한 끼'}</Text>
-            <Text style={styles.logoTitle}>{'RE:FOOD'}</Text>
+        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          <View style={styles.headerBox}>
+            <Text style={styles.headerLabel}>리푸드의 환경 리포트</Text>
+            <Text style={styles.title}>
+              <Text style={styles.headerHighlight}>지구</Text>
+              <Text>를 위한 발자국,{'\n'}얼마나 남겼을까요? 🌍</Text>
+            </Text>
           </View>
-        </View>
-        <View style={styles.imgContainer}>
-          <Image source={require('@/assets/images/login-img.webp')} style={styles.loginImg} />
-        </View>
-        <TouchableOpacity onPress={handleKakaoLogin} style={styles.btnContainer}>
-          <View style={styles.btnInner}>
-            <Kakao width={20} height={20} style={styles.kakaoIcon} />
-            <Text style={styles.kakaoText}>카카오로 시작하기</Text>
-            {/* dummy view */}
-            <View style={styles.kakaoIcon} />
+
+          <View style={styles.bottomContainer}>
+            <View style={styles.rowBox}>
+              <MetricBox label="음식 구출 🍽️" value={orderCount} color="#0FB758" unit="회" />
+              <View style={styles.line} />
+              <MetricBox label="다회용기 사용 🥣" value={dishCount} color="#5ED735" unit="회" />
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionText}>
+                RE:FOOD 사용자가 구한 한 끼들이,{'\n'}
+                나무 <Text style={styles.highlight1}>{totalTreesSaved.toLocaleString()}그루</Text>를
+                심었어요! 🌲
+              </Text>
+              <LottieView
+                ref={lottieRef}
+                source={require('@/assets/lottie/trees.json')}
+                loop={false}
+                style={{ width: 300, height: 201 }}
+              />
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionText}>
+                RE:FOOD와 함께,{'\n'}
+                없앤 탄소는 약{' '}
+                <Text style={styles.highlight2}>{totalCarbonSaved.toLocaleString()}kg</Text> ☁️
+              </Text>
+              <LottieView
+                source={require('@/assets/lottie/earth.json')}
+                loop={false}
+                autoPlay
+                style={{ width: 300, height: 209 }}
+              />
+            </View>
+
+            <View style={styles.btnSection}>
+              <Text style={styles.footerText}>환경과 함께하는 똑똑한 한 끼 RE:FOOD</Text>
+              <KakaoButton onPress={handleKakaoLogin} />
+            </View>
           </View>
-        </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -125,74 +141,97 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    gap: 45,
   },
-  loginView: {
-    marginTop: 55,
-    marginHorizontal: 27,
+  scroll: {
+    flexGrow: 1,
+    alignItems: 'center',
   },
-  logo: {
-    width: 80,
-    height: 80,
-    marginBottom: 8,
-    aspectRatio: 1,
+  headerBox: {
+    width: '100%',
+    paddingVertical: 35,
+    gap: 13,
+    backgroundColor: colors.WHITE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  headerLabel: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-SemiBold',
+    color: colors.BLACK,
+    borderBottomWidth: 2,
+    borderBottomColor: '#0FB758',
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 32,
+    fontSize: 24,
     fontFamily: 'Pretendard-Bold',
-    marginBottom: 22,
-    marginLeft: 10,
-  },
-  subTitle: {
-    color: '#FFFFFF',
-    fontFamily: 'Pretendard-Medium',
-    fontSize: 20,
-    marginLeft: 10,
-  },
-  logoTitle: {
-    color: '#FFFFFF',
-    fontFamily: 'Pretendard-ExtraBold',
-    fontSize: 20,
-    marginLeft: 10,
-  },
-  imgContainer: {
-    width: '100%',
-    height: 200,
-    paddingHorizontal: 30,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
-  loginImg: {
-    width: 222,
-    height: 205,
-    aspectRatio: 1,
-  },
-  btnContainer: {
-    marginHorizontal: 27,
-    height: 45,
-    backgroundColor: '#FEE500',
-    borderRadius: 8,
-    justifyContent: 'center',
-  },
-  btnInner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  kakaoIcon: {
-    width: 24,
-    height: 24,
-  },
-  kakaoText: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
+    color: colors.BLACK,
     textAlign: 'center',
-    fontSize: 15,
+    lineHeight: 34,
+  },
+  headerHighlight: {
+    fontSize: 24,
     fontFamily: 'Pretendard-Bold',
-    color: '#000000',
+    color: '#0FB758',
+    lineHeight: 34,
+  },
+  bottomContainer: {
+    width: '100%',
+    gap: 30,
+    padding: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rowBox: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    borderColor: '#EAEAEA',
+    borderWidth: 1,
+  },
+  line: {
+    width: 1,
+    backgroundColor: '#EAEAEA',
+    height: '100%',
+  },
+  section: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 25,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+  },
+  sectionText: {
+    width: '100%',
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
+    color: '#000',
+    lineHeight: 27,
+  },
+  highlight1: {
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 24,
+    color: '#0FB758',
+  },
+  highlight2: {
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 24,
+    color: '#5ED735',
+  },
+  footerText: {
+    fontSize: 15,
+    color: '#fff',
+    textAlign: 'center',
+    fontFamily: 'Pretendard-Medium',
+  },
+  btnSection: {
+    width: '100%',
+    gap: 15,
   },
 });
 

@@ -5,8 +5,6 @@ import useAuth from '@/hooks/queries/useAuth';
 
 function RootNavigator() {
   const { isLogin, isSeller } = useAuth();
-  // const isLogin = true;
-  // const isSeller = true;
 
   if (!isLogin) {
     return <LoggedOutStackNavigator />;

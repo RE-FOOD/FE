@@ -35,6 +35,7 @@ const LoginScreen = () => {
 
   const getFcmToken = async () => {
     const fcmToken = await getToken(getMessaging());
+    console.log(`fcmToken: ${fcmToken}`);
     return fcmToken;
   };
 

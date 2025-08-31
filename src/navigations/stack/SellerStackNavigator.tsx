@@ -9,6 +9,7 @@ import SellerMenuRegisterScreen from '@/screens/seller/SellerMenuRegisterScreen'
 
 export type SellerStackparamList = {
   SellerTabs: NavigatorScreenParams<SellerBottomTabsParamList>;
+  [sellerNavigations.STORE_CREATE]: undefined;
   [sellerNavigations.MENU_HOME]: undefined;
   [sellerNavigations.ORDER_HOME]: undefined;
   [sellerNavigations.MYPAGE_HOME]: undefined;

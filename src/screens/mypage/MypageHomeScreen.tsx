@@ -144,9 +144,10 @@ const styles = StyleSheet.create({
     height: 73,
   },
   innerContainer: {
-    padding: 20,
+    width: '100%',
+    padding: 10,
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'stretch',
     gap: 20,
     backgroundColor: colors.WHITE,
     borderRadius: 10,
@@ -159,9 +160,9 @@ const styles = StyleSheet.create({
   },
   profileInnerContainer: {
     flexDirection: 'row',
-    gap: 68,
     justifyContent: 'space-between',
     alignItems: 'center',
+    alignSelf: 'stretch',
   },
   textContainer: {
     alignItems: 'flex-end',
@@ -178,7 +179,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    gap: 85,
   },
   listContainer: {
     flexDirection: 'column',

@@ -134,19 +134,11 @@ const SellerMenuRegisterScreen = () => {
           <View style={styles.innerContainer} />
           <View style={styles.listContainer}>
             <Text style={styles.label}>메뉴명</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="메뉴명을 입력하세요"
-              placeholderTextColor={colors.GRAY_500}
-            />
+            <TextInput style={styles.input} placeholderTextColor={colors.GRAY_500} />
           </View>
           <View style={styles.listContainer}>
             <Text style={styles.label}>메뉴설명</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="메뉴설명을 입력하세요"
-              placeholderTextColor={colors.GRAY_500}
-            />
+            <TextInput style={styles.input} placeholderTextColor={colors.GRAY_500} />
           </View>
           <View style={styles.listContainer}>
             <Text style={styles.label}>가격</Text>
@@ -155,7 +147,6 @@ const SellerMenuRegisterScreen = () => {
               value={price}
               onChangeText={handleChange}
               keyboardType="numeric"
-              placeholder="가격을 입력하세요"
               placeholderTextColor={colors.GRAY_500}
             />
           </View>
@@ -165,7 +156,6 @@ const SellerMenuRegisterScreen = () => {
               style={styles.input}
               value={discountPrice}
               onChangeText={handleDiscountChange}
-              placeholder="할인금액을 입력하세요"
               placeholderTextColor={colors.GRAY_500}
               keyboardType="numeric"
             />

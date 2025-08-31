@@ -24,7 +24,7 @@ const GreenReport = () => {
         </View>
         <View style={styles.levelContainer}>
           <Text style={styles.greenBoldText_20}>{toLevelLabel(me?.environmentLevel)}</Text>
-          <Text style={styles.blackRegularText_16}>
+          <Text style={styles.blackRegularText_13}>
             현재 {me?.nickname}님은 {toLevelLabel(me?.environmentLevel)} 등급입니다.
           </Text>
         </View>
@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     backgroundColor: colors.GRAY_200,
-    gap: 25,
+    gap: 20,
   },
   topContainer: {
     paddingTop: 20,
     paddingBottom: 30,
-    gap: 25,
+    gap: 20,
     alignSelf: 'stretch',
     borderBottomStartRadius: 20,
     borderBottomEndRadius: 20,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   bottomContainer: {
-    paddingVertical: 30,
+    paddingVertical: 20,
     paddingHorizontal: 30,
     flexDirection: 'column',
     gap: 25,
@@ -98,17 +98,15 @@ const styles = StyleSheet.create({
   },
   glevelContainer: {
     alignItems: 'center',
-    gap: 11,
   },
   savingContainer: {
-    width: 297,
-    height: 101,
+    width: '100%',
   },
   centerText: {
     textAlign: 'center',
     color: colors.BLACK,
     fontFamily: 'Pretendard-Regular',
-    fontSize: 15,
+    fontSize: 13,
   },
   logo: {
     width: 73,
@@ -138,11 +136,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     fontSize: 13,
   },
-  blackRegularText_16: {
-    color: colors.BLACK,
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 16,
-  },
+
   whiteBoldText_14: {
     color: colors.WHITE,
     fontFamily: 'Pretendard-Bold',

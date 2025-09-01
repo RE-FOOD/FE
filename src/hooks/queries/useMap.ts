@@ -1,4 +1,5 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import mapApi, { StoreSummary } from '@/api/map';
 import type { GetSortedStoreRequest, PaginatedStoresResponse } from '@/api/map';
 import { ApiResponse } from '@/types/api';
@@ -31,11 +32,24 @@ function useMap({ latitude, longitude, radiusKm = 5.0 }: UseMapProps) {
 }
 
 const useStoreSummary = (storeId: number, latitude: number, longitude: number) => {
-  return useQuery<ApiResponse<StoreSummary>, Error>({
+  const queryClient = useQueryClient();
+
+  const query = useQuery<ApiResponse<StoreSummary>, Error>({
     queryKey: ['storeSummary', storeId, latitude, longitude],
     queryFn: () => mapApi.storeSummary(storeId, latitude, longitude),
     enabled: storeId != null && latitude != null && longitude != null,
   });
+
+  useEffect(() => {
+    if (query.data) {
+      queryClient.setQueryData<ApiResponse<StoreSummary>>(
+        ['storeSummary', storeId, latitude, longitude],
+        query.data
+      );
+    }
+  }, [query.data, queryClient, storeId, latitude, longitude]);
+
+  return query;
 };
 
 const useInfiniteStores = ({

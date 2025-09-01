@@ -30,7 +30,6 @@ const MapHomeScreen = () => {
   const [stores, setStores] = useState<any[]>([]);
   const [selectedStore, setSelectedStore] = useState<any | null>(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
 
   const { data: nearByStores } = mapHooks.useMap({
     latitude: currentLocation?.latitude ?? 0,
@@ -43,17 +42,7 @@ const MapHomeScreen = () => {
     currentLocation?.longitude ?? 0
   );
 
-  const toggleFavoriteMutation = useToggleFavorite({
-    onSuccess: (data) => {
-      // API 응답에 따라 하트 상태 업데이트
-      setIsFavorite(data.isFavored);
-    },
-    onError: (error) => {
-      console.error('즐겨찾기 토글 실패:', error);
-      // 에러 발생 시 이전 상태로 롤백
-      setIsFavorite((prev) => !prev);
-    },
-  });
+  const toggleFavoriteMutation = useToggleFavorite();
 
   useEffect(() => {
     if (nearByStores) {
@@ -88,11 +77,6 @@ const MapHomeScreen = () => {
   // 하트 토글 핸들러 - API 요청과 함께
   const handleToggleFavorite = useCallback(() => {
     if (!selectedStore?.id) return;
-
-    // 낙관적 업데이트 (UI 먼저 변경)
-    setIsFavorite((prev) => !prev);
-
-    // API 요청
     toggleFavoriteMutation.mutate(selectedStore.id);
   }, [selectedStore?.id, toggleFavoriteMutation]);
 
@@ -116,7 +100,6 @@ const MapHomeScreen = () => {
         Geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            console.log(latitude, longitude);
             setCurrentLocation({ latitude, longitude });
           },
           (error) => {
@@ -210,7 +193,7 @@ const MapHomeScreen = () => {
                     <View style={styles.heartContainer}>
                       <Text style={styles.popupTitle}>{storeSummary?.data?.name}</Text>
                       <Pressable onPress={handleToggleFavorite}>
-                        {isFavorite ? (
+                        {storeSummary?.data?.isFavored ? (
                           <LikeIcon width={24} height={24} />
                         ) : (
                           <UnlikeIcon width={24} height={24} />
@@ -252,11 +235,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   popup: {
-    width: 330,
     backgroundColor: colors.WHITE,
     padding: 16,
     borderRadius: 20,
-    gap: 5,
   },
   infoContainer: {
     flexDirection: 'column',
@@ -272,8 +253,8 @@ const styles = StyleSheet.create({
     gap: 1,
   },
   storeImage: {
-    width: 70,
-    height: 70,
+    width: 80,
+    height: 80,
     borderRadius: 10,
   },
   star: {
@@ -306,10 +287,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   heartContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    gap: 100,
   },
   listViewButton: {
     flexDirection: 'row',

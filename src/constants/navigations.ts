@@ -40,6 +40,8 @@ const sellerNavigations = {
   MYPAGE_HOME: 'MypageHome',
   ORDER_HOME: 'OrderHome',
   MENU_HOME: 'MenuHome',
+  MENU_REGISTER: 'MenuRegister',
+  MENU_MODIFY: 'MenuModify',
 };
 
 export { loggedOutNavigations, userNavigations, sellerNavigations };

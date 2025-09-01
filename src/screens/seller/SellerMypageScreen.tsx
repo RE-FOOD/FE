@@ -1,4 +1,5 @@
 import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+// import { BarChart } from 'react-native-chart-kit';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,6 +23,35 @@ const SellerMypageScreen = () => {
 
   // const insight = storeInsightQuery.data;
   const insight = dummyInsight;
+
+  // const screenWidth = Dimensions.get('window').width;
+
+  // const dummyChartData = {
+  //   labels: ['5월', '6월', '7월', '8월'],
+  //   datasets: [
+  //     {
+  //       data: [500000, 750000, 1000000, 950000], // 월별 매출 더미데이터
+  //       color: (opacity = 1) => `rgba(51, 190, 111, ${opacity})`, // 선 색상
+  //       strokeWidth: 2,
+  //     },
+  //   ],
+  // };
+
+  // const chartConfig = {
+  //   backgroundGradientFrom: '#ffffff',
+  //   backgroundGradientTo: '#ffffff',
+  //   decimalPlaces: 0, // 소수점 없음
+  //   color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  //   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  //   propsForDots: {
+  //     // r: '6',
+  //     strokeWidth: '2',
+  //     stroke: colors.GREEN, // 점 외곽선 색
+  //   },
+  //   propsForBackgroundLines: {
+  //     stroke: '#e3e3e3',
+  //   },
+  // };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -89,8 +119,21 @@ const SellerMypageScreen = () => {
 
             <View style={styles.line} />
 
-            <View style={{ marginTop: 16 }}>
+            <View style={{ marginTop: 3 }}>
               <Text style={styles.title}>{'월별 매출액 현황'}</Text>
+              {/* <BarChart
+                data={dummyChartData}
+                width={screenWidth - 32} // 좌우 padding 고려
+                height={220}
+                yAxisSuffix="원"
+                fromZero
+                chartConfig={chartConfig}
+                style={
+                  {
+                    // borderRadius: 8,
+                  }
+                }
+              /> */}
             </View>
           </View>
         )}

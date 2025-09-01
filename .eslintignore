@@ -6,3 +6,4 @@ jest.config.js
 .eslintrc.js
 react-native.config.js
 README.md
+index.js

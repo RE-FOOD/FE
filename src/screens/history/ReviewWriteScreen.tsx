@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
 import { useCreateReview } from '@/hooks/queries/useReview';
@@ -26,6 +27,7 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
 
   const [rating, setRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -33,13 +35,18 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
 
   const handleStarPress = (starId: number) => {
     if (rating === starId) {
-      setRating(starId - 1);
+      setRating(Math.max(1, starId - 1));
     } else {
       setRating(starId);
     }
   };
 
-  const handleRegistration = () => {
+  useEffect(() => {
+    // 화면 진입하자마자 모달 자동 실행
+    setSuccessModalOpen(true);
+  }, []);
+
+  const confirmRegistration = () => {
     createReview(
       {
         rating,
@@ -47,12 +54,13 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
       },
       {
         onSuccess: () => {
+          setSuccessModalOpen(false);
           navigation.navigate('UserTabs', {
             screen: userNavigations.HISTORY_HOME,
           });
         },
-        onError: (error) => {
-          console.error('리뷰 등록 실패', error);
+        onError: (error: any) => {
+          console.error('리뷰 등록 실패', error.response?.data ?? error.message);
         },
       }
     );
@@ -84,10 +92,25 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
           multiline
           textAlignVertical="top"
         />
-        <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+        <TouchableOpacity style={styles.button} onPress={confirmRegistration}>
           <Text style={styles.greenRegularText_13}>등록완료</Text>
         </TouchableOpacity>
       </View>
+      <CustomModal
+        state="Review"
+        type="success"
+        isOpen={successModalOpen}
+        onClose={() => setSuccessModalOpen(false)}
+        onButtonClick={(index) => {
+          if (index === 0) {
+            setSuccessModalOpen(false);
+            navigation.goBack();
+          }
+          if (index === 1) {
+            setSuccessModalOpen(false);
+          }
+        }}
+      />
     </SafeAreaView>
   );
 };

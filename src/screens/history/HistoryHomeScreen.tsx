@@ -206,8 +206,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   picture: {
-    width: 110,
-    height: 110,
+    width: 90,
+    height: 90,
     backgroundColor: colors.GRAY_200,
   },
   rectangle: {

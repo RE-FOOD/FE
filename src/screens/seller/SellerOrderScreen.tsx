@@ -5,34 +5,24 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
 import { stateMap } from '@/constants/modalStates';
-
-type Order = {
-  id: number;
-  time: string;
-  menu: string;
-  price: string;
-  status: '신규처리중' | '완료';
-};
+import { useApproveOrder, useSellerOrders, useFailOrder } from '@/hooks/queries/useSeller';
+import { SellerOrder } from '@/types/domain';
 
 const SellerOrderScreen = () => {
   const [activeTab, setActiveTab] = useState<'신규처리중' | '완료'>('신규처리중');
   const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<SellerOrder | null>(null);
 
-  const [orders, setOrders] = useState<Order[]>([
-    { id: 1, time: '19:30', menu: '하와이안 피자 외 1개', price: '28,600원', status: '신규처리중' },
-    { id: 2, time: '19:30', menu: '고구마 피자 외 1개', price: '28,600원', status: '신규처리중' },
-  ]);
+  const { data: orders = [], isLoading, isError } = useSellerOrders();
+  const { mutate: approveOrder } = useApproveOrder();
+  const { mutate: failOrder } = useFailOrder();
 
-  const filteredOrders = orders.filter((o) => o.status === activeTab);
-  const handleAcceptOrder = (orderId: number) => {
-    setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: '완료' } : o)));
-    setActiveTab('완료');
-  };
+  if (isLoading) return <Text>로딩 중...</Text>;
+  if (isError) return <Text>에러가 발생했습니다.</Text>;
 
-  const handleCancelOrder = (orderId: number) => {
-    setOrders((prev) => prev.filter((o) => o.id !== orderId));
-  };
+  const filteredOrders = orders.filter((o) =>
+    activeTab === '신규처리중' ? o.status !== 'COMPLETED' : o.status === 'COMPLETED'
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,14 +55,17 @@ const SellerOrderScreen = () => {
           </View>
         </View>
         {filteredOrders.map((order) => (
-          <View key={order.id} style={styles.listContainer}>
+          <View key={order.orderId} style={styles.listContainer}>
             <View style={styles.innerListContainer}>
               <View style={styles.textListContainer}>
-                <Text style={styles.blackBoldText_20}>{order.time}</Text>
-                <Text style={styles.blackBoldText_20}>{order.menu}</Text>
-                <Text style={styles.grayRegularText_14}>결재완료 {order.price}</Text>
+                <Text style={styles.blackBoldText_20}>{order.pickupDueTime}</Text>
+                <Text style={styles.blackBoldText_20}>
+                  {order.menus.join(', ')}
+                  {order.menuCount > 0 && ` 외 ${order.menuCount}개`}
+                </Text>
+                <Text style={styles.grayRegularText_14}>결재완료 {order.totalAmount}</Text>
               </View>
-              {order.status === '신규처리중' ? (
+              {order.status !== 'COMPLETED' ? (
                 <TouchableOpacity
                   style={styles.orderRectangle}
                   onPress={() => {
@@ -97,14 +90,24 @@ const SellerOrderScreen = () => {
         isOpen={successModalOpen}
         onClose={() => setSuccessModalOpen(false)}
         onButtonClick={(index) => {
+          if (!selectedOrder) return;
           const btnType = stateMap.Order.btn[index];
           if (btnType === 0) {
             console.log('주문 취소');
-            handleCancelOrder(selectedOrder!.id);
+            failOrder(selectedOrder.orderId, {
+              onSuccess: () => {
+                setSuccessModalOpen(false);
+              },
+            });
           }
-          if (btnType === 6 && selectedOrder) {
+          if (btnType === 6) {
             console.log('주문 수락');
-            handleAcceptOrder(selectedOrder!.id);
+            approveOrder(selectedOrder.orderId, {
+              onSuccess: () => {
+                setSuccessModalOpen(false);
+                setActiveTab('완료');
+              },
+            });
           }
         }}
       />

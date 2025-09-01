@@ -12,7 +12,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SearchIcon from '@/assets/icons/search.svg'; // 🔥 icons 먼저
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
 import { useInfiniteHistory } from '@/hooks/queries/useHistory';
@@ -42,10 +42,11 @@ const HistoryHomeScreen = () => {
             <TextInput
               style={styles.searchInput}
               placeholder="가게 검색하기"
+              placeholderTextColor="#9C9C9C"
               value={query}
               onChangeText={setQuery}
             />
-            <FontAwesome name="search" size={20} color={colors.GREEN} />
+            <SearchIcon />
           </View>
         </View>
       </View>
@@ -145,10 +146,10 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 10,
   },
   search: {
-    marginHorizontal: 24,
+    marginHorizontal: 18,
     marginTop: 20,
-    backgroundColor: colors.GRAY_200,
-    borderRadius: 8,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 10,
   },
   innerContainer: {
     flexDirection: 'row',
@@ -286,6 +287,9 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
   },
 });
 

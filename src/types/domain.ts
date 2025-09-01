@@ -171,6 +171,15 @@ interface Order {
   menus: OrderMenu[];
 }
 
+interface History {
+  orderId: number;
+  storeId: number;
+  storeName: string;
+  imageUrl: string;
+  status: boolean;
+  menuName: string;
+}
+
 export type {
   Member,
   Profile,
@@ -194,4 +203,5 @@ export type {
   Overviews,
   Order,
   OrderMenu,
+  History,
 };

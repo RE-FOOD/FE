@@ -1,57 +1,37 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Image,
+  ActivityIndicator,
+  FlatList,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '@/constants/colors';
-
 import { userNavigations } from '@/constants/navigations';
+import { useInfiniteHistory } from '@/hooks/queries/useHistory';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
-
-export const initialOrders = [
-  {
-    id: 1,
-    type: '픽업주문',
-    date: '2025.07.28',
-    status: '픽업전',
-    store: 'Pizza & Pasta',
-    menu: '콤비네이션 피자',
-    picture: 'https://picsum.photos/85',
-  },
-  {
-    id: 2,
-    type: '픽업주문',
-    date: '2025.07.28',
-    status: '픽업완료',
-    store: 'Chicken',
-    menu: '후라이드 치킨',
-    picture: 'https://picsum.photos/85',
-  },
-  {
-    id: 3,
-    type: '픽업주문',
-    date: '2025.07.28',
-    status: '픽업완료',
-    store: 'Pasta',
-    menu: 'Pasta',
-    picture: 'https://picsum.photos/85',
-  },
-];
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'OrderDetail'>;
 const deletedIds = new Set<number>();
 
 const HistoryHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-
-  const [orders, setOrders] = useState(() => initialOrders.filter((o) => !deletedIds.has(o.id)));
   const [query, setQuery] = useState('');
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useInfiniteHistory(query);
+
+  const orders = (data ?? []).filter((o) => !deletedIds.has(o.orderId));
 
   const handleCancel = async (targetId: number) => {
     deletedIds.add(targetId);
-    setOrders((prev) => prev.filter((o) => o.id !== targetId));
+    refetch();
   };
 
   return (
@@ -69,68 +49,81 @@ const HistoryHomeScreen = () => {
           </View>
         </View>
       </View>
-      {orders.map((order) => (
-        <View key={order.id} style={{ marginBottom: 10 }}>
-          <View style={styles.orderListContainer}>
-            <View style={styles.orderInnerContainer}>
-              <View style={styles.textInnerContainer}>
-                <View style={styles.dateInnerContainer}>
-                  <Text style={styles.dateText}>{order.date}</Text>
+
+      <FlatList
+        data={orders}
+        keyExtractor={(item, index) => `${item.orderId}-${index}`}
+        renderItem={({ item: order }) => (
+          <View style={{ marginBottom: 10 }}>
+            <View style={styles.orderListContainer}>
+              <View style={styles.orderInnerContainer}>
+                <View style={styles.textInnerContainer}>
+                  <View style={styles.dateInnerContainer}>
+                    <Text style={styles.dateText}>{order.orderId}</Text>
+                  </View>
+                  <Text style={styles.statusText}>{order.status ? '완료' : '픽업전'}</Text>
                 </View>
-                <Text style={styles.statusText}>{order.status}</Text>
-              </View>
-              <View style={styles.horizontalLine} />
-              <View style={styles.menuContainer}>
-                {order.picture ? (
-                  <Image
-                    source={{ uri: order.picture }}
-                    style={styles.picture}
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <View style={styles.picture} />
-                )}
-                <View style={styles.menuDetailContainer}>
-                  <Text style={styles.storeText}>{order.store}</Text>
-                  <Text style={styles.menuText}>{order.menu}</Text>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={styles.buttonGray}
-                      onPress={() =>
-                        navigation.navigate('OrderDetail', {
-                          orderId: order.id,
-                        })
-                      }
-                    >
-                      <Text style={styles.buttonGrayText}>주문상세</Text>
-                    </TouchableOpacity>
-                    {order.status === '픽업전' ? (
+                <View style={styles.horizontalLine} />
+                <View style={styles.menuContainer}>
+                  {order.imageUrl ? (
+                    <Image
+                      source={{ uri: order.imageUrl }}
+                      style={styles.picture}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View style={styles.picture} />
+                  )}
+                  <View style={styles.menuDetailContainer}>
+                    <Text style={styles.storeText}>{order.storeName}</Text>
+                    <Text style={styles.menuText}>{order.menuName}</Text>
+                    <View style={styles.buttonContainer}>
                       <TouchableOpacity
-                        style={styles.buttonGreen}
-                        onPress={() => handleCancel(order.id)}
+                        style={styles.buttonGray}
+                        onPress={() =>
+                          navigation.navigate('OrderDetail', {
+                            orderId: order.orderId,
+                          })
+                        }
                       >
-                        <Text style={styles.buttonGreenText}>주문취소</Text>
+                        <Text style={styles.buttonGrayText}>주문상세</Text>
                       </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.buttonGreen}
-                        onPress={() => {
-                          navigation.navigate(userNavigations.REVIEW_WRITE, {
-                            storeId: order.id,
-                            orderId: order.id,
-                          }); //api 연결 후 수정예정
-                        }}
-                      >
-                        <Text style={styles.buttonGreenText}>리뷰쓰기</Text>
-                      </TouchableOpacity>
-                    )}
+                      {!order.status ? (
+                        <TouchableOpacity
+                          style={styles.buttonGreen}
+                          onPress={() => handleCancel(order.orderId)}
+                        >
+                          <Text style={styles.buttonGreenText}>주문취소</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.buttonGreen}
+                          onPress={() => {
+                            navigation.navigate(userNavigations.REVIEW_WRITE, {
+                              storeId: order.storeId,
+                              orderId: order.orderId,
+                            });
+                          }}
+                        >
+                          <Text style={styles.buttonGreenText}>리뷰쓰기</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
-      ))}
+        )}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        ListFooterComponent={
+          isFetchingNextPage ? <ActivityIndicator size="small" color={colors.GREEN} /> : null
+        }
+      />
     </SafeAreaView>
   );
 };
@@ -162,7 +155,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 153,
   },
 
   titleText: {

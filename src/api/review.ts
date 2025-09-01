@@ -2,11 +2,10 @@ import axiosInstance from './axios';
 import { Review } from '@/types/domain';
 
 export type MyReviewResponse = Pick<Review, 'id' | 'rating' | 'content' | 'createdAt'> & {
+  storeId: number;
+  orderId: number;
   memberId: number;
-  menuList: {
-    id: number;
-    name: string;
-  }[];
+  menuList: { id: number; name: string }[];
 };
 
 export type CreateReviewRequest = Pick<Review, 'rating' | 'content'>;
@@ -37,4 +36,13 @@ export const createReview = async (
 ): Promise<CreateReviewResponse> => {
   const { data } = await axiosInstance.post(`/stores/${storeId}/orders/${orderId}/reviews`, body);
   return data;
+};
+
+export const deleteReview = async (
+  storeId: number,
+  orderId: number,
+  reviewId: number
+): Promise<void> => {
+  console.log('🛠️ deleteReview 호출됨:', { storeId, orderId, reviewId });
+  await axiosInstance.delete(`/stores/${storeId}/orders/${orderId}/reviews/${reviewId}`);
 };

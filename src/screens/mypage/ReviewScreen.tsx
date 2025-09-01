@@ -1,15 +1,21 @@
+import React, { useState } from 'react'; // 🔥 react 최상단
 import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import Trash from '@/assets/icons/trash.svg';
+import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
-import { useMyReviewFlat } from '@/hooks/queries/useReview';
+import { stateMap } from '@/constants/modalStates';
+import { useDeleteReview, useMyReviewFlat } from '@/hooks/queries/useReview';
 
 const ReviewScreen = () => {
   const { reviews, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyReviewFlat();
+  const { mutate: deleteReview } = useDeleteReview();
 
-  console.log('리뷰 데이터:', JSON.stringify(reviews, null, 2));
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<any>(null);
 
   if (isLoading) {
     return (
@@ -26,7 +32,14 @@ const ReviewScreen = () => {
         <View style={styles.storeInfoContainer}>
           <View style={styles.titleRow}>
             <Text style={styles.blackRegularText_15}>{item.storeName}</Text>
-            <TouchableOpacity style={styles.deleteButton}>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => {
+                console.log('🛠️ 삭제 버튼 클릭됨:', item.id);
+                setSelectedReview(item);
+                setModalOpen(true);
+              }}
+            >
               <Trash />
               <Text style={styles.grayRegularText_13}>삭제</Text>
             </TouchableOpacity>
@@ -73,6 +86,33 @@ const ReviewScreen = () => {
         ListFooterComponent={
           isFetchingNextPage ? <ActivityIndicator size="small" color={colors.GREEN} /> : null
         }
+      />
+      <CustomModal
+        state="ReviewDelete"
+        type="warning"
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onButtonClick={(index) => {
+          const btnType = stateMap.ReviewDelete.btn[index];
+          if (btnType === 0) {
+            // 취소
+            setModalOpen(false);
+          }
+          if (btnType === 4 && selectedReview) {
+            deleteReview(
+              {
+                storeId: 1,
+                orderId: 1,
+                reviewId: selectedReview.id,
+              },
+              {
+                onSuccess: () => {
+                  setModalOpen(false);
+                },
+              }
+            );
+          }
+        }}
       />
     </SafeAreaView>
   );

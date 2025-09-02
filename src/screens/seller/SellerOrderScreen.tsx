@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomModal from '@/components/_modal/CustomModal';
@@ -13,16 +13,53 @@ const SellerOrderScreen = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<SellerOrder | null>(null);
 
-  const { data: orders = [], isLoading, isError } = useSellerOrders();
+  const status = activeTab === '신규처리중' ? 'PENDING' : 'COMPLETED';
+  const {
+    data: orders = [],
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useSellerOrders(status);
+
   const { mutate: approveOrder } = useApproveOrder();
   const { mutate: failOrder } = useFailOrder();
 
-  if (isLoading) return <Text>로딩 중...</Text>;
-  if (isError) return <Text>에러가 발생했습니다.</Text>;
+  const renderItem = ({ item: order }: { item: SellerOrder }) => {
+    const time = order.pickupDueTime.substring(11, 16);
 
-  const filteredOrders = orders.filter((o) =>
-    activeTab === '신규처리중' ? o.status !== 'COMPLETED' : o.status === 'COMPLETED'
-  );
+    return (
+      <View key={order.orderId} style={styles.listContainer}>
+        <View style={styles.innerListContainer}>
+          {/* 주문 정보 */}
+          <View style={styles.textListContainer}>
+            <Text style={styles.blackBoldText_20}>{time}</Text>
+            <Text style={styles.blackBoldText_20}>
+              {order.menus[0]}
+              {order.menuCount > 0 && ` 외 ${order.menuCount}개`}
+            </Text>
+            <Text style={styles.grayRegularText_14}>결제완료 {order.totalAmount}</Text>
+          </View>
+
+          {/* 버튼 영역 */}
+          {order.status === 'PENDING' ? (
+            <TouchableOpacity
+              style={styles.orderRectangle}
+              onPress={() => {
+                setSelectedOrder(order);
+                setSuccessModalOpen(true);
+              }}
+            >
+              <Text style={styles.whiteRegularText_15}>접수</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={[styles.orderRectangle, styles.orderRectangleDone]}>
+              <Text style={styles.whiteRegularText_15}>완료</Text>
+            </View>
+          )}
+        </View>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,36 +91,26 @@ const SellerOrderScreen = () => {
             <Text style={styles.whiteRegularText_15}>영업중</Text>
           </View>
         </View>
-        {filteredOrders.map((order) => (
-          <View key={order.orderId} style={styles.listContainer}>
-            <View style={styles.innerListContainer}>
-              <View style={styles.textListContainer}>
-                <Text style={styles.blackBoldText_20}>{order.pickupDueTime}</Text>
-                <Text style={styles.blackBoldText_20}>
-                  {order.menus.join(', ')}
-                  {order.menuCount > 0 && ` 외 ${order.menuCount}개`}
-                </Text>
-                <Text style={styles.grayRegularText_14}>결재완료 {order.totalAmount}</Text>
-              </View>
-              {order.status !== 'COMPLETED' ? (
-                <TouchableOpacity
-                  style={styles.orderRectangle}
-                  onPress={() => {
-                    setSelectedOrder(order);
-                    setSuccessModalOpen(true);
-                  }}
-                >
-                  <Text style={styles.whiteRegularText_15}>접수</Text>
-                </TouchableOpacity>
-              ) : (
-                <View style={[styles.orderRectangle, styles.orderRectangleDone]}>
-                  <Text style={styles.whiteRegularText_15}>완료</Text>
-                </View>
-              )}
-            </View>
-          </View>
-        ))}
+
+        {/* 주문 리스트 */}
+        <FlatList
+          data={orders}
+          keyExtractor={(item) => String(item.orderId)}
+          renderItem={renderItem}
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+          onEndReachedThreshold={0.6}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={
+            isFetchingNextPage ? <ActivityIndicator style={{ marginVertical: 16 }} /> : null
+          }
+        />
       </View>
+
+      {/* 모달 */}
       <CustomModal
         state="Order"
         type="success"
@@ -93,19 +120,14 @@ const SellerOrderScreen = () => {
           if (!selectedOrder) return;
           const btnType = stateMap.Order.btn[index];
           if (btnType === 0) {
-            console.log('주문 취소');
             failOrder(selectedOrder.orderId, {
-              onSuccess: () => {
-                setSuccessModalOpen(false);
-              },
+              onSuccess: () => setSuccessModalOpen(false),
             });
           }
           if (btnType === 6) {
-            console.log('주문 수락');
             approveOrder(selectedOrder.orderId, {
               onSuccess: () => {
                 setSuccessModalOpen(false);
-                setActiveTab('완료');
               },
             });
           }

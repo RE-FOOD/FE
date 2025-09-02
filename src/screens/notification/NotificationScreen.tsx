@@ -56,6 +56,7 @@ const NotificationScreen = () => {
             ListFooterComponent={
               isFetchingNextPage ? <ActivityIndicator style={{ margin: 10 }} /> : null
             }
+            contentContainerStyle={{ gap: 20 }}
           />
           <Text style={styles.infoText}>최근 30일 이내의 알림만 확인하실 수 있습니다.</Text>
         </View>

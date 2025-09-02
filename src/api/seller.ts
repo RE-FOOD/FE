@@ -1,4 +1,3 @@
-import axios, { AxiosError } from 'axios';
 import axiosInstance from './axios';
 import { ApiResponse } from '@/types/api';
 import { SellerOrder, StoreInsight } from '@/types/domain';
@@ -8,25 +7,26 @@ export interface SellerOrderListResponse {
 }
 
 export const getSellerOrders = async (cursorId?: number) => {
-  try {
-    const { data } = await axiosInstance.get('/orders/list', {
-      params: cursorId ? { cursorId } : {},
-    });
+  const { data } = await axiosInstance.get('/stores/orders', {
+    params: cursorId ? { cursorId } : {},
+  });
+
+  if (Array.isArray(data.data)) {
     return data.data;
-  } catch (err: unknown) {
-    if (axios.isAxiosError(err)) {
-      throw err as AxiosError;
-    }
-    throw err;
   }
+
+  if (Array.isArray(data.items)) {
+    return data.items;
+  }
+  return [];
 };
 
 export const approveSellerOrder = async (orderId: number): Promise<void> => {
-  await axiosInstance.get<{ data: null }>(`/stores/orders/${orderId}/success`);
+  await axiosInstance.get<{ data: null }>(`/stores/orders/${orderId}/success`, {});
 };
 
 export const failSellerOrder = async (orderId: number): Promise<void> => {
-  await axiosInstance.get<{ data: null }>(`/stores/orders/${orderId}/fail`);
+  await axiosInstance.get<{ data: null }>(`/stores/orders/${orderId}/fail`, {});
 };
 
 const getStoreInsight = async (): Promise<StoreInsight> => {

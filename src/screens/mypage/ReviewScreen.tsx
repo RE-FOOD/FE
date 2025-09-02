@@ -1,8 +1,10 @@
-import React, { useState } from 'react'; // 🔥 react 최상단
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+import type { MyReviewResponse } from '@/api/review';
 
 import Trash from '@/assets/icons/trash.svg';
 import CustomModal from '@/components/_modal/CustomModal';
@@ -15,7 +17,7 @@ const ReviewScreen = () => {
   const { mutate: deleteReview } = useDeleteReview();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedReview, setSelectedReview] = useState<any>(null);
+  const [selectedReview, setSelectedReview] = useState<MyReviewResponse | null>(null);
 
   if (isLoading) {
     return (
@@ -25,7 +27,7 @@ const ReviewScreen = () => {
     );
   }
 
-  const renderItem = ({ item }: any) => {
+  const renderItem = ({ item }: { item: MyReviewResponse }) => {
     const formattedDate = item.createdAt.split('T')[0];
     return (
       <View style={styles.listContainer}>

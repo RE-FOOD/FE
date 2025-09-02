@@ -59,7 +59,7 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
             screen: userNavigations.HISTORY_HOME,
           });
         },
-        onError: (error: any) => {
+        onError: (error) => {
           console.error('리뷰 등록 실패', error.response?.data ?? error.message);
         },
       }

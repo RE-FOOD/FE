@@ -17,8 +17,10 @@ import { userNavigations } from '@/constants/navigations';
 import useToggleFavorite from '@/hooks/queries/useLike';
 import mapHooks from '@/hooks/queries/useMap';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
+import { Map } from '@/types/domain';
 
 type Navigation = StackNavigationProp<UserStackParamList, typeof userNavigations.STORE_LIST>;
+type MapWithOpen = Map & { isOpen: boolean };
 
 const MapHomeScreen = () => {
   const navigation = useNavigation<Navigation>();
@@ -27,8 +29,8 @@ const MapHomeScreen = () => {
     latitude: number;
     longitude: number;
   } | null>(null);
-  const [stores, setStores] = useState<any[]>([]);
-  const [selectedStore, setSelectedStore] = useState<any | null>(null);
+  const [stores, setStores] = useState<MapWithOpen[]>([]);
+  const [selectedStore, setSelectedStore] = useState<MapWithOpen | null>(null);
   const [showPopup, setShowPopup] = useState(false);
 
   const { data: nearByStores } = mapHooks.useMap({
@@ -47,7 +49,7 @@ const MapHomeScreen = () => {
   useEffect(() => {
     if (nearByStores) {
       setStores(
-        nearByStores.map((s: any) => ({
+        nearByStores.map((s: Map) => ({
           ...s,
           isOpen: s.status === 'OPEN',
         }))
@@ -69,7 +71,7 @@ const MapHomeScreen = () => {
   );
 
   // 마커 클릭 핸들러
-  const handleMarkerPress = useCallback((store: any) => {
+  const handleMarkerPress = useCallback((store: MapWithOpen) => {
     setSelectedStore(store);
     setShowPopup(true);
   }, []);

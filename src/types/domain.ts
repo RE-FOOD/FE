@@ -186,7 +186,7 @@ interface SellerOrder {
   menus: string[];
   menuCount: number;
   totalAmount: number;
-  status: 'PENDING' | 'COMPLETED' | 'CANCELLED' | string;
+  status: 'PENDING' | 'COMPLETED' | 'CANCELED' | string;
 }
 
 export type {

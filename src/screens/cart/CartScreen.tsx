@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Text, View, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Text, View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -28,6 +29,16 @@ const CartScreen = () => {
   const { cartListQuery, updateCartMutation } = useCart();
   const { data: store, isLoading, isError } = cartListQuery;
   const { orderQuery } = useOrder();
+
+  useEffect(() => {
+    if (store?.imageUrl) {
+      FastImage.preload([{ uri: store.imageUrl }]);
+    }
+    if (store?.menus?.length) {
+      const uris = store.menus.map((m) => ({ uri: m.imageUrl }));
+      FastImage.preload(uris);
+    }
+  }, [store]);
 
   if (isLoading) return <Text>Loading...</Text>;
   if (isError || !store) return <Text>장바구니를 불러올 수 없습니다</Text>;
@@ -89,7 +100,11 @@ const CartScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.cartContainer}>
         <View style={styles.storeRow}>
-          <Image source={{ uri: store.imageUrl }} style={styles.storeImage} />
+          <FastImage
+            source={{ uri: store.imageUrl, priority: FastImage.priority.normal }}
+            style={styles.storeImage}
+            resizeMode={FastImage.resizeMode.cover}
+          />
           <TouchableOpacity onPress={goDetail} style={styles.storeInfoRow}>
             <Text style={styles.storeName}>{store.name}</Text>
             <Arrow width={14} height={20} />

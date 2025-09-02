@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   SafeAreaView,
   Text,
@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import TimePicker from 'react-native-date-picker';
+import FastImage from 'react-native-fast-image';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import CustomModal from '@/components/_modal/CustomModal';
@@ -74,6 +75,13 @@ const OrderScreen = () => {
       showToast('error', '주문 실패', '주문 생성에 실패했습니다.');
     }
   };
+
+  useEffect(() => {
+    if (order?.menus?.length) {
+      const uris = order.menus.map((m) => ({ uri: m.imageUrl }));
+      FastImage.preload(uris);
+    }
+  }, [order]);
 
   return (
     <SafeAreaView style={styles.container}>

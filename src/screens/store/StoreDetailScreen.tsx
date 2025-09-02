@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { View, Image, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { Text } from 'react-native-svg';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -33,6 +34,12 @@ const StoreDetailScreen = () => {
 
   const heroImage = useMemo(() => store?.imageUrl?.[0] ?? '', [store?.imageUrl]);
 
+  useEffect(() => {
+    if (heroImage) {
+      FastImage.preload([{ uri: heroImage }]);
+    }
+  }, [heroImage]);
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -58,7 +65,11 @@ const StoreDetailScreen = () => {
   return (
     <View style={styles.container}>
       {heroImage ? (
-        <Image source={{ uri: heroImage }} style={styles.hero} />
+        <FastImage
+          source={{ uri: heroImage, priority: FastImage.priority.high }}
+          style={styles.hero}
+          resizeMode={FastImage.resizeMode.cover}
+        />
       ) : (
         <View style={[styles.hero, styles.heroPlaceholder]} />
       )}

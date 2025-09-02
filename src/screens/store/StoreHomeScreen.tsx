@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -31,6 +32,17 @@ const StoreHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   // const { data, refetch, isLoading, isError } = useGetOverviews();
   const { data, refetch } = useGetOverviews();
+
+  useEffect(() => {
+    if (data?.data?.discountMenu) {
+      const uris = data.data.discountMenu.map((m) => ({ uri: m.imageUrl }));
+      FastImage.preload(uris);
+    }
+    if (data?.data?.popularStores) {
+      const uris = data.data.popularStores.map((s) => ({ uri: s.imageUrl }));
+      FastImage.preload(uris);
+    }
+  }, [data]);
 
   useFocusEffect(
     useCallback(() => {

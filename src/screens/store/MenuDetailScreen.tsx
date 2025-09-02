@@ -1,5 +1,6 @@
-import { useLayoutEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -34,6 +35,12 @@ const MenuDetailScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({ title: storeName, headerRight: renderHeaderCartButton });
   }, [navigation, storeName]);
+
+  useEffect(() => {
+    if (menu?.imageUrl) {
+      FastImage.preload([{ uri: menu.imageUrl }]);
+    }
+  }, [menu?.imageUrl]);
 
   if (isLoading || !menu) {
     return <LoadingScreen />;
@@ -91,7 +98,15 @@ const MenuDetailScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Image source={{ uri: menu.imageUrl }} style={styles.image} resizeMode="cover" />
+        <FastImage
+          source={{
+            uri: menu.imageUrl,
+            priority: FastImage.priority.high,
+            cache: FastImage.cacheControl.immutable,
+          }}
+          style={styles.image}
+          resizeMode={FastImage.resizeMode.cover}
+        />
       </View>
 
       <View style={styles.infoContainer}>

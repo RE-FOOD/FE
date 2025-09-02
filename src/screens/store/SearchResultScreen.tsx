@@ -53,7 +53,6 @@ const SearchResultScreen = () => {
 
   const [sort, setSort] = useState<SortKey>('distance');
 
-  // 🔑 필터 정의 (category는 null, keyword는 route에서 받음)
   const filters: BaseFilters = useMemo(
     () => ({
       category: null,

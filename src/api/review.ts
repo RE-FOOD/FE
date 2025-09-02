@@ -1,7 +1,10 @@
 import axiosInstance from './axios';
 import { Review } from '@/types/domain';
 
-export type MyReviewResponse = Pick<Review, 'id' | 'rating' | 'content' | 'createdAt'> & {
+export type MyReviewResponse = Pick<
+  Review,
+  'id' | 'rating' | 'content' | 'createdAt' | 'storeName'
+> & {
   storeId: number;
   orderId: number;
   memberId: number;

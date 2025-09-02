@@ -171,6 +171,24 @@ interface Order {
   menus: OrderMenu[];
 }
 
+interface History {
+  orderId: number;
+  storeId: number;
+  storeName: string;
+  imageUrl: string;
+  status: boolean;
+  menuName: string;
+}
+
+interface SellerOrder {
+  orderId: number;
+  pickupDueTime: string;
+  menus: string[];
+  menuCount: number;
+  totalAmount: number;
+  status: 'PENDING' | 'COMPLETED' | 'CANCELLED' | string;
+}
+
 interface MonthAmount {
   [key: string]: number;
 }
@@ -206,4 +224,6 @@ export type {
   OrderMenu,
   MonthAmount,
   StoreInsight,
+  History,
+  SellerOrder,
 };

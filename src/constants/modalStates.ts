@@ -74,6 +74,16 @@ export const stateMap: StateMap = {
     subtitle: '결제 완료 후에는 환불이 불가능합니다.\n계속 진행하시겠습니까?',
     btn: [0, 7],
   },
+  Review: {
+    title: '리뷰를 작성하시겠습니까?',
+    subtitle: '한번 등록된 리뷰는 수정되지 않습니다.',
+    btn: [0, 8],
+  },
+  ReviewDelete: {
+    title: '리뷰를 삭제하시겠습니까?',
+    subtitle: '삭제한 리뷰 정보는 저장되지 않습니다.',
+    btn: [0, 4],
+  },
 };
 
 export const buttonMap: ButtonMap = {
@@ -85,4 +95,5 @@ export const buttonMap: ButtonMap = {
   5: { color: '#EA575B', label: '새로 담기' },
   6: { color: '#0FB758', label: '수락' },
   7: { color: '#0FB758', label: '결제' },
+  8: { color: '#0FB758', label: '등록' },
 };

@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     borderTopStartRadius: 20,
     borderTopEndRadius: 20,
+    height: '100%',
   },
   imgContainer: {
     alignItems: 'center',

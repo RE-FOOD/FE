@@ -1,86 +1,9 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp } from '@react-navigation/native';
 import { colors } from '@/constants/colors';
+import { useOrderDetail } from '@/hooks/queries/useHistory';
 import type { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
-
-export const ORDER_DETAIL_MOCK: Record<number, any> = {
-  1: {
-    id: 1,
-    type: 'PICKUP',
-    status: 'PICKUP_PENDING',
-    store: { name: 'Pizza & Pasta' },
-    orderNumber: '1234',
-    orderedAt: '2025-07-28T12:23:00+09:00',
-    items: [
-      {
-        id: 101,
-        name: '콤비네이션 피자',
-        quantity: 6,
-        unitPrice: 63000,
-        imageUrl: 'https://picsum.photos/85',
-        status: '주문완료',
-      },
-    ],
-    pricing: { subtotal: 63000, discountRate: 0.3, total: 60000 },
-    payment: {
-      method: 'CARD',
-      cardName: '카카오뱅크',
-      approvedAt: '2025-07-28T12:23:00+09:00',
-    },
-    pickup: { name: '구희원', phone: '010-1234-1234', timeText: '17시 30분' },
-  },
-  2: {
-    id: 2,
-    type: 'PICKUP',
-    status: 'PICKUP_DONE',
-    store: { name: 'Chicken' },
-    orderNumber: '4518',
-    orderedAt: '2025-07-28T10:10:00+09:00',
-    items: [
-      {
-        id: 201,
-        name: '후라이드 치킨',
-        quantity: 1,
-        unitPrice: 18000,
-        imageUrl: 'https://picsum.photos/85',
-        status: '주문완료',
-      },
-    ],
-    pricing: { subtotal: 18000, discountRate: 0, total: 18000 },
-    payment: {
-      method: 'CARD',
-      cardName: '신한카드',
-      approvedAt: '2025-07-28T10:10:30+09:00',
-    },
-    pickup: { name: '구희원', phone: '010-1234-1234', timeText: '즉시 픽업' },
-  },
-  3: {
-    id: 3,
-    type: 'PICKUP',
-    status: 'PICKUP_DONE',
-    store: { name: 'Pasta' },
-    orderNumber: '7890',
-    orderedAt: '2025-07-28T09:30:00+09:00',
-    items: [
-      {
-        id: 301,
-        name: '까르보나라',
-        quantity: 2,
-        unitPrice: 24000,
-        imageUrl: 'https://picsum.photos/85',
-        status: '주문완료',
-      },
-    ],
-    pricing: { subtotal: 24000, discountRate: 0.1, total: 21600 },
-    payment: {
-      method: 'CARD',
-      cardName: '우리카드',
-      approvedAt: '2025-07-28T09:30:20+09:00',
-    },
-    pickup: { name: '구희원', phone: '010-1234-1234', timeText: '12시 10분' },
-  },
-};
 
 type OrderDetailProp = RouteProp<UserStackParamList, 'OrderDetail'>;
 
@@ -90,80 +13,127 @@ type Props = {
 
 const HistoryDetailScreen = ({ route }: Props) => {
   const id = Number(route.params.orderId);
-  const data = ORDER_DETAIL_MOCK[id];
+  const { data, isLoading, error } = useOrderDetail(id);
+
+  if (isLoading) return <Text>로딩 중...</Text>;
+  if (error) return <Text>에러 발생: {error.message}</Text>;
   if (!data) return <Text>주문을 찾을 수 없습니다.</Text>;
 
   const fmtWon = (n: number) => n.toLocaleString('ko-KR');
 
+  const formatPhoneNumber = (phone: string) => {
+    // 숫자만 남기기
+    const digits = phone.replace(/\D/g, '');
+    // 010-XXXX-XXXX 패턴으로 자르기
+    return digits.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+  };
+
+  const formatDateTime = (isoString: string) => {
+    return isoString.slice(0, 19).replace('T', ' ');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.menuInfoContainer}>
-        <View style={styles.menuInnerContainer}>
-          <View style={styles.menuOrderContainer}>
-            <Text style={styles.blackBoldText_13}>{data.store.name}</Text>
-            <Text style={styles.grayRegularText}>주문 번호: {data.orderNumber}</Text>
-            <Text style={styles.grayRegularText}>주문 일시: {data.orderedAt}</Text>
-          </View>
-          <View style={styles.horizontalLine} />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.menuInfoContainer}>
+          <View style={styles.menuInnerContainer}>
+            {[
+              { label: '가게명', value: data.storeName, style: styles.blackBoldText_13 },
+              { label: '주문 번호', value: data.orderNumber, style: styles.grayRegularText },
+              {
+                label: '주문 일시',
+                value: formatDateTime(data.requestedAt),
+                style: styles.grayRegularText,
+              },
+            ].map((row, idx) => (
+              <Text key={idx} style={row.style}>
+                {row.label === '가게명' ? row.value : `${row.label}: ${row.value}`}
+              </Text>
+            ))}
 
-          {data.items.map((item: any) => (
-            <View key={item.id} style={styles.menuPictureContainer}>
-              <View style={styles.menuPictureTextContainer}>
-                <Text style={styles.blackBoldText_11}>{item.name}</Text>
-                <Text style={styles.blackRegularText}>수량: {item.quantity}</Text>
-                <Text style={styles.blackRegularText}>가격: {fmtWon(item.unitPrice)}원</Text>
+            <View style={styles.horizontalLine} />
+            {data.menus?.map((menu) => (
+              <View key={menu.name} style={styles.menuPictureContainer}>
+                {[
+                  { label: '메뉴명', value: menu.name, style: styles.blackBoldText_11 },
+                  { label: '수량', value: `${menu.quality}`, style: styles.blackRegularText },
+                  {
+                    label: '가격',
+                    value: `${fmtWon(menu.totalAmount)}원`,
+                    style: styles.blackRegularText,
+                  },
+                ].map((row, idx) => (
+                  <Text key={idx} style={row.style}>
+                    {row.label === '메뉴명' ? row.value : `${row.label}: ${row.value}`}
+                  </Text>
+                ))}
               </View>
-            </View>
-          ))}
-          <View style={styles.horizontalLine} />
+            ))}
 
-          <View style={styles.menuInfoPriceContainer}>
-            <View style={styles.leftCol}>
-              <Text style={styles.blackRegularText}>상품 합계</Text>
-              <Text style={styles.blackRegularText}>총 금액</Text>
-            </View>
-            <View style={styles.rightCol}>
-              <Text style={styles.blackRegularText}>{fmtWon(data.pricing.subtotal)}원</Text>
+            <View style={styles.horizontalLine} />
 
-              <Text style={styles.blackRegularText}>{fmtWon(data.pricing.total)}원</Text>
-            </View>
+            {/* 가격 정보 */}
+            {[{ label: '총 금액', value: `${fmtWon(data.totalAmount)}원` }].map((row, idx) => (
+              <View key={idx} style={styles.menuInfoPriceContainer}>
+                <View style={styles.leftCol}>
+                  <Text style={styles.blackRegularText}>{row.label}</Text>
+                </View>
+                <View style={styles.rightCol}>
+                  <Text style={styles.blackRegularText}>{row.value}</Text>
+                </View>
+              </View>
+            ))}
           </View>
         </View>
-      </View>
-      <View style={styles.accountContainer}>
-        <View style={styles.accountInnerContainer}>
-          <Text style={styles.blackBoldText_13}>결제 정보</Text>
-          <View style={styles.accountInfoContainer}>
-            <View style={styles.leftCol}>
-              <Text style={styles.blackRegularText}>결제 수단</Text>
-              <Text style={styles.blackRegularText}>결제 금액</Text>
-              <Text style={styles.blackRegularText}>결제 시간</Text>
-            </View>
-            <View style={styles.rightCol}>
-              <Text style={styles.blackRegularText}>신용카드</Text>
-              <Text style={styles.blackRegularText}>{fmtWon(data.pricing.total)}원</Text>
-              <Text style={styles.blackRegularText}>{data.payment.approvedAt}</Text>
-            </View>
+
+        {/* 결제 정보 */}
+        <View style={styles.accountContainer}>
+          <View style={styles.accountInnerContainer}>
+            <Text style={styles.blackBoldText_13}>결제 정보</Text>
+            {[
+              { label: '결제 금액', value: `${fmtWon(data.totalAmount)}원` },
+              { label: '결제 시간', value: data.requestedAt },
+            ].map((row, idx) => (
+              <View key={idx} style={styles.accountInfoContainer}>
+                <View style={styles.leftCol}>
+                  <Text style={styles.blackRegularText}>{row.label}</Text>
+                </View>
+                <View style={styles.rightCol}>
+                  <Text style={styles.blackRegularText}>{row.value}</Text>
+                </View>
+              </View>
+            ))}
           </View>
         </View>
-      </View>
-      <View style={styles.memberContainer}>
-        <View style={styles.accountInnerContainer}>
-          <Text style={styles.blackBoldText_13}>픽업 정보</Text>
-          <View style={styles.accountInfoContainer}>
-            <View style={styles.leftCol}>
-              <Text style={styles.blackRegularText}>예약인</Text>
-              <Text style={styles.blackRegularText}>전화번호</Text>
-              <Text style={styles.blackRegularText}>픽업 시간</Text>
-            </View>
-            <View style={styles.rightCol}>
-              <Text style={styles.blackRegularText}>{data.pickup.name}</Text>
-              <Text style={styles.blackRegularText}>{data.pickup.phone}</Text>
-              <Text style={styles.blackRegularText}>{data.pickup.timeText}</Text>
-            </View>
+
+        {/* 픽업 정보 */}
+        <View style={styles.memberContainer}>
+          <View style={styles.accountInnerContainer}>
+            <Text style={styles.blackBoldText_13}>픽업 정보</Text>
+            {[
+              { label: '예약인', value: data.memberName },
+              { label: '전화번호', value: formatPhoneNumber(data.memberNumber) },
+              {
+                label: '픽업 시간',
+                value: new Date(data.pickupDueTime).toLocaleTimeString('ko-KR', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                }),
+              },
+            ].map((row, idx) => (
+              <View key={idx} style={styles.accountInfoContainer}>
+                <View style={styles.leftCol}>
+                  <Text style={styles.blackRegularText}>{row.label}</Text>
+                </View>
+                <View style={styles.rightCol}>
+                  <Text style={styles.blackRegularText}>{row.value}</Text>
+                </View>
+              </View>
+            ))}
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -174,6 +144,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     backgroundColor: colors.GRAY_200,
+  },
+  scrollContent: {
+    paddingBottom: 24,
     gap: 10,
   },
   menuInfoContainer: {
@@ -186,20 +159,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     marginTop: 10,
   },
-  menuOrderContainer: {
-    gap: 2,
-  },
+
   menuInnerContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    gap: 10,
+    gap: 5,
     alignSelf: 'stretch',
   },
   accountContainer: {
     paddingVertical: 10,
     flexDirection: 'column',
     alignItems: 'flex-start',
-    flexShrink: 0,
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
   },
@@ -209,32 +179,29 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginHorizontal: 24,
     alignSelf: 'stretch',
-    gap: 10,
+    gap: 5,
   },
   accountInfoContainer: {
     flexDirection: 'row',
-    columnGap: 24,
+    justifyContent: 'space-between',
   },
 
   menuPictureContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 10,
+    alignItems: 'flex-start',
+    gap: 5,
   },
   menuPictureTextContainer: {
-    flexDirection: 'column',
     alignItems: 'flex-start',
     gap: 5,
   },
   menuInfoPriceContainer: {
     flexDirection: 'row',
-    columnGap: 200,
+    justifyContent: 'space-between',
+    width: '100%',
   },
   memberContainer: {
     paddingVertical: 10,
-    flexDirection: 'column',
     alignItems: 'flex-start',
-    flexShrink: 0,
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
   },

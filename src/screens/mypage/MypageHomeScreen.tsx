@@ -81,7 +81,7 @@ const MypageHomeScreen = () => {
           onPress={() => navigation.navigate('GreenReport', { progress })}
         >
           <View style={styles.itemTextContainer}>
-            <Text style={styles.blackRegularText_16}>환경 리포트</Text>
+            <Text style={styles.blackRegularText_16}>환경 레벨</Text>
             <Arrow />
           </View>
         </TouchableOpacity>

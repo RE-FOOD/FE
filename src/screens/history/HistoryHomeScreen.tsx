@@ -60,7 +60,7 @@ const HistoryHomeScreen = () => {
               <View style={styles.orderInnerContainer}>
                 <View style={styles.textInnerContainer}>
                   <View style={styles.dateInnerContainer}>
-                    <Text style={styles.dateText}>{order.orderId}</Text>
+                    <Text style={styles.dateText}>주문번호: {order.orderId}</Text>
                   </View>
                   <Text style={styles.statusText}>{order.status ? '완료' : '픽업전'}</Text>
                 </View>

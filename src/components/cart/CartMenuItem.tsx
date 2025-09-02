@@ -84,12 +84,10 @@ const styles = StyleSheet.create({
     padding: 15,
     gap: 20,
   },
-  menuCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  menuCard: {},
   soldOutCard: {
     opacity: 0.5,
+    flexDirection: 'column',
   },
   menuContainer: {
     flexDirection: 'row',

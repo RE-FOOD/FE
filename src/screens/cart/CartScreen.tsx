@@ -55,7 +55,8 @@ const CartScreen = () => {
 
   const updateMenus = (menuId: number, quantity: number) => {
     const targetMenu = store.menus.find((m) => m.id === menuId);
-    if (targetMenu && quantity > targetMenu.dailyQuantity) {
+    if (!targetMenu) return;
+    if (quantity > targetMenu.orderQuantity && quantity > targetMenu.dailyQuantity) {
       showToast('error', `최대 주문 가능 개수를 초과했습니다.`);
       return;
     }

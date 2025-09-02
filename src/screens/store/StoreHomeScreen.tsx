@@ -77,6 +77,7 @@ const StoreHomeScreen = () => {
           <TopBar
             locationLabel={data?.locationLabel ?? ''}
             cartCount={data?.data.cartCount ?? 0}
+            hasUnread={data?.data.hasUnread ?? false}
             onPressLocation={() => navigation.navigate(userNavigations.LOCATION)}
             onPressCart={() => navigation.navigate(userNavigations.CART)}
             onPressNotification={() => navigation.navigate(userNavigations.NOTIFICATION)}

@@ -1,31 +1,41 @@
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { FlatList, Text, View, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { userNavigations } from '@/constants/navigations';
-import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
-
-type Nav = StackNavigationProp<UserStackParamList>;
+import { useNotification } from '@/hooks/queries/useNotification';
 
 const NotificationScreen = () => {
-  const navigation = useNavigation<Nav>();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useNotification();
+
+  const notifications = data?.pages.flatMap((page) => page.list) ?? [];
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Notification Screen</Text>
+      <Text style={styles.title}>알림</Text>
 
-      {/* // TODO: 테스트 버튼 추후 삭제 */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          navigation.navigate(userNavigations.ORDER_SUCCESS, {
-            level: 'FRUIT',
-            levelCheck: true,
-          })
-        }
-      >
-        <Text style={styles.buttonText}>테스트: OrderSuccess 이동</Text>
-      </TouchableOpacity>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          data={notifications}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <Text style={styles.itemTitle}>{item.title}</Text>
+              <Text style={styles.itemBody}>{item.body}</Text>
+              <Text style={styles.itemDate}>{item.createdAt}</Text>
+            </View>
+          )}
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isFetchingNextPage ? <ActivityIndicator style={{ margin: 10 }} /> : null
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -33,24 +43,14 @@ const NotificationScreen = () => {
 export default NotificationScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: { flex: 1, backgroundColor: '#fff' },
+  title: { fontSize: 20, fontWeight: 'bold', margin: 16 },
+  item: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#0FB758',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+  itemTitle: { fontSize: 16, fontWeight: '600' },
+  itemBody: { fontSize: 14, color: '#555', marginTop: 4 },
+  itemDate: { fontSize: 12, color: '#999', marginTop: 2 },
 });

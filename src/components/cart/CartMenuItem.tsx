@@ -34,7 +34,7 @@ const CartMenuItem = ({ menu, onDecrease, onIncrease, onRemove }: Props) => {
             <Text style={[styles.menuName, soldOut && styles.soldOutText]}>{menu.name}</Text>
             <View style={styles.priceRow}>
               <Text style={[styles.percent, soldOut && styles.soldOutText]}>
-                -{menu.dailyDiscountPercent}%
+                {menu.dailyDiscountPercent}%
               </Text>
               <Text style={[styles.price, soldOut && styles.soldOutText]}>
                 {menu.discountPrice.toLocaleString()}원

@@ -1,9 +1,9 @@
 import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-// import { BarChart } from 'react-native-chart-kit';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Arrow from '@/assets/icons/arrow-right-light.svg';
+import MonthlySalesChart from '@/components/seller/MonthlySalesChart';
 import { colors } from '@/constants/colors';
 import useAuth from '@/hooks/queries/useAuth';
 import useSeller from '@/hooks/queries/useSeller';
@@ -11,47 +11,21 @@ import useSeller from '@/hooks/queries/useSeller';
 const SellerMypageScreen = () => {
   const { logoutMutation, profile } = useAuth();
   const { isSeller, storeInsightQuery } = useSeller();
+
+  // TODO: 추후 실제 데이터로 변경
+  // const insight = storeInsightQuery.data;
+
   const dummyInsight = {
-    salesAmount: 125000, // 오늘 매출
-    popularMenu: ['탕수육', '깐풍기', '김밥'], // 인기 메뉴 (최대 3개)
+    salesAmount: 125000,
+    popularMenu: ['탕수육', '깐풍기', '김밥'],
     monthAmount: {
+      '2025-05': 1050000,
       '2025-06': 800000,
       '2025-07': 950000,
       '2025-08': 1250000,
-    }, // 월별 매출
+    },
   };
-
-  // const insight = storeInsightQuery.data;
   const insight = dummyInsight;
-
-  // const screenWidth = Dimensions.get('window').width;
-
-  // const dummyChartData = {
-  //   labels: ['5월', '6월', '7월', '8월'],
-  //   datasets: [
-  //     {
-  //       data: [500000, 750000, 1000000, 950000], // 월별 매출 더미데이터
-  //       color: (opacity = 1) => `rgba(51, 190, 111, ${opacity})`, // 선 색상
-  //       strokeWidth: 2,
-  //     },
-  //   ],
-  // };
-
-  // const chartConfig = {
-  //   backgroundGradientFrom: '#ffffff',
-  //   backgroundGradientTo: '#ffffff',
-  //   decimalPlaces: 0, // 소수점 없음
-  //   color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  //   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  //   propsForDots: {
-  //     // r: '6',
-  //     strokeWidth: '2',
-  //     stroke: colors.GREEN, // 점 외곽선 색
-  //   },
-  //   propsForBackgroundLines: {
-  //     stroke: '#e3e3e3',
-  //   },
-  // };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -119,21 +93,9 @@ const SellerMypageScreen = () => {
 
             <View style={styles.line} />
 
-            <View style={{ marginTop: 3 }}>
+            <View style={{ marginTop: 3, gap: 25 }}>
               <Text style={styles.title}>{'월별 매출액 현황'}</Text>
-              {/* <BarChart
-                data={dummyChartData}
-                width={screenWidth - 32} // 좌우 padding 고려
-                height={220}
-                yAxisSuffix="원"
-                fromZero
-                chartConfig={chartConfig}
-                style={
-                  {
-                    // borderRadius: 8,
-                  }
-                }
-              /> */}
+              <MonthlySalesChart monthAmount={insight.monthAmount} />
             </View>
           </View>
         )}

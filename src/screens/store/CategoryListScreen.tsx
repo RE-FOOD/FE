@@ -79,7 +79,7 @@ const CategoryListScreen = () => {
       category: categoryMap[selectedKey],
       keyword: keyword ?? null,
       sort: sortMap[sort],
-      limit: 5,
+      limit: 15,
     }),
     [selectedKey, keyword, sort]
   );

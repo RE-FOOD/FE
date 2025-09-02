@@ -17,7 +17,7 @@ const SellerMypageScreen = () => {
 
   const dummyInsight = {
     salesAmount: 125000,
-    popularMenu: ['탕수육', '깐풍기', '김밥'],
+    popularMenu: ['죠죠 야끼소바', '새우구이', '매운 우동'],
     monthAmount: {
       '2025-05': 1050000,
       '2025-06': 800000,

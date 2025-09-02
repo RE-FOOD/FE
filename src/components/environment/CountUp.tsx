@@ -8,7 +8,7 @@ interface CountUpProps {
   style?: TextStyle;
 }
 
-const CountUp: React.FC<CountUpProps> = ({ toValue, duration = 1000, color, style }) => {
+const CountUp = ({ toValue, duration = 1000, color, style }: CountUpProps) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const [displayValue, setDisplayValue] = useState(0);
 

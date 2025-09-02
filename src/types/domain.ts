@@ -189,6 +189,16 @@ interface SellerOrder {
   status: 'PENDING' | 'COMPLETED' | 'CANCELLED' | string;
 }
 
+interface MonthAmount {
+  [key: string]: number;
+}
+
+interface StoreInsight {
+  salesAmount: number;
+  popularMenu: string[];
+  monthAmount: MonthAmount;
+}
+
 export type {
   Member,
   Profile,
@@ -212,6 +222,8 @@ export type {
   Overviews,
   Order,
   OrderMenu,
+  MonthAmount,
+  StoreInsight,
   History,
   SellerOrder,
 };

@@ -155,6 +155,7 @@ interface Map {
 }
 interface Overviews {
   cartCount: number;
+  hasUnread: boolean;
   discountMenu: DiscountMenu[];
   locations: LocationFull;
   popularStores: PopularStore[];

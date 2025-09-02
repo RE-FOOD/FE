@@ -76,6 +76,7 @@ function SellerBottomTabsNavigator() {
         component={SellerMypageScreen}
         options={{
           title: 'MY',
+          headerShown: false,
           tabBarIcon: ({ focused }) => renderTabIcon(focused, MyActive, My),
         }}
       />

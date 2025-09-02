@@ -16,6 +16,8 @@ const queryKeys = {
   GET_ORDER: 'getOrder',
   ENVIRONMENT: 'environment',
   GET_REPORT: 'getReport',
+  SELLER: 'seller',
+  GET_STORE_INSIGHT: 'getStoreInsight',
 } as const;
 
 const storageKeys = {

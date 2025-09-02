@@ -36,7 +36,7 @@ const StoreListCard = ({ item, width = '100%', showDiscountBadge }: Props) => {
             )}
           </View>
         </View>
-        <Text style={styles.distance}>{item.distance}km</Text>
+        <Text style={styles.distance}>{item.distance.toFixed(2)}km</Text>
       </View>
     </View>
   );

@@ -43,7 +43,7 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
 
   useEffect(() => {
     // 화면 진입하자마자 모달 자동 실행
-    setSuccessModalOpen(true);
+    // setSuccessModalOpen(true);
   }, []);
 
   const confirmRegistration = () => {

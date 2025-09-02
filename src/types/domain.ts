@@ -155,6 +155,7 @@ interface Map {
 }
 interface Overviews {
   cartCount: number;
+  hasUnread: boolean;
   discountMenu: DiscountMenu[];
   locations: LocationFull;
   popularStores: PopularStore[];
@@ -199,6 +200,21 @@ interface StoreInsight {
   monthAmount: MonthAmount;
 }
 
+interface Notification {
+  id: number;
+  type:
+    | 'ORDER_COMPLETION'
+    | 'ORDER_CANCELED'
+    | 'ORDER_PICK_UP'
+    | 'ENVIRONMENT_LEVEL_UP'
+    | 'FAVORITE_STORE_DAILY_REGISTRATION';
+  redirectTargetId: number | null;
+  title: string;
+  body: string;
+  createdAt: string;
+  isRead: boolean;
+}
+
 export type {
   Member,
   Profile,
@@ -226,4 +242,5 @@ export type {
   StoreInsight,
   History,
   SellerOrder,
+  Notification,
 };

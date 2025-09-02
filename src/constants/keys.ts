@@ -18,6 +18,8 @@ const queryKeys = {
   GET_REPORT: 'getReport',
   SELLER: 'seller',
   GET_STORE_INSIGHT: 'getStoreInsight',
+  NOTIFICATION: 'notification',
+  GET_NOTIFICATION: 'getNotifiation',
 } as const;
 
 const storageKeys = {

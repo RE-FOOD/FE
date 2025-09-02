@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AlertOff from '@/assets/icons/alert-off.svg';
+import AlertOn from '@/assets/icons/alert-on.svg';
 import Arrow from '@/assets/icons/arrow-down-line.svg';
 import Cart from '@/assets/icons/cart.svg';
 import Region from '@/assets/icons/region.svg';
@@ -8,6 +9,7 @@ import { colors } from '@/constants/colors';
 
 interface TopBarProps {
   locationLabel: string;
+  hasUnread: boolean;
   onPressLocation?: () => void;
   onPressNotification?: () => void;
   onPressCart?: () => void;
@@ -19,6 +21,7 @@ const TopBar = ({
   onPressLocation,
   onPressNotification,
   onPressCart,
+  hasUnread,
   cartCount = 0,
 }: TopBarProps) => {
   return (
@@ -46,7 +49,7 @@ const TopBar = ({
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressNotification}>
-          <AlertOff width={23} height={23} />
+          {hasUnread ? <AlertOn width={23} height={23} /> : <AlertOff width={23} height={23} />}
         </TouchableOpacity>
       </View>
     </View>

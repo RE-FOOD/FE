@@ -94,7 +94,7 @@ const SellerOrderScreen = () => {
 
         {/* 주문 리스트 */}
         <FlatList
-          data={orders}
+          data={orders.filter((order) => order.status === status)}
           keyExtractor={(item) => String(item.orderId)}
           renderItem={renderItem}
           onEndReached={() => {

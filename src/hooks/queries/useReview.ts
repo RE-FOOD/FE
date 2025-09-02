@@ -5,6 +5,7 @@ import {
   createReview,
   CreateReviewRequest,
   CreateReviewResponse,
+  deleteReview,
 } from '@/api/review';
 
 interface UseCreateReviewParams {
@@ -43,4 +44,19 @@ export const useMyReviewFlat = () => {
     reviews,
     totalCount: reviews.length,
   };
+};
+
+export const useDeleteReview = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { storeId: number; orderId: number; reviewId: number }>({
+    mutationFn: ({ storeId, orderId, reviewId }) => deleteReview(storeId, orderId, reviewId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['review', 'me'] });
+      queryClient.invalidateQueries({ queryKey: ['store'] });
+    },
+    onError: (error) => {
+      console.error('리뷰 삭제 실패:', error.message);
+    },
+  });
 };

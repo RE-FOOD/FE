@@ -180,6 +180,15 @@ interface History {
   menuName: string;
 }
 
+interface SellerOrder {
+  orderId: number;
+  pickupDueTime: string;
+  menus: string[];
+  menuCount: number;
+  totalAmount: number;
+  status: 'PENDING' | 'COMPLETED' | 'CANCELLED' | string;
+}
+
 export type {
   Member,
   Profile,
@@ -204,4 +213,5 @@ export type {
   Order,
   OrderMenu,
   History,
+  SellerOrder,
 };

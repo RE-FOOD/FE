@@ -79,6 +79,11 @@ export const stateMap: StateMap = {
     subtitle: '한번 등록된 리뷰는 수정되지 않습니다.',
     btn: [0, 8],
   },
+  ReviewDelete: {
+    title: '리뷰를 삭제하시겠습니까?',
+    subtitle: '삭제한 리뷰 정보는 저장되지 않습니다.',
+    btn: [0, 4],
+  },
 };
 
 export const buttonMap: ButtonMap = {

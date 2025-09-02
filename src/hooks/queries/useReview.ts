@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 import {
   getReview,
   MyReviewsApiResponse,
@@ -16,7 +17,7 @@ interface UseCreateReviewParams {
 export const useCreateReview = ({ storeId, orderId }: UseCreateReviewParams) => {
   const queryClient = useQueryClient();
 
-  return useMutation<CreateReviewResponse, Error, CreateReviewRequest>({
+  return useMutation<CreateReviewResponse, AxiosError, CreateReviewRequest>({
     mutationFn: (reviewData) => createReview(storeId, orderId, reviewData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['review', 'me'] });

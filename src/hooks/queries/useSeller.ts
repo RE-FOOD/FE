@@ -3,7 +3,6 @@ import useAuth from './useAuth';
 import {
   approveSellerOrder,
   getSellerOrders,
-  SellerOrderListResponse,
   failSellerOrder,
   getStoreInsight,
 } from '@/api/seller';
@@ -11,27 +10,24 @@ import { queryKeys } from '@/constants/keys';
 import { ResponseError, UseQueryCustomOptions } from '@/types/api';
 import { StoreInsight, SellerOrder } from '@/types/domain';
 
-export const useSellerOrders = () => {
+export const useSellerOrders = (status: 'PENDING' | 'COMPLETED') => {
   type SellerOrdersFlat = SellerOrder[];
+
   return useInfiniteQuery<
-    SellerOrderListResponse,
+    SellerOrder[],
     Error,
     SellerOrdersFlat,
-    ['sellerOrders'],
+    ['sellerOrders', typeof status],
     number | undefined
   >({
-    queryKey: ['sellerOrders'],
-    queryFn: async ({ pageParam }) => {
-      return getSellerOrders(pageParam);
-    },
+    queryKey: ['sellerOrders', status],
+    queryFn: ({ pageParam }) => getSellerOrders(pageParam),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => {
-      const lastOrder = lastPage.data[lastPage.data.length - 1];
+      const lastOrder = lastPage[lastPage.length - 1];
       return lastOrder ? lastOrder.orderId : undefined;
     },
-    select: (data) => {
-      return data.pages.flatMap((page) => page.data);
-    },
+    select: (data) => data.pages.flatMap((p) => p),
   });
 };
 

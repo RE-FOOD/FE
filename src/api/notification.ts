@@ -8,11 +8,11 @@ export type NotiResponse = {
   list: Notification[];
 };
 
-const getNotificationList = async (): Promise<NotiResponse> => {
+const getNotificationList = async (cursorId = 0): Promise<NotiResponse> => {
   const res = await axiosInstance.get<ApiResponse<NotiResponse>>('/notifications/me', {
-    // params: {
-    //   cursorId,
-    // },
+    params: {
+      cursorId,
+    },
   });
   console.log(res.data);
   return res.data.data;

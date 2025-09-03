@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 4,
   },
-  label: { color: '#777', fontSize: 12, fontWeight: '600' },
+  label: { color: '#777', fontSize: 12, fontFamily: 'Pretendard-Bold' },
 });
 
 export default memo(LevelProgress);

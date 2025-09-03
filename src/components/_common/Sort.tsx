@@ -66,7 +66,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   activeText: {
+    fontFamily: 'Pretendard-Regular',
     color: colors.GREEN,
+    fontSize: 14,
   },
 });
 

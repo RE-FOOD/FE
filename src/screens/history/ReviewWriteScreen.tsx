@@ -87,11 +87,14 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
           style={styles.reviewInput}
           value={reviewText}
           onChangeText={setReviewText}
-          placeholder="픽업한 음식은 어떠셨나요? 맛, 양, 포장 상태에 대해 자유롭게 작성해주세요."
-          placeholderTextColor={colors.GRAY_700}
           multiline
           textAlignVertical="top"
         />
+        {!reviewText && (
+          <Text style={styles.placeholderText}>
+            픽업한 음식은 어떠셨나요? 맛, 양, 포장 상태에 대해 자유롭게 작성해주세요.
+          </Text>
+        )}
         <TouchableOpacity style={styles.button} onPress={confirmRegistration}>
           <Text style={styles.greenRegularText_13}>등록완료</Text>
         </TouchableOpacity>
@@ -205,6 +208,14 @@ const styles = StyleSheet.create({
     color: colors.GREEN,
     fontFamily: 'Pretendard-Bold',
     fontSize: 11,
+  },
+  placeholderText: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    color: colors.GRAY_700,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
   },
 });
 

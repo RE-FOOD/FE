@@ -103,17 +103,21 @@ const styles = StyleSheet.create({
   subTitle: {
     fontFamily: 'Pretendard-Bold',
     fontSize: 16,
-    fontWeight: '500',
     marginTop: 10,
     marginBottom: 5,
     color: colors.BLACK,
   },
   text: { fontFamily: 'Pretendard-Regular', fontSize: 14, lineHeight: 22, color: colors.BLACK },
   table: { marginTop: 10 },
-  tableHeader: { fontWeight: '600', marginBottom: 5 },
   tableRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#ccc' },
-  tableCell: { flex: 1, padding: 10, fontSize: 14, color: colors.BLACK },
-  headerCell: { fontWeight: '600' },
+  tableCell: {
+    flex: 1,
+    padding: 10,
+    fontSize: 14,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
+  },
+  headerCell: { fontFamily: 'Pretendard-Regular', color: colors.BLACK, fontSize: 20 },
   tableHeaderRow: { backgroundColor: '#f5f5f5' },
 });
 

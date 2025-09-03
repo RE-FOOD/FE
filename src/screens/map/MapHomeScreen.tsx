@@ -278,6 +278,7 @@ const styles = StyleSheet.create({
   },
   popupTime: {
     fontSize: 14,
+    fontFamily: 'Pretendard-Regular',
     color: colors.BLACK,
     lineHeight: 20,
   },

@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   horizontalLine: {
     height: 1,
-    backgroundColor: colors.GREEN, // 원하는 선 색상
+    backgroundColor: colors.GREEN,
     width: '100%',
   },
   picture: {

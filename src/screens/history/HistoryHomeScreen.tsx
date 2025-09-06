@@ -12,7 +12,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import SearchIcon from '@/assets/icons/search.svg'; // 🔥 icons 먼저
+import SearchIcon from '@/assets/icons/search.svg';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
 import { useInfiniteHistory } from '@/hooks/queries/useHistory';
@@ -59,9 +59,7 @@ const HistoryHomeScreen = () => {
             <View style={styles.orderListContainer}>
               <View style={styles.orderInnerContainer}>
                 <View style={styles.textInnerContainer}>
-                  <View style={styles.dateInnerContainer}>
-                    <Text style={styles.dateText}>{order.orderId}</Text>
-                  </View>
+                  <View style={styles.dateInnerContainer} />
                   <Text style={styles.statusText}>{order.status ? '완료' : '픽업전'}</Text>
                 </View>
                 <View style={styles.horizontalLine} />

@@ -14,12 +14,19 @@ import {
 } from 'react-native';
 import { launchImageLibrary, ImagePickerResponse, Asset } from 'react-native-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { colors } from '@/constants/colors';
+import { sellerNavigations } from '@/constants/navigations';
 import { useRegisterMenu } from '@/hooks/queries/useSeller';
+import { SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
 import { showToast } from '@/utils/toast';
 
+type Navigation = StackNavigationProp<SellerStackparamList>;
+
 const SellerMenuRegisterScreen = () => {
+  const navigation = useNavigation<Navigation>();
   const [name, setName] = useState('');
   const [info, setInfo] = useState('');
   const [quantity, setQuantity] = useState(0);
@@ -33,6 +40,7 @@ const SellerMenuRegisterScreen = () => {
   const { mutate: registerMenuMutate, isPending } = useRegisterMenu(storeId, {
     onSuccess: () => {
       showToast('success', '메뉴가 등록되었습니다.');
+      navigation.navigate(sellerNavigations.MENU_HOME);
     },
     onError: (err) => {
       console.error(err);

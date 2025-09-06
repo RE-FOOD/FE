@@ -10,7 +10,7 @@ import { colors } from '@/constants/colors';
 import useAuth from '@/hooks/queries/useAuth';
 import { useMyPage } from '@/hooks/queries/useMyPage';
 import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
-import { toLevelLabel, getLevelImage } from '@/utils/level';
+import { toLevelLabel, getLevelImage, remapProgress } from '@/utils/level';
 
 type NavigationProp = StackNavigationProp<UserStackParamList, 'NicknameChange'>;
 
@@ -19,8 +19,7 @@ const MypageHomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const { data, isLoading, error } = useMyPage();
   const me = data?.data;
-
-  const progress = me ? (me.progressPercentage ?? 0) / 100 : 0.0;
+  const progress = me ? remapProgress(me.environmentPoint) : 0.0;
 
   if (isLoading) return <Text>로딩중</Text>;
   if (error) return <Text>불러오기 실패</Text>;
@@ -58,7 +57,7 @@ const MypageHomeScreen = () => {
             </View>
             <LevelProgress
               value={progress}
-              labels={['LEVEL1', 'LEVEL2', 'LEVEL3', 'LEVEL4']}
+              labels={['씨앗', '묘목', '나무', '사과나무']}
               height={16}
               colors={['#FF6A3D', '#FFC0A3']}
             />

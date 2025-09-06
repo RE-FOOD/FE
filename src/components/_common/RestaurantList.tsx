@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
   },
   blackRegularText_14: {
     color: colors.BLACK,
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 14,
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 15,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

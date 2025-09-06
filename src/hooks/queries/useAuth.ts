@@ -52,7 +52,7 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
 }
 
 function useGetRefreshToken() {
-  const { data, isSuccess, isError } = useQuery({
+  const { data, isSuccess, isError, isLoading } = useQuery({
     queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
     enabled: true,
@@ -78,7 +78,7 @@ function useGetRefreshToken() {
     })();
   }, [isError]);
 
-  return { isSuccess, isError };
+  return { isSuccess, isError, isLoading };
 }
 
 function useGetProfile(queryOptions?: UseQueryCustomOptions<Profile>) {
@@ -106,11 +106,14 @@ function useAuth() {
   const sellerSignupMutation = useSellerSignup();
   const loginMutation = useLogin();
   const refreshTokenQuery = useGetRefreshToken();
-  const { data: profile, isSuccess: isLogin } = useGetProfile({
-    enabled: refreshTokenQuery.isSuccess, // 토큰 갱신 성공 시 프로필 요청
+  const { data: profile, isLoading: isProfileLoading } = useGetProfile({
+    enabled: refreshTokenQuery.isSuccess,
   });
   const logoutMutation = useLogout();
   const isSeller = profile?.role === 'ROLE_STORE';
+
+  const isLoading = refreshTokenQuery.isLoading || isProfileLoading;
+  const isLogin = !!profile;
 
   return {
     kakaoSignupMutation,
@@ -120,6 +123,7 @@ function useAuth() {
     isSeller,
     profile,
     logoutMutation,
+    isLoading,
   };
 }
 

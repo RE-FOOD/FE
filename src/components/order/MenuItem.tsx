@@ -1,4 +1,5 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { colors } from '@/constants/colors';
 import { OrderMenu } from '@/types/domain';
 
@@ -6,7 +7,15 @@ type Props = { item: OrderMenu };
 
 const MenuItem = ({ item }: Props) => (
   <View style={styles.menuRow}>
-    <Image source={{ uri: item.imageUrl }} style={styles.menuImage} />
+    <FastImage
+      source={{
+        uri: item.imageUrl,
+        priority: FastImage.priority.high,
+        cache: FastImage.cacheControl.immutable,
+      }}
+      style={styles.menuImage}
+      resizeMode={FastImage.resizeMode.cover}
+    />
     <View style={{ flex: 1, gap: 2 }}>
       <Text style={styles.menuName}>{item.name}</Text>
       <Text style={styles.menuPrice}>

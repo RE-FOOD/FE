@@ -1,4 +1,5 @@
-import { View, Text, Image, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Bin from '@/assets/icons/bin.svg';
 import Minus from '@/assets/icons/minus.svg';
 import Plus from '@/assets/icons/plus.svg';
@@ -29,7 +30,15 @@ const CartMenuItem = ({ menu, onDecrease, onIncrease, onRemove }: Props) => {
           >{`재고가 부족합니다. [현재 재고: ${menu.dailyQuantity}]`}</Text>
         )}
         <View style={styles.menuContainer}>
-          <Image source={{ uri: menu.imageUrl }} style={styles.image} />
+          <FastImage
+            source={{
+              uri: menu.imageUrl,
+              priority: FastImage.priority.high,
+              cache: FastImage.cacheControl.immutable,
+            }}
+            style={styles.image}
+            resizeMode={FastImage.resizeMode.cover}
+          />
           <View style={styles.menuInfo}>
             <Text style={[styles.menuName, soldOut && styles.soldOutText]}>{menu.name}</Text>
             <View style={styles.priceRow}>
@@ -84,12 +93,10 @@ const styles = StyleSheet.create({
     padding: 15,
     gap: 20,
   },
-  menuCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  menuCard: {},
   soldOutCard: {
     opacity: 0.5,
+    flexDirection: 'column',
   },
   menuContainer: {
     flexDirection: 'row',

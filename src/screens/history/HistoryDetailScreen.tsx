@@ -92,7 +92,7 @@ const HistoryDetailScreen = ({ route }: Props) => {
             <Text style={styles.blackBoldText_13}>결제 정보</Text>
             {[
               { label: '결제 금액', value: `${fmtWon(data.totalAmount)}원` },
-              { label: '결제 시간', value: data.requestedAt },
+              { value: formatDateTime(data.requestedAt) },
             ].map((row, idx) => (
               <View key={idx} style={styles.accountInfoContainer}>
                 <View style={styles.leftCol}>

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, memo } from 'react';
 import { View, Text, StyleSheet, Animated, ViewStyle, TextStyle } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { colors } from '@/constants/colors';
 
 type Props = {
   /** 0 ~ 1 사이 값 (채워질 비율) */
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 4,
   },
-  label: { color: '#777', fontSize: 12, fontWeight: '600' },
+  label: { color: colors.BLACK, fontSize: 12, fontFamily: 'Pretendard-Regular' },
 });
 
 export default memo(LevelProgress);

@@ -135,11 +135,11 @@ const SellerMenuModifyScreen = () => {
           <View style={styles.innerContainer} />
           <View style={styles.listContainer}>
             <Text style={styles.label}>메뉴명</Text>
-            <TextInput style={styles.input} placeholderTextColor={colors.GRAY_500} />
+            <TextInput style={styles.input} />
           </View>
           <View style={styles.listContainer}>
             <Text style={styles.label}>메뉴설명</Text>
-            <TextInput style={styles.input} placeholderTextColor={colors.GRAY_500} />
+            <TextInput style={styles.input} />
           </View>
           <View style={styles.listContainer}>
             <Text style={styles.label}>가격</Text>
@@ -148,7 +148,6 @@ const SellerMenuModifyScreen = () => {
               value={price}
               onChangeText={handleChange}
               keyboardType="numeric"
-              placeholderTextColor={colors.GRAY_500}
             />
           </View>
           <View style={styles.listContainer}>
@@ -157,7 +156,6 @@ const SellerMenuModifyScreen = () => {
               style={styles.input}
               value={discountPrice}
               onChangeText={handleDiscountChange}
-              placeholderTextColor={colors.GRAY_500}
               keyboardType="numeric"
             />
           </View>
@@ -245,6 +243,7 @@ const styles = StyleSheet.create({
     width: 80,
     fontSize: 16,
     color: colors.GRAY_700,
+    fontFamily: 'Pretendard-Regular',
   },
   controls: {
     flex: 1,
@@ -265,6 +264,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.GRAY_500,
     fontWeight: 'bold',
+    fontFamily: 'Pretendard-Regular',
   },
   value: {
     fontSize: 16,

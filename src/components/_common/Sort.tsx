@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
   },
   activeText: {
     color: colors.GREEN,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
   },
 });
 

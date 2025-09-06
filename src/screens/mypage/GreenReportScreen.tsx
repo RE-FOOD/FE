@@ -52,8 +52,8 @@ const GreenReport = () => {
             <Text style={styles.whiteBoldText_14}>상세 적립 기준</Text>
           </View>
           <View style={styles.rectangle}>
-            <Text style={styles.blackRegularText_13}>① 음식 구출 시 nn점 적립</Text>
-            <Text style={styles.blackRegularText_13}>② 다회용기 사용 시 nn점 적립</Text>
+            <Text style={styles.blackRegularText_13}>① 주문 금액 250원당 1포인트 적립</Text>
+            <Text style={styles.blackRegularText_13}>② 다회용기 사용 시 50포인트 적립</Text>
           </View>
         </View>
       </View>

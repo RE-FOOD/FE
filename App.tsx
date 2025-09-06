@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import BootSplash from 'react-native-bootsplash';
 import Toast, { BaseToast, BaseToastProps, ErrorToast } from 'react-native-toast-message';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import { FirebaseMessagingTypes, getMessaging, onMessage } from '@react-native-firebase/messaging';
@@ -90,7 +91,12 @@ function AppContent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer theme={AppTheme}>
+      <NavigationContainer
+        theme={AppTheme}
+        onReady={() => {
+          BootSplash.hide({ fade: true });
+        }}
+      >
         <RootNavigator />
         <Toast config={toastConfig} />
       </NavigationContainer>

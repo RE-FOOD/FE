@@ -1,13 +1,21 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useAuth from './useAuth';
 import {
+  registerMenu,
+  MenuRegisterRequest,
   approveSellerOrder,
   getSellerOrders,
   failSellerOrder,
   getStoreInsight,
 } from '@/api/seller';
+
 import { queryKeys } from '@/constants/keys';
-import { ResponseError, UseQueryCustomOptions } from '@/types/api';
+import {
+  ResponseError,
+  UseQueryCustomOptions,
+  ApiResponse,
+  UseMutationCustomOptions,
+} from '@/types/api';
 import { StoreInsight, SellerOrder } from '@/types/domain';
 
 export const useSellerOrders = (status: 'PENDING' | 'COMPLETED') => {
@@ -56,6 +64,16 @@ export const useFailOrder = () => {
     onError: () => {
       console.error('주문 거절 실패');
     },
+  });
+};
+
+export const useRegisterMenu = (
+  storeId: number,
+  options?: UseMutationCustomOptions<ApiResponse<null>, MenuRegisterRequest>
+) => {
+  return useMutation<ApiResponse<null>, ResponseError, MenuRegisterRequest>({
+    mutationFn: (payload: MenuRegisterRequest) => registerMenu(storeId, payload),
+    ...options,
   });
 };
 

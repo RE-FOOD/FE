@@ -26,13 +26,10 @@ const SellerMenuScreen = () => {
         <View style={styles.listContainer}>
           <View style={styles.innerListContainer}>
             <View style={styles.infoContainer}>
-              <Image
-                style={styles.img}
-                source={{ uri: 'https://via.placeholder.com/80' }} // 샘플 이미지
-              />
+              <Image style={styles.img} source={require('@/assets/images/image.png')} />
               <View style={styles.textContainer}>
-                <Text style={styles.blackBoldText_15}>치즈버거</Text>
-                <Text style={styles.grayRegularText_13}>육즙이 풍부한 냉장패티로 만든 버거</Text>
+                <Text style={styles.blackBoldText_15}>포테이토 피자</Text>
+                <Text style={styles.grayRegularText_13}>감자가 풍부한 맛있는 피자</Text>
                 <Text style={styles.grayRegularText_13}>10,000원</Text>
               </View>
             </View>
@@ -54,7 +51,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'flex-start',
     backgroundColor: colors.WHITE,
   },
   innerContainer: {
@@ -81,6 +77,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   infoContainer: {
+    alignItems: 'flex-start',
     flexDirection: 'row',
     gap: 5,
   },

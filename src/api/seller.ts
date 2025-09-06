@@ -1,9 +1,15 @@
 import axiosInstance from './axios';
 import { ApiResponse } from '@/types/api';
-import { SellerOrder, StoreInsight } from '@/types/domain';
+import { SellerOrder, StoreInsight, Menu } from '@/types/domain';
 
 export interface SellerOrderListResponse {
   data: SellerOrder[];
+}
+
+export interface MenuRegisterRequest extends Pick<Menu, 'name' | 'price' | 'dailyQuantity'> {
+  info: string; // 메뉴 설명
+  dailyDiscountPrice: number; // 할인 가격
+  imageKey: string; // S3 업로드 이미지 키
 }
 
 export const getSellerOrders = async (cursorId?: number) => {
@@ -33,6 +39,14 @@ const getStoreInsight = async (): Promise<StoreInsight> => {
   const { data } = await axiosInstance.get<ApiResponse<StoreInsight>>('/stores/mypage');
   console.log(data);
   return data.data;
+};
+
+export const registerMenu = async (
+  storeId: number,
+  payload: MenuRegisterRequest
+): Promise<ApiResponse<null>> => {
+  const { data } = await axiosInstance.post<ApiResponse<null>>(`/stores/${storeId}/menus`, payload);
+  return data;
 };
 
 export { getStoreInsight };

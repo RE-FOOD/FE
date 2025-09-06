@@ -14,7 +14,7 @@ import MetricBox from '@/components/environment/MetricBox';
 import { colors } from '@/constants/colors';
 import { loggedOutNavigations } from '@/constants/navigations';
 import useAuth from '@/hooks/queries/useAuth';
-import { useGetReport } from '@/hooks/queries/useEnvironment';
+// import { useGetReport } from '@/hooks/queries/useEnvironment';
 import { LoggedOutStackParamList } from '@/navigations/stack/LoggedOutStackNavigator';
 import { useAuthStore } from '@/zustand/useAuthStore';
 
@@ -24,7 +24,7 @@ const LoginScreen = () => {
   const { loginMutation } = useAuth();
   const navigation = useNavigation<Nav>();
   const lottieRef = useRef<LottieView>(null);
-  const { data } = useGetReport();
+  // const { data } = useGetReport();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -39,10 +39,10 @@ const LoginScreen = () => {
     return fcmToken;
   };
 
-  const orderCount = data?.orderCount ?? 0;
-  const dishCount = data?.dishCount ?? 0;
-  const totalTreesSaved = data?.totalTreesSaved ?? 0;
-  const totalCarbonSaved = data?.totalCarbonSaved ?? 0;
+  // const orderCount = data?.orderCount ?? 0;
+  // const dishCount = data?.dishCount ?? 0;
+  // const totalTreesSaved = data?.totalTreesSaved ?? 0;
+  // const totalCarbonSaved = data?.totalCarbonSaved ?? 0;
 
   const handleKakaoLogin = async (): Promise<void> => {
     const deviceToken = await getFcmToken();
@@ -92,16 +92,18 @@ const LoginScreen = () => {
 
           <View style={styles.bottomContainer}>
             <View style={styles.rowBox}>
-              <MetricBox label="음식 구출 🍽️" value={orderCount} color="#0FB758" unit="회" />
+              {/* <MetricBox label="음식 구출 🍽️" value={orderCount} color="#0FB758" unit="회" /> */}
+              <MetricBox label="음식 구출 🍽️" value={113320} color="#0FB758" unit="회" />
               <View style={styles.line} />
-              <MetricBox label="다회용기 사용 🥣" value={dishCount} color="#5ED735" unit="회" />
+              {/* <MetricBox label="다회용기 사용 🥣" value={dishCount} color="#5ED735" unit="회" /> */}
+              <MetricBox label="다회용기 사용 🥣" value={57310} color="#5ED735" unit="회" />
             </View>
 
             <View style={styles.section}>
               <Text style={styles.sectionText}>
                 RE:FOOD 사용자가 구한 한 끼들이,{'\n'}
-                나무 <Text style={styles.highlight1}>{totalTreesSaved.toLocaleString()}그루</Text>를
-                심었어요! 🌲
+                {/* 나무 <Text style={styles.highlight1}>{totalTreesSaved.toLocaleString()}그루</Text>를 */}
+                나무 <Text style={styles.highlight1}>{'2,870'}그루</Text>를 심었어요! 🌲
               </Text>
               <LottieView
                 ref={lottieRef}
@@ -115,7 +117,8 @@ const LoginScreen = () => {
               <Text style={styles.sectionText}>
                 RE:FOOD와 함께,{'\n'}
                 없앤 탄소는 약{' '}
-                <Text style={styles.highlight2}>{totalCarbonSaved.toLocaleString()}kg</Text> ☁️
+                {/* <Text style={styles.highlight2}>{totalCarbonSaved.toLocaleString()}kg</Text> ☁️ */}
+                <Text style={styles.highlight2}>{'57,300'}kg</Text> ☁️
               </Text>
               <LottieView
                 source={require('@/assets/lottie/earth.json')}

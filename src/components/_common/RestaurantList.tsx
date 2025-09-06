@@ -70,7 +70,7 @@ const RestaurantList = ({
             <Text style={styles.grayRegularText}>({restaurant?.reviewCount})</Text>
           </View>
         </View>
-        <Text style={styles.grayRegularText}>{restaurant?.distance}km</Text>
+        <Text style={styles.grayRegularText}>{restaurant?.distance.toFixed(2)}km</Text>
       </View>
     </TouchableOpacity>
   );

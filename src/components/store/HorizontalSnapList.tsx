@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Star from '@/assets/icons/star.svg';
 import { itemSeparator } from '@/components/_common/ItemSeparator';
 import { colors } from '@/constants/colors';
@@ -60,7 +61,15 @@ const HorizontalSnapList = ({
             style={({ pressed }) => [{ opacity: pressed ? 0.9 : 1 }]}
           >
             <View style={[styles.storeCard, { width: CARD_WIDTH }]}>
-              <Image source={{ uri: item.image }} style={styles.storeImage} />
+              <FastImage
+                style={styles.storeImage}
+                source={{
+                  uri: item.image,
+                  // priority: FastImage.priority.high,
+                  // cache: FastImage.cacheControl.immutable,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
               {showDiscountBadge && item.discount && (
                 <View style={styles.discountBadge}>
                   <Text style={styles.discountText}>{item.discount}</Text>

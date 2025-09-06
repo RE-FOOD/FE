@@ -37,6 +37,8 @@ function useAddMenuToCart() {
     mutationFn: (data: AddMenuRequest) => addMenuToCart(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.CART, queryKeys.GET_CART] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.CART, queryKeys.GET_CART_COUNT] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_OVERVIEWS] });
       showToast('success', '선택하신 메뉴가 장바구니에 추가되었습니다.');
     },
     onError: () => {
@@ -51,6 +53,7 @@ function useUpdateCartItem() {
     mutationFn: (data: UpdateCartRequest) => updateCartItem(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.CART, queryKeys.GET_CART] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.CART, queryKeys.GET_CART_COUNT] });
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_OVERVIEWS] });
     },
   });

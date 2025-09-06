@@ -7,6 +7,7 @@ const queryKeys = {
   STORE: 'store',
   GET_STORE_DETAIL: 'getStoreDetail',
   GET_MENU_DETAIL: 'getMenuDetail',
+  GET_STORE_REVIEW: 'getStoreReview',
   CART: 'cart',
   GET_CART: 'getCart',
   GET_CART_COUNT: 'getCartCount',

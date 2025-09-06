@@ -1,6 +1,6 @@
 import axiosInstance from './axios';
 import { ApiResponse } from '@/types/api';
-import { Menu, Store, StoreCategory, StoreSort, StoreDetail } from '@/types/domain';
+import { Menu, Store, StoreCategory, StoreSort, StoreDetail, StoreReview } from '@/types/domain';
 
 export type OverviewResponse = {
   cartCount: number;
@@ -71,4 +71,17 @@ const toggleStoreLike = async (storeId: number) => {
   return res.data;
 };
 
-export { getStoreList, getStoreDetail, getMenuDetail, toggleStoreLike };
+export type StoreReviewResponse = {
+  prevCursor: number;
+  nextCursor: number;
+  list: StoreReview[];
+};
+
+const getStoreReviews = async (storeId: number) => {
+  const res = await axiosInstance.get<ApiResponse<StoreReviewResponse>>(
+    `/stores/${storeId}/reviews`
+  );
+  return res.data.data;
+};
+
+export { getStoreList, getStoreDetail, getMenuDetail, toggleStoreLike, getStoreReviews };

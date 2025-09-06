@@ -1,64 +1,33 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import ReviewItem from '../../components/store/ReviewItem';
 import { colors } from '@/constants/colors';
-import { Review } from '@/types/domain';
+import { userNavigations } from '@/constants/navigations';
+import useStore from '@/hooks/queries/useStore';
+import { UserStackParamList } from '@/navigations/stack/UserStackNavigator';
 
-// 더미 데이터
-const REVIEWS: Review[] = [
-  {
-    id: 1,
-    storeName: '구해줘한끼',
-    rating: 5,
-    content: '항상 맛있게 잘 먹고 있습니다! 추천해요👍',
-    createdAt: '2025-09-31',
-    menus: ['김치찌개'],
-  },
-  {
-    id: 2,
-    storeName: '연홍시',
-    rating: 4,
-    content: '양이 많고 푸짐합니다. 맛있게 잘 먹었습니다.',
-    createdAt: '2025-07-30',
-    menus: ['갈비찜'],
-  },
-  {
-    id: 3,
-    storeName: '왕돈',
-    rating: 4,
-    content: '갈비찜 맛집입니다~ 일주일에 두번은 먹어요',
-    createdAt: '2025-05-05',
-    menus: ['김치찌개'],
-  },
-  {
-    id: 4,
-    storeName: '코사',
-    rating: 5,
-    content: '고향이 생각나는 맛입니다. 번창하세요!',
-    createdAt: '2025-04-05',
-    menus: ['된장찌개'],
-  },
-  {
-    id: 5,
-    storeName: '시스원',
-    rating: 3,
-    content: '오늘도 맛있게 먹었습니다.',
-    createdAt: '2025-03-05',
-    menus: ['갈비찜'],
-  },
-];
+type Rt = RouteProp<UserStackParamList, typeof userNavigations.STORE_REVIEW>;
 
 const StoreReviewScreen = () => {
+  const { params } = useRoute<Rt>();
+  const { storeId } = params;
+  const { storeReviewQuery } = useStore(storeId);
+  const { data, isLoading, isError } = storeReviewQuery;
+
+  if (isLoading) return <Text>로딩 중...</Text>;
+  if (isError || !data) return <Text>리뷰를 불러오지 못했습니다.</Text>;
+
   return (
     <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 20 }}
     >
-      <Text style={styles.title}>리뷰 {REVIEWS.length}개</Text>
+      <Text style={styles.title}>리뷰 {data.list.length}개</Text>
 
-      {REVIEWS.map((review) => (
+      {data.list.map((review) => (
         <ReviewItem key={review.id} review={review} />
       ))}
     </ScrollView>

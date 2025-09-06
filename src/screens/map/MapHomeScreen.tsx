@@ -279,6 +279,7 @@ const styles = StyleSheet.create({
   popupTime: {
     fontSize: 14,
     color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
     lineHeight: 20,
   },
   pinImage: {

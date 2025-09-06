@@ -112,8 +112,14 @@ const styles = StyleSheet.create({
   table: { marginTop: 10 },
   tableHeader: { fontWeight: '600', marginBottom: 5 },
   tableRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#ccc' },
-  tableCell: { flex: 1, padding: 10, fontSize: 14, color: colors.BLACK },
-  headerCell: { fontWeight: '600' },
+  tableCell: {
+    flex: 1,
+    padding: 10,
+    fontSize: 14,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
+  },
+  headerCell: { fontFamily: 'Pretendard-Regular' },
   tableHeaderRow: { backgroundColor: '#f5f5f5' },
 });
 

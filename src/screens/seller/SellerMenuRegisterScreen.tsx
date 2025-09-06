@@ -11,6 +11,7 @@ import {
   Platform,
   Animated,
   KeyboardAvoidingView,
+  Linking,
 } from 'react-native';
 import { launchImageLibrary, ImagePickerResponse, Asset } from 'react-native-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -50,37 +51,47 @@ const SellerMenuRegisterScreen = () => {
 
   //권한 받기 (사진)
   async function requestGalleryPermission() {
-    if (Platform.OS === 'android') {
-      try {
-        if (Platform.Version >= 33) {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-            {
-              title: '갤러리 접근 권한',
-              message: '이미지를 업로드하려면 갤러리 접근 권한이 필요합니다.',
-              buttonNegative: '거부',
-              buttonPositive: '허용',
-            }
-          );
-          return granted === PermissionsAndroid.RESULTS.GRANTED;
-        } else {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-            {
-              title: '갤러리 접근 권한',
-              message: '이미지를 업로드하려면 갤러리 접근 권한이 필요합니다.',
-              buttonNegative: '거부',
-              buttonPositive: '허용',
-            }
-          );
-          return granted === PermissionsAndroid.RESULTS.GRANTED;
+    if (Platform.OS !== 'android') return true;
+
+    try {
+      if (Platform.Version >= 33) {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          {
+            title: '갤러리 접근 권한',
+            message: '이미지를 업로드하려면 갤러리 접근 권한이 필요합니다.',
+            buttonNegative: '거부',
+            buttonPositive: '허용',
+          }
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          return true; // ✅ 권한 허용
         }
-      } catch (error) {
-        console.error('권한 요청 중 오류:', error);
-        return false;
+
+        if (granted === PermissionsAndroid.RESULTS.DENIED) {
+          showToast('error', '갤러리 권한을 허용하지 않았습니다. 설정에서 다시 시도해주세요');
+          return false;
+        }
+
+        if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+          showToast('error', '갤러리 권한을 허용하지 않았습니다. 설정에서 다시 시도해주세요');
+          [
+            { text: '취소', style: 'cancel' },
+            { text: '설정으로 이동', onPress: () => Linking.openSettings() },
+          ];
+          return false;
+        }
+      } else {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+        );
+
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
       }
-    } else {
-      return true;
+    } catch (e) {
+      console.error('권한 요청 오류:', e);
+      return false;
     }
   }
 
@@ -98,7 +109,7 @@ const SellerMenuRegisterScreen = () => {
         showToast('error', '이미지를 불러오는 중 오류가 발생했습니다.');
       } else if (response.assets && response.assets.length > 0) {
         const asset: Asset = response.assets[0];
-        const validTypes = ['image/jpeg', 'img/png'];
+        const validTypes = ['image/jpeg', 'image/png'];
         if (!asset.type || !validTypes.includes(asset.type)) {
           showToast('error', 'jpg 또는 png 형식의 이미지만 등록할 수 있습니다.');
           return;

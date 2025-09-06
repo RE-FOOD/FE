@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -41,31 +41,6 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
     }
   };
 
-  useEffect(() => {
-    // 화면 진입하자마자 모달 자동 실행
-    setSuccessModalOpen(true);
-  }, []);
-
-  const confirmRegistration = () => {
-    createReview(
-      {
-        rating,
-        content: reviewText,
-      },
-      {
-        onSuccess: () => {
-          setSuccessModalOpen(false);
-          navigation.navigate('UserTabs', {
-            screen: userNavigations.HISTORY_HOME,
-          });
-        },
-        onError: (error) => {
-          console.error('리뷰 등록 실패', error.response?.data ?? error.message);
-        },
-      }
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -92,7 +67,7 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
           multiline
           textAlignVertical="top"
         />
-        <TouchableOpacity style={styles.button} onPress={confirmRegistration}>
+        <TouchableOpacity style={styles.button} onPress={() => setSuccessModalOpen(true)}>
           <Text style={styles.greenRegularText_13}>등록완료</Text>
         </TouchableOpacity>
       </View>
@@ -107,7 +82,24 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
             navigation.goBack();
           }
           if (index === 1) {
-            setSuccessModalOpen(false);
+            createReview(
+              {
+                rating,
+                content: reviewText,
+              },
+              {
+                onSuccess: () => {
+                  setSuccessModalOpen(false);
+                  navigation.navigate('UserTabs', {
+                    screen: userNavigations.HISTORY_HOME,
+                  });
+                },
+                onError: (error) => {
+                  console.error('리뷰 등록 실패', error.response?.data ?? error.message);
+                  setSuccessModalOpen(false);
+                },
+              }
+            );
           }
         }}
       />

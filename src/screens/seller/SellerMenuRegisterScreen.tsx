@@ -244,6 +244,7 @@ const styles = StyleSheet.create({
     width: 80,
     fontSize: 16,
     color: colors.GRAY_700,
+    fontFamily: 'Pretendard-Regular',
   },
   controls: {
     flex: 1,
@@ -264,6 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.GRAY_500,
     fontWeight: 'bold',
+    fontFamily: 'Pretendard-Regular',
   },
   value: {
     fontSize: 16,
@@ -316,6 +318,7 @@ const styles = StyleSheet.create({
   imageButtonText: {
     fontSize: 16,
     color: colors.BLACK,
+    fontFamily: 'Pretendard-Regular',
   },
   image: {
     width: 120,

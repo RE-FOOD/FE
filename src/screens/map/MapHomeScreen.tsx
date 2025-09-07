@@ -77,10 +77,10 @@ const MapHomeScreen = () => {
   }, []);
 
   // 하트 토글 핸들러 - API 요청과 함께
-  const handleToggleFavorite = useCallback(() => {
-    if (!selectedStore?.id) return;
-    toggleFavoriteMutation.mutate(selectedStore.id);
-  }, [selectedStore?.id, toggleFavoriteMutation]);
+  // const handleToggleFavorite = useCallback(() => {
+  //   if (!selectedStore?.id) return;
+  //   toggleFavoriteMutation.mutate(selectedStore.id);
+  // }, [selectedStore?.id, toggleFavoriteMutation]);
 
   // 팝업 닫기
   const closePopup = () => {
@@ -165,21 +165,32 @@ const MapHomeScreen = () => {
         animationType="fade"
         onRequestClose={closePopup}
       >
-        <Pressable style={styles.modalOverlay} onPress={closePopup}>
+        <View style={styles.modalOverlay}>
+          {/* 닫기용 overlay: 팝업 바깥 눌렀을 때 닫힘 */}
+          <Pressable style={StyleSheet.absoluteFill} onPress={closePopup} />
+
+          {/* 팝업 영역 */}
           <View style={styles.bottomSheetContainer}>
-            <Pressable
-              style={styles.listViewButton}
-              onPress={(e) => {
-                e.stopPropagation();
-                handleNavigateToList();
-              }}
-            >
+            {/* 목록 보기 버튼 */}
+            <Pressable style={styles.listViewButton} onPress={handleNavigateToList}>
               <List />
               <Text style={styles.listViewButtonText}>목록 보기</Text>
             </Pressable>
 
-            {/* 기존 팝업 */}
-            <Pressable onPress={(e) => e.stopPropagation()}>
+            {/* 카드 전체: 가게 상세 이동 */}
+            <Pressable
+              onPress={() => {
+                console.log(storeSummary?.data?.id);
+                console.log(storeSummary?.data?.name);
+                closePopup();
+                if (storeSummary?.data?.id && storeSummary?.data?.name) {
+                  navigation.navigate(userNavigations.STORE_DETAIL, {
+                    storeId: storeSummary.data.id,
+                    storeName: storeSummary.data.name,
+                  });
+                }
+              }}
+            >
               <View style={styles.popup}>
                 <View style={styles.popupContent}>
                   <Image
@@ -191,6 +202,7 @@ const MapHomeScreen = () => {
                     style={styles.storeImage}
                     resizeMode="cover"
                   />
+
                   <View style={styles.popupRow}>
                     <View style={styles.infoContainer}>
                       <View style={styles.heartContainer}>
@@ -209,7 +221,16 @@ const MapHomeScreen = () => {
                         </View>
                       </View>
                     </View>
-                    <Pressable onPress={handleToggleFavorite}>
+
+                    {/* 하트 아이콘만 클릭 → 찜 토글 */}
+                    <Pressable
+                      onPress={(e) => {
+                        e.stopPropagation(); // 카드 onPress 방지
+                        if (storeSummary?.data?.id) {
+                          toggleFavoriteMutation.mutate(storeSummary.data.id);
+                        }
+                      }}
+                    >
                       {storeSummary?.data?.isFavored ? (
                         <LikeIcon width={24} height={24} />
                       ) : (
@@ -221,7 +242,7 @@ const MapHomeScreen = () => {
               </View>
             </Pressable>
           </View>
-        </Pressable>
+        </View>
       </Modal>
     </SafeAreaView>
   );

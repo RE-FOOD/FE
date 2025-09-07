@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.WHITE,
     borderColor: colors.GRAY_200,
-    borderWidth: 1,
+    borderBottomWidth: 1,
   },
   itemTextContainer: {
     flexDirection: 'row',

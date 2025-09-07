@@ -59,9 +59,12 @@ const HistoryHomeScreen = () => {
             <View style={styles.orderListContainer}>
               <View style={styles.orderInnerContainer}>
                 <View style={styles.textInnerContainer}>
-                  <View style={styles.dateInnerContainer} />
+                  <View style={styles.dateInnerContainer}>
+                    <Text style={styles.idText}>{order.orderId}</Text>
+                  </View>
                   <Text style={styles.statusText}>{order.status ? '완료' : '픽업전'}</Text>
                 </View>
+
                 <View style={styles.horizontalLine} />
                 <View style={styles.menuContainer}>
                   {order.imageUrl ? (
@@ -135,7 +138,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   searchContainer: {
-    paddingBottom: 38,
+    paddingBottom: 30,
     gap: 17,
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
   },
   search: {
     marginHorizontal: 18,
-    marginTop: 20,
+    marginTop: 30,
     backgroundColor: '#F2F2F2',
     borderRadius: 10,
   },
@@ -207,6 +210,7 @@ const styles = StyleSheet.create({
   picture: {
     width: 90,
     height: 90,
+    borderRadius: 10,
     backgroundColor: colors.GRAY_200,
   },
   rectangle: {
@@ -229,7 +233,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.WHITE,
-    borderRadius: 3,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: colors.GRAY_500,
   },
@@ -239,7 +243,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.WHITE,
-    borderRadius: 3,
+    borderRadius: 5,
     borderWidth: 0.5,
     borderColor: colors.GREEN,
   },
@@ -272,6 +276,11 @@ const styles = StyleSheet.create({
     color: colors.GRAY_700,
     fontFamily: 'Pretendard-Regular',
     fontSize: 11,
+  },
+  idText: {
+    color: colors.GRAY_700,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 13,
   },
   buttonGrayText: {
     color: colors.GRAY_700,

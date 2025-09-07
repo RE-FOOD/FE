@@ -36,9 +36,9 @@ const SellerMenuModifyScreen = () => {
 
   const [name, setName] = useState(menu.name);
   const [info, setInfo] = useState(menu.info);
-  const [quantity, setQuantity] = useState(4);
+  const [quantity, setQuantity] = useState<number>(menu.quantity);
   const [price, setPrice] = useState(menu.price.toLocaleString());
-  const [discountPrice, setDiscountPrice] = useState('100');
+  const [discountPrice, setDiscountPrice] = useState<string>(menu.discountPrice.toString());
   const [imageUri, setImageUri] = useState<string | null>(null);
   const pan = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
 
@@ -149,13 +149,15 @@ const SellerMenuModifyScreen = () => {
       name,
       info,
       price: Number(price.replace(/,/g, '')),
-      // 나중에 API 연동시 추가 필드들도 업데이트
+      discountPrice: Number(discountPrice.replace(/,/g, '')) || 0,
+      quantity,
     };
 
     // 부모 컴포넌트의 onSave 콜백 호출
-    navigation.setParams({ updatedMenu });
-    navigation.goBack();
-
+    navigation.navigate('SellerTabs', {
+      screen: sellerNavigations.MENU_HOME,
+      params: { updatedMenu },
+    });
     showToast('success', '메뉴가 수정되었습니다.');
   };
 

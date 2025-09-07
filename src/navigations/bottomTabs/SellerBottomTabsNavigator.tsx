@@ -2,6 +2,7 @@ import React from 'react';
 import { SvgProps } from 'react-native-svg';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { MenuItem } from '../stack/SellerStackNavigator';
 import AcceptActive from '@/assets/icons/accept-active.svg';
 import Accept from '@/assets/icons/accept.svg';
 import MenuActive from '@/assets/icons/menu-active.svg';
@@ -15,7 +16,7 @@ import SellerMypageScreen from '@/screens/seller/SellerMypageScreen';
 import SellerOrderScreen from '@/screens/seller/SellerOrderScreen';
 
 export type SellerBottomTabsParamList = {
-  [sellerNavigations.MENU_HOME]: undefined;
+  [sellerNavigations.MENU_HOME]: { updatedMenu?: MenuItem } | undefined;
   [sellerNavigations.ORDER_HOME]: undefined;
   [sellerNavigations.MYPAGE_HOME]: undefined;
 };

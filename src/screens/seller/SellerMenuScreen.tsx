@@ -1,15 +1,17 @@
+import { useState, useEffect } from 'react';
 import { Text, StyleSheet, View, Image, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Pencil from '@/assets/icons/Pencil.svg';
 import Plus from '@/assets/icons/plus.svg';
 import { colors } from '@/constants/colors';
 import { sellerNavigations } from '@/constants/navigations';
-import { SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
+import { SellerStackparamList, MenuItem } from '@/navigations/stack/SellerStackNavigator';
 
 type Navigation = StackNavigationProp<SellerStackparamList>;
+type MenuHomeRouteProp = RouteProp<SellerStackparamList, typeof sellerNavigations.MENU_HOME>;
 
 const dummyMenus = [
   {
@@ -17,6 +19,8 @@ const dummyMenus = [
     name: '경성꽈배기',
     info: '대한민국 No.1 경성 꽈배기',
     price: 1000,
+    discountPrice: 100, // 할인 금액 추가
+    quantity: 1, // 수량 추가
     image: require('@/assets/images/gwabegione.webp'),
   },
   {
@@ -24,6 +28,8 @@ const dummyMenus = [
     name: '경성꽈배기 4개',
     info: '대한민국 No.1 경성 꽈배기 4개',
     price: 2000,
+    discountPrice: 100,
+    quantity: 4,
     image: require('@/assets/images/gwabegi.webp'),
   },
   {
@@ -31,6 +37,8 @@ const dummyMenus = [
     name: '팥도너츠',
     info: '팥이 잔뜩 들어있는 도너츠',
     price: 1000,
+    discountPrice: 100,
+    quantity: 1,
     image: require('@/assets/images/donuts.webp'),
   },
   {
@@ -38,6 +46,8 @@ const dummyMenus = [
     name: '김치고기 고로케',
     info: '미치는 맛 김치 고로케',
     price: 2500,
+    discountPrice: 100,
+    quantity: 1,
     image: require('@/assets/images/gorokeone.webp'),
   },
   {
@@ -45,13 +55,23 @@ const dummyMenus = [
     name: '감자고로케',
     info: '강원도 감자로 만든 감자 고로케',
     price: 800,
+    discountPrice: 100,
+    quantity: 1,
     image: require('@/assets/images/goroke.webp'),
   },
 ];
 
 const SellerMenuScreen = () => {
   const navigation = useNavigation<Navigation>();
-  const menus = dummyMenus;
+  const route = useRoute<MenuHomeRouteProp>();
+  const [menus, setMenus] = useState(dummyMenus);
+
+  useEffect(() => {
+    const updated = (route.params as { updatedMenu?: MenuItem })?.updatedMenu;
+    if (updated) {
+      setMenus((prev) => prev.map((m) => (m.id === updated.id ? updated : m)));
+    }
+  }, [route.params]);
 
   return (
     <SafeAreaView style={styles.container}>

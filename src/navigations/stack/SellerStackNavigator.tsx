@@ -9,17 +9,19 @@ import { sellerNavigations } from '@/constants/navigations';
 import SellerMenuModifyScreen from '@/screens/seller/SellerMenuModifyScreen';
 import SellerMenuRegisterScreen from '@/screens/seller/SellerMenuRegisterScreen';
 
+// 임시
 export type MenuItem = {
   id: number;
   name: string;
   info: string;
   price: number;
+  discountPrice: number;
+  quantity: number;
   image: ImageSourcePropType;
 };
 
 export type SellerStackparamList = {
   SellerTabs: NavigatorScreenParams<SellerBottomTabsParamList>;
-  [sellerNavigations.MENU_HOME]: { updatedMenu?: MenuItem } | undefined;
   [sellerNavigations.ORDER_HOME]: undefined;
   [sellerNavigations.MYPAGE_HOME]: undefined;
   [sellerNavigations.MENU_REGISTER]: undefined;

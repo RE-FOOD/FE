@@ -26,6 +26,7 @@ const SellerOrderScreen = () => {
 
   const renderItem = ({ item: order }: { item: SellerOrder }) => {
     const time = order.pickupDueTime.substring(11, 16);
+    const formattedAmount = `${order.totalAmount.toLocaleString('ko-KR')}원`;
 
     return (
       <View key={order.orderId} style={styles.listContainer}>
@@ -37,7 +38,7 @@ const SellerOrderScreen = () => {
               {order.menus[0]}
               {order.menuCount > 0 && ` 외 ${order.menuCount}개`}
             </Text>
-            <Text style={styles.grayRegularText_14}>결제완료 {order.totalAmount}</Text>
+            <Text style={styles.grayRegularText_14}>결제완료 {formattedAmount}</Text>
           </View>
 
           {/* 버튼 영역 */}
@@ -66,7 +67,7 @@ const SellerOrderScreen = () => {
       <View style={styles.innerContainer}>
         <View style={styles.topContainer}>
           <View style={styles.textContainer}>
-            <TouchableOpacity onPress={() => setActiveTab('신규처리중')}>
+            <TouchableOpacity style={styles.tabItem} onPress={() => setActiveTab('신규처리중')}>
               <Text
                 style={
                   activeTab === '신규처리중'
@@ -77,7 +78,7 @@ const SellerOrderScreen = () => {
                 신규처리중
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setActiveTab('완료')}>
+            <TouchableOpacity style={styles.tabItem} onPress={() => setActiveTab('완료')}>
               <Text
                 style={
                   activeTab === '완료' ? styles.blackRegularText_15 : styles.grayRegularText_15
@@ -107,6 +108,7 @@ const SellerOrderScreen = () => {
           ListFooterComponent={
             isFetchingNextPage ? <ActivityIndicator style={{ marginVertical: 16 }} /> : null
           }
+          contentContainerStyle={{ paddingBottom: 45 }}
         />
       </View>
 
@@ -145,17 +147,18 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     paddingHorizontal: 24,
+    alignSelf: 'stretch',
   },
   topContainer: {
     flexDirection: 'row',
     paddingVertical: 10,
     alignItems: 'center',
     alignSelf: 'stretch',
-    gap: 117,
+    justifyContent: 'space-between',
   },
   textContainer: {
     flexDirection: 'row',
-    gap: 27,
+    flex: 1,
   },
   textListContainer: {
     flexDirection: 'column',
@@ -178,6 +181,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     backgroundColor: '#1A7DFF',
     borderRadius: 20,
+    marginLeft: 'auto',
   },
   orderRectangle: {
     marginLeft: 'auto',
@@ -185,6 +189,9 @@ const styles = StyleSheet.create({
     paddingVertical: 23,
     backgroundColor: colors.GREEN,
     borderRadius: 10,
+  },
+  tabItem: {
+    marginRight: 27,
   },
   whiteRegularText_15: {
     fontSize: 15,

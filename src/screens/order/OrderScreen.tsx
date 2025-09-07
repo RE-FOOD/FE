@@ -153,8 +153,6 @@ const OrderScreen = () => {
           />
         </View>
 
-        <ReuseOption ecoFriendly={ecoFriendly} toggleEco={() => setEcoFriendly(!ecoFriendly)} />
-
         <View style={styles.pickupInfo}>
           <Text style={styles.sectionTitle}>할인 쿠폰</Text>
           <TouchableOpacity
@@ -165,6 +163,7 @@ const OrderScreen = () => {
           </TouchableOpacity>
         </View>
 
+        <ReuseOption ecoFriendly={ecoFriendly} toggleEco={() => setEcoFriendly(!ecoFriendly)} />
         <View style={styles.pickupInfo}>
           <Text style={styles.sectionTitle}>결제 예정 금액</Text>
           <View style={[styles.storeBox, { gap: 8 }]}>

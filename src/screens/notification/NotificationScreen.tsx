@@ -1,14 +1,12 @@
 import React from 'react';
-import { FlatList, Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { FlatList, Text, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CancleIcon from '@/assets/icons/cancle.svg';
 import CheckIcon from '@/assets/icons/check-black.svg';
 import LevelUpIcon from '@/assets/icons/levelup.svg';
 import { colors } from '@/constants/colors';
-import { useNotification } from '@/hooks/queries/useNotification';
-import { Notification } from '@/types/domain';
 
-const getIconByType = (type: Notification['type']) => {
+const getIconByType = (type: string) => {
   switch (type) {
     case 'ORDER_CANCELED':
       return <CancleIcon width={20} height={20} />;
@@ -22,45 +20,47 @@ const getIconByType = (type: Notification['type']) => {
   }
 };
 
-const NotificationScreen = () => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useNotification();
-  const notifications = data?.pages.flatMap((page) => page.list) ?? [];
+// ✅ 더미데이터
+const dummyNotifications = [
+  {
+    id: 1,
+    type: 'ENVIRONMENT_LEVEL_UP',
+    title: '레벨업',
+    createdAt: '2분 전',
+    body: '축하합니다! 환경 레벨 3단계를 달성했어요.\n환경 쿠폰이 발급되었어요',
+  },
+  {
+    id: 2,
+    type: 'ORDER_COMPLETION',
+    title: '주문 완료',
+    createdAt: '2분 전',
+    body: '죠죠 대학로점의 주문이 접수되었습니다!\n가게에서 곧 준비를 시작할거에요.',
+  },
+];
 
+const NotificationScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <View>
-          <FlatList
-            data={notifications}
-            keyExtractor={(item, index) => `${item.id}-${index}`}
-            renderItem={({ item }) => (
-              <View style={styles.card}>
-                <View style={styles.header}>
-                  <View style={styles.leftHeader}>
-                    <View style={styles.icon}>{getIconByType(item.type)}</View>
-                    <Text style={styles.itemTitle}>{item.title}</Text>
-                  </View>
-                  <Text style={styles.itemDate}>{item.createdAt}</Text>
+      <View>
+        <FlatList
+          data={dummyNotifications}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <View style={styles.header}>
+                <View style={styles.leftHeader}>
+                  <View style={styles.icon}>{getIconByType(item.type)}</View>
+                  <Text style={styles.itemTitle}>{item.title}</Text>
                 </View>
-                <Text style={styles.itemBody}>{item.body.trim()}</Text>
+                <Text style={styles.itemDate}>{item.createdAt}</Text>
               </View>
-            )}
-            onEndReached={() => {
-              if (hasNextPage && !isFetchingNextPage) {
-                fetchNextPage();
-              }
-            }}
-            onEndReachedThreshold={0.5}
-            ListFooterComponent={
-              isFetchingNextPage ? <ActivityIndicator style={{ margin: 10 }} /> : null
-            }
-            contentContainerStyle={{ gap: 20 }}
-          />
-          <Text style={styles.infoText}>최근 30일 이내의 알림만 확인하실 수 있습니다.</Text>
-        </View>
-      )}
+              <Text style={styles.itemBody}>{item.body.trim()}</Text>
+            </View>
+          )}
+          contentContainerStyle={{ gap: 20 }}
+        />
+        <Text style={styles.infoText}>최근 30일 이내의 알림만 확인하실 수 있습니다.</Text>
+      </View>
     </SafeAreaView>
   );
 };

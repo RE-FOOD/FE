@@ -14,7 +14,7 @@ export type SellerStackparamList = {
   [sellerNavigations.ORDER_HOME]: undefined;
   [sellerNavigations.MYPAGE_HOME]: undefined;
   [sellerNavigations.MENU_REGISTER]: undefined;
-  [sellerNavigations.MENU_MODIFY]: undefined;
+  [sellerNavigations.MENU_MODIFY]: { id: number };
 };
 
 const Stack = createStackNavigator<SellerStackparamList>();

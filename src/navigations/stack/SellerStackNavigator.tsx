@@ -1,3 +1,4 @@
+import { ImageSourcePropType } from 'react-native';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SellerBottomTabsNavigator, {
@@ -8,13 +9,23 @@ import { sellerNavigations } from '@/constants/navigations';
 import SellerMenuModifyScreen from '@/screens/seller/SellerMenuModifyScreen';
 import SellerMenuRegisterScreen from '@/screens/seller/SellerMenuRegisterScreen';
 
+export type MenuItem = {
+  id: number;
+  name: string;
+  info: string;
+  price: number;
+  image: ImageSourcePropType;
+};
+
 export type SellerStackparamList = {
   SellerTabs: NavigatorScreenParams<SellerBottomTabsParamList>;
-  [sellerNavigations.MENU_HOME]: undefined;
+  [sellerNavigations.MENU_HOME]: { updatedMenu?: MenuItem } | undefined;
   [sellerNavigations.ORDER_HOME]: undefined;
   [sellerNavigations.MYPAGE_HOME]: undefined;
   [sellerNavigations.MENU_REGISTER]: undefined;
-  [sellerNavigations.MENU_MODIFY]: { id: number };
+  [sellerNavigations.MENU_MODIFY]: {
+    menu: MenuItem;
+  };
 };
 
 const Stack = createStackNavigator<SellerStackparamList>();

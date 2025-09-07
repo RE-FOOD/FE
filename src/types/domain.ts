@@ -230,6 +230,14 @@ interface Notification {
   isRead: boolean;
 }
 
+export type DummyMenu = {
+  id: number;
+  name: string;
+  info: string;
+  price: number;
+  image: any;
+};
+
 export type {
   Member,
   Profile,

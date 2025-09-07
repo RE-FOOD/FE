@@ -51,6 +51,8 @@ const dummyMenus = [
 
 const SellerMenuScreen = () => {
   const navigation = useNavigation<Navigation>();
+  const menus = dummyMenus;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -67,7 +69,7 @@ const SellerMenuScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 24 }}
         >
-          {dummyMenus.map((menu) => (
+          {menus.map((menu) => (
             <View key={menu.id} style={styles.innerListContainer}>
               <View style={styles.infoContainer}>
                 <Image style={styles.img} source={menu.image} />
@@ -81,7 +83,11 @@ const SellerMenuScreen = () => {
               </View>
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => navigation.navigate(sellerNavigations.MENU_MODIFY, { id: menu.id })}
+                onPress={() =>
+                  navigation.navigate(sellerNavigations.MENU_MODIFY, {
+                    menu,
+                  })
+                }
               >
                 <Pencil width={15} height={15} />
                 <Text style={styles.grayRegularText_13}>수정</Text>

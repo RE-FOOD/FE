@@ -12,17 +12,33 @@ import {
   Platform,
   Animated,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 
 import { launchImageLibrary, ImagePickerResponse, Asset } from 'react-native-image-picker';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { colors } from '@/constants/colors';
+import { sellerNavigations } from '@/constants/navigations';
+import { MenuItem, SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
+
 import { showToast } from '@/utils/toast';
 
+type Navigation = StackNavigationProp<SellerStackparamList>;
+type MenuModifyRouteProp = RouteProp<SellerStackparamList, typeof sellerNavigations.MENU_MODIFY>;
+
 const SellerMenuModifyScreen = () => {
-  const [quantity, setQuantity] = useState(0);
-  const [price, setPrice] = useState('');
-  const [discountPrice, setDiscountPrice] = useState('');
+  const navigation = useNavigation<Navigation>();
+  const route = useRoute<MenuModifyRouteProp>();
+  const { menu } = route.params as {
+    menu: MenuItem;
+  };
+
+  const [name, setName] = useState(menu.name);
+  const [info, setInfo] = useState(menu.info);
+  const [quantity, setQuantity] = useState(4);
+  const [price, setPrice] = useState(menu.price.toLocaleString());
+  const [discountPrice, setDiscountPrice] = useState('100');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const pan = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
 
@@ -122,6 +138,27 @@ const SellerMenuModifyScreen = () => {
     }),
   });
 
+  const handleSave = () => {
+    if (!name || !info || !price) {
+      showToast('error', '필수 필드를 입력해주세요.');
+      return;
+    }
+
+    const updatedMenu = {
+      ...menu,
+      name,
+      info,
+      price: Number(price.replace(/,/g, '')),
+      // 나중에 API 연동시 추가 필드들도 업데이트
+    };
+
+    // 부모 컴포넌트의 onSave 콜백 호출
+    navigation.setParams({ updatedMenu });
+    navigation.goBack();
+
+    showToast('success', '메뉴가 수정되었습니다.');
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -135,11 +172,21 @@ const SellerMenuModifyScreen = () => {
           <View style={styles.innerContainer} />
           <View style={styles.listContainer}>
             <Text style={styles.label}>메뉴명</Text>
-            <TextInput style={styles.input} />
+            <TextInput
+              style={styles.input}
+              placeholderTextColor={colors.GRAY_500}
+              value={name}
+              onChangeText={setName}
+            />
           </View>
           <View style={styles.listContainer}>
             <Text style={styles.label}>메뉴설명</Text>
-            <TextInput style={styles.input} />
+            <TextInput
+              style={styles.input}
+              placeholderTextColor={colors.GRAY_500}
+              value={info}
+              onChangeText={setInfo}
+            />
           </View>
           <View style={styles.listContainer}>
             <Text style={styles.label}>가격</Text>
@@ -148,6 +195,7 @@ const SellerMenuModifyScreen = () => {
               value={price}
               onChangeText={handleChange}
               keyboardType="numeric"
+              placeholderTextColor={colors.GRAY_500}
             />
           </View>
           <View style={styles.listContainer}>
@@ -156,17 +204,16 @@ const SellerMenuModifyScreen = () => {
               style={styles.input}
               value={discountPrice}
               onChangeText={handleDiscountChange}
+              placeholderTextColor={colors.GRAY_500}
               keyboardType="numeric"
             />
           </View>
           <View style={styles.listContainer}>
             <Text style={styles.label}>수량</Text>
-
             <View style={styles.quantityBox}>
               <TouchableOpacity style={styles.sideButton} onPress={decrease}>
                 <Text style={styles.buttonText}>-</Text>
               </TouchableOpacity>
-
               <TextInput
                 style={styles.quantityInput}
                 value={quantity.toString()}
@@ -174,7 +221,6 @@ const SellerMenuModifyScreen = () => {
                 onBlur={() => setQuantity(quantity === 0 ? 1 : quantity)}
                 keyboardType="numeric"
               />
-
               <TouchableOpacity style={styles.sideButton} onPress={increase}>
                 <Text style={styles.buttonText}>+</Text>
               </TouchableOpacity>
@@ -190,16 +236,16 @@ const SellerMenuModifyScreen = () => {
                   style={[styles.image, { transform: pan.getTranslateTransform() }]}
                 />
               ) : (
-                <Icon name="image-outline" size={40} color="#999" />
+                <Image source={menu.image} style={styles.image} />
               )}
             </View>
           </View>
           <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
-            <Text style={styles.imageButtonText}>이미지 선택</Text>
+            <Text style={styles.imageButtonText}>이미지 변경</Text>
           </TouchableOpacity>
 
           <View style={styles.signupWrapper}>
-            <TouchableOpacity style={styles.signupBtn}>
+            <TouchableOpacity style={styles.signupBtn} onPress={handleSave}>
               <Text style={styles.signupText}>메뉴 수정</Text>
             </TouchableOpacity>
           </View>
@@ -325,8 +371,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   imageBox: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,

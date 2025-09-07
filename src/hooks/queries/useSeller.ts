@@ -7,6 +7,8 @@ import {
   getSellerOrders,
   failSellerOrder,
   getStoreInsight,
+  UpdateMenuRequest,
+  updateMenu,
 } from '@/api/seller';
 
 import { queryKeys } from '@/constants/keys';
@@ -94,5 +96,12 @@ function useSeller() {
     storeInsightQuery,
   };
 }
+
+export const useUpdateMenu = () => {
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: Partial<UpdateMenuRequest> }) =>
+      updateMenu(id, data),
+  });
+};
 
 export default useSeller;

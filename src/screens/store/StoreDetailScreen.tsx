@@ -30,7 +30,8 @@ const StoreDetailScreen = () => {
 
   useEffect(() => {
     if (typeof store?.like === 'boolean') setLiked(store.like);
-  }, [store?.like]);
+    console.log(storeId);
+  }, [store?.like, storeId]);
 
   const heroImage = useMemo(() => store?.imageUrl?.[0] ?? '', [store?.imageUrl]);
 

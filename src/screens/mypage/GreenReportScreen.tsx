@@ -23,7 +23,7 @@ const GreenReport = () => {
           <Image source={getLevelImage(me?.environmentLevel)} style={styles.logo} />
         </View>
         <View style={styles.levelContainer}>
-          <Text style={styles.greenBoldText_20}>{toLevelLabel(me?.environmentLevel)}</Text>
+          <Text style={styles.greenBoldText_10}>{toLevelLabel(me?.environmentLevel)}</Text>
           <Text style={styles.blackRegularText_13}>
             현재 {me?.nickname}님은 {toLevelLabel(me?.environmentLevel)} 등급입니다.
           </Text>
@@ -31,7 +31,7 @@ const GreenReport = () => {
         <LevelProgress
           value={progress}
           labels={['씨앗', '묘목', '나무', '사과나무']}
-          height={16}
+          height={12}
           colors={['#FF6A3D', '#FFC0A3']}
         />
       </View>
@@ -43,10 +43,10 @@ const GreenReport = () => {
             환경 점수를 계산한 등급 제도입니다.
           </Text>
         </View>
-        <View style={styles.glevelContainer}>
+        {/* <View style={styles.glevelContainer}>
           <Text style={styles.greenBoldText_20}>환경 쿠폰 혜택</Text>
           <Text style={styles.centerText}>쿠폰 혜택 내용 기재</Text>
-        </View>
+        </View> */}
         <View style={styles.savingContainer}>
           <View style={styles.round}>
             <Text style={styles.whiteBoldText_14}>상세 적립 기준</Text>
@@ -80,10 +80,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
   },
   bottomContainer: {
-    paddingVertical: 20,
-    paddingHorizontal: 30,
+    paddingVertical: 35,
+    paddingHorizontal: 35,
     flexDirection: 'column',
-    gap: 25,
+    gap: 50,
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
     borderTopStartRadius: 20,
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
   },
   glevelContainer: {
     alignItems: 'center',
+    gap: 10,
   },
   savingContainer: {
     width: '100%',
@@ -107,7 +108,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.BLACK,
     fontFamily: 'Pretendard-Regular',
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 19,
   },
   logo: {
     width: 90,
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
   },
   round: {
     alignSelf: 'center',
-    paddingHorizontal: 13,
+    paddingHorizontal: 16,
     paddingVertical: 5,
     alignItems: 'center',
     gap: 10,
@@ -123,19 +125,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -12,
     zIndex: 1,
-    backgroundColor: colors.GREEN,
+    backgroundColor: '#458430',
   },
   rectangle: {
-    borderColor: colors.GREEN,
+    borderColor: '#458430',
     borderRadius: 10,
     borderWidth: 1,
+    marginTop: 5,
     paddingVertical: 28,
     paddingHorizontal: 50,
+    gap: 3,
   },
   blackRegularText_13: {
     color: colors.BLACK,
     fontFamily: 'Pretendard-Regular',
-    fontSize: 13,
+    fontSize: 14,
   },
 
   whiteBoldText_14: {
@@ -143,10 +147,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Bold',
     fontSize: 14,
   },
-  greenBoldText_20: {
-    color: colors.GREEN,
+  greenBoldText_10: {
+    color: '#458430',
     fontFamily: 'Pretendard-Bold',
     fontSize: 20,
+  },
+  greenBoldText_20: {
+    color: '#458430',
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 22,
   },
 });
 

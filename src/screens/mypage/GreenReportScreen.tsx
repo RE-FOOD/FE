@@ -66,18 +66,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
-    backgroundColor: colors.GRAY_200,
+    backgroundColor: '#F6F6F6',
     gap: 20,
   },
   topContainer: {
-    paddingTop: 20,
+    paddingTop: 30,
     paddingBottom: 30,
-    gap: 20,
+    gap: 22,
     alignSelf: 'stretch',
     borderBottomStartRadius: 20,
     borderBottomEndRadius: 20,
     backgroundColor: colors.WHITE,
-    paddingHorizontal: 24,
+    paddingHorizontal: 50,
   },
   bottomContainer: {
     paddingVertical: 20,
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   logo: {
-    width: 73,
-    height: 73,
+    width: 90,
+    height: 90,
   },
   round: {
     alignSelf: 'center',

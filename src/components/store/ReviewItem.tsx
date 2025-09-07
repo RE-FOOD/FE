@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
 import StarRating from './StarRating';
 import { colors } from '@/constants/colors';
-import { Review } from '@/types/domain';
+import { StoreReview } from '@/types/domain';
 import { formatDate } from '@/utils/format';
 
-const ReviewItem = ({ review }: { review: Review }) => (
+const ReviewItem = ({ review }: { review: StoreReview }) => (
   <View style={styles.reviewItem}>
     <View style={{ gap: 9 }}>
       <View style={styles.topRow}>
-        <Text style={styles.nickname}>{review.nickname}</Text>
+        <Text style={styles.nickname}>{review.memberNickName}</Text>
         <View style={styles.ratingRow}>
           <StarRating rating={review.rating} />
           <Text style={styles.date}>{formatDate(review.createdAt)}</Text>
@@ -19,9 +19,9 @@ const ReviewItem = ({ review }: { review: Review }) => (
     </View>
 
     <View style={styles.menuRow}>
-      {review.menus.map((menu, idx) => (
+      {review.menuList.map((menu, idx) => (
         <View key={idx} style={styles.menuTag}>
-          <Text style={styles.menuText}>{menu}</Text>
+          <Text style={styles.menuText}>{menu.name}</Text>
         </View>
       ))}
     </View>

@@ -191,29 +191,31 @@ const MapHomeScreen = () => {
                     style={styles.storeImage}
                     resizeMode="cover"
                   />
-                  <View style={styles.infoContainer}>
-                    <View style={styles.heartContainer}>
-                      <Text style={styles.popupTitle}>{storeSummary?.data?.name}</Text>
-                      <Pressable onPress={handleToggleFavorite}>
-                        {storeSummary?.data?.isFavored ? (
-                          <LikeIcon width={24} height={24} />
-                        ) : (
-                          <UnlikeIcon width={24} height={24} />
-                        )}
-                      </Pressable>
-                    </View>
-                    <Text style={styles.popupTime}>{storeSummary?.data?.pickupTime}</Text>
-                    <View style={styles.info}>
-                      <View style={styles.distance}>
-                        <Image source={pinImage} style={styles.pinImage} />
-                        <Text style={styles.popupTime}>{storeSummary?.data.distance}km</Text>
+                  <View style={styles.popupRow}>
+                    <View style={styles.infoContainer}>
+                      <View style={styles.heartContainer}>
+                        <Text style={styles.popupTitle}>{storeSummary?.data?.name}</Text>
                       </View>
-                      <View style={styles.star}>
-                        <StarIcon width={16} height={16} fill="#FFD700" />
-                        <Text style={styles.popupTime}>{storeSummary?.data.rating}</Text>
-                        <Text style={styles.popupTime}>({storeSummary?.data.reviewCount})</Text>
+                      <Text style={styles.popupTime}>{storeSummary?.data?.pickupTime}</Text>
+                      <View style={styles.info}>
+                        <View style={styles.distance}>
+                          <Image source={pinImage} style={styles.pinImage} />
+                          <Text style={styles.popupTime}>{storeSummary?.data.distance}km</Text>
+                        </View>
+                        <View style={styles.star}>
+                          <StarIcon width={16} height={16} fill="#FFD700" />
+                          <Text style={styles.popupTime}>{storeSummary?.data.rating}</Text>
+                          <Text style={styles.popupTime}>({storeSummary?.data.reviewCount})</Text>
+                        </View>
                       </View>
                     </View>
+                    <Pressable onPress={handleToggleFavorite}>
+                      {storeSummary?.data?.isFavored ? (
+                        <LikeIcon width={24} height={24} />
+                      ) : (
+                        <UnlikeIcon width={24} height={24} />
+                      )}
+                    </Pressable>
                   </View>
                 </View>
               </View>
@@ -232,14 +234,19 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingBottom: 65,
-    paddingHorizontal: 20,
+    alignItems: 'stretch',
+    paddingBottom: 70,
+    width: '100%',
   },
   popup: {
     backgroundColor: colors.WHITE,
     padding: 16,
     borderRadius: 20,
+  },
+  popupRow: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
   },
   infoContainer: {
     flexDirection: 'column',
@@ -247,7 +254,7 @@ const styles = StyleSheet.create({
   popupContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 15,
   },
   distance: {
     flexDirection: 'row',
@@ -265,15 +272,15 @@ const styles = StyleSheet.create({
     gap: 1,
   },
   info: {
+    marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 6,
   },
   popupTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    fontFamily: 'Pretendard-Regular',
+    fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
     color: colors.BLACK,
   },
   popupTime: {
@@ -312,7 +319,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
   },
   bottomSheetContainer: {
-    alignItems: 'center',
+    width: '100%',
+    // alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 20,
     gap: 12,

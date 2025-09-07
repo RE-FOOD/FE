@@ -103,7 +103,7 @@ const LoginScreen = () => {
               <Text style={styles.sectionText}>
                 RE:FOOD 사용자가 구한 한 끼들이,{'\n'}
                 {/* 나무 <Text style={styles.highlight1}>{totalTreesSaved.toLocaleString()}그루</Text>를 */}
-                나무 <Text style={styles.highlight1}>{'2,870'}그루</Text>를 심었어요! 🌲
+                나무 <Text style={styles.highlight1}>{'156'}그루</Text>를 심었어요! 🌲
               </Text>
               <LottieView
                 ref={lottieRef}
@@ -118,7 +118,7 @@ const LoginScreen = () => {
                 RE:FOOD와 함께,{'\n'}
                 없앤 탄소는 약{' '}
                 {/* <Text style={styles.highlight2}>{totalCarbonSaved.toLocaleString()}kg</Text> ☁️ */}
-                <Text style={styles.highlight2}>{'57,300'}kg</Text> ☁️
+                <Text style={styles.highlight2}>{'1,423'}kg</Text> ☁️
               </Text>
               <LottieView
                 source={require('@/assets/lottie/earth.json')}

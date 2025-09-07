@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, Platform } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -58,7 +58,7 @@ const MypageHomeScreen = () => {
             <LevelProgress
               value={progress}
               labels={['씨앗', '묘목', '나무', '사과나무']}
-              height={16}
+              height={12}
               colors={['#FF6A3D', '#FFC0A3']}
             />
           </View>
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
+    backgroundColor: colors.WHITE,
   },
   gradient: {
     flex: 1,
@@ -140,16 +141,20 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     width: '100%',
-    padding: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 22,
     flexDirection: 'column',
     alignItems: 'stretch',
     gap: 20,
     backgroundColor: colors.WHITE,
     borderRadius: 10,
+    ...Platform.select({
+      android: { elevation: 4 },
+    }),
   },
   profileContainer: {
-    paddingVertical: 20,
-    paddingHorizontal: 25,
+    paddingVertical: 35,
+    paddingHorizontal: 30,
     flexDirection: 'column',
     gap: 10,
   },
@@ -161,7 +166,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'flex-end',
-    gap: 4,
+    gap: 2,
   },
   couponContainer: {
     alignItems: 'flex-end',
@@ -232,18 +237,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   greenRegularText_13: {
-    color: colors.GREEN,
-    fontFamily: 'Pretendard-Regular',
+    color: '#5B9349',
+    fontFamily: 'Pretendard-SemiBold',
     fontSize: 13,
   },
   orangeBoldText_13: {
     color: '#FF704F',
-    fontFamily: 'Pretendard-Bold',
+    fontFamily: 'Pretendard-SemiBold',
     fontSize: 13,
   },
 
   logoutWrapper: {
-    paddingVertical: 20,
+    paddingVertical: 35,
   },
   logoutText: {
     fontSize: 14,

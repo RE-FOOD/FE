@@ -9,9 +9,11 @@ import {
   getMenuDetail,
   getStoreDetail,
   getStoreList,
+  getStoreReviews,
   MenuDetail,
   StoreListParams,
   StoreListResponse,
+  StoreReviewResponse,
   toggleStoreLike,
 } from '@/api/store';
 import { queryKeys } from '@/constants/keys';
@@ -98,11 +100,23 @@ function useToggleLike() {
   });
 }
 
+function useGetStoreReviews(
+  storeId: number,
+  queryOptions?: UseQueryCustomOptions<StoreReviewResponse>
+) {
+  return useQuery({
+    queryKey: [queryKeys.STORE, queryKeys.GET_STORE_REVIEW, storeId],
+    queryFn: () => getStoreReviews(storeId),
+    ...queryOptions,
+  });
+}
+
 function useStore(storeId?: number, menuId?: number) {
   const storeListQuery = useGetStoreList();
   const storeDetailQuery = useGetStoreDetail(storeId!);
   const menuDetailQuery = useGetMenuDetail(storeId!, menuId!);
   const toggleLikeMutation = useToggleLike();
+  const storeReviewQuery = useGetStoreReviews(storeId!);
 
   return {
     storeListQuery,
@@ -110,6 +124,7 @@ function useStore(storeId?: number, menuId?: number) {
     menuDetailQuery,
     useInfiniteStoreList,
     toggleLikeMutation,
+    storeReviewQuery,
   };
 }
 

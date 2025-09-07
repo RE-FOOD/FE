@@ -4,7 +4,11 @@ import UserStackNavigator from '../stack/UserStackNavigator';
 import useAuth from '@/hooks/queries/useAuth';
 
 function RootNavigator() {
-  const { isLogin, isSeller } = useAuth();
+  const { isLogin, isSeller, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!isLogin) {
     return <LoggedOutStackNavigator />;

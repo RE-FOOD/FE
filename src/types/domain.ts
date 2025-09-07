@@ -133,6 +133,21 @@ interface Review {
   menus: string[];
 }
 
+interface StoreReviewMenu {
+  id: number;
+  name: string;
+}
+
+interface StoreReview {
+  id: number;
+  memberId: number;
+  memberNickName: string;
+  rating: number;
+  content: string;
+  createdAt: string;
+  menuList: StoreReviewMenu[];
+}
+
 export type StoreSortOption = 'NEAR' | 'REVIEW' | 'RATING';
 interface Like {
   id: number;
@@ -243,4 +258,5 @@ export type {
   History,
   SellerOrder,
   Notification,
+  StoreReview,
 };

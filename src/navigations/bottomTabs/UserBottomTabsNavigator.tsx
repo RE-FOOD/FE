@@ -41,7 +41,6 @@ function UserBottomTabsNavigator() {
       screenOptions={{
         tabBarActiveTintColor: '#00A146',
         tabBarInactiveTintColor: '#9C9C9C',
-        headerShown: false,
         tabBarStyle: {
           height: 73,
           justifyContent: 'center',
@@ -58,6 +57,11 @@ function UserBottomTabsNavigator() {
           fontFamily: 'Pretendard-Medium',
           fontSize: 12,
         },
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'Pretendard-Medium',
+          fontSize: 17,
+        },
         popToTopOnBlur: true,
       }}
       initialRouteName={userNavigations.STORE_HOME}
@@ -67,6 +71,7 @@ function UserBottomTabsNavigator() {
         component={StoreHomeScreen}
         options={{
           title: '홈',
+          headerShown: false,
           tabBarIcon: ({ focused }) => renderTabIcon(focused, HomeActive, Home),
         }}
       />
@@ -75,6 +80,7 @@ function UserBottomTabsNavigator() {
         component={MapHomeScreen}
         options={{
           title: '주변가게',
+          headerShown: false,
           tabBarIcon: ({ focused }) => renderTabIcon(focused, MapActive, Map),
         }}
       />
@@ -83,6 +89,7 @@ function UserBottomTabsNavigator() {
         component={LikeHomeScreen}
         options={{
           title: '찜',
+          headerTitle: '찜한 가게',
           tabBarIcon: ({ focused }) => renderTabIcon(focused, FavoriteActive, Favorite),
         }}
       />
@@ -91,6 +98,7 @@ function UserBottomTabsNavigator() {
         component={HistoryHomeScreen}
         options={{
           title: '주문내역',
+          headerShown: false,
           tabBarIcon: ({ focused }) => renderTabIcon(focused, OrderActive, Order),
         }}
       />
@@ -99,6 +107,7 @@ function UserBottomTabsNavigator() {
         component={MypageHomeScreen}
         options={{
           title: 'MY',
+          headerShown: false,
           tabBarIcon: ({ focused }) => renderTabIcon(focused, MyActive, My),
         }}
       />

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, memo } from 'react';
 import { View, Text, StyleSheet, Animated, ViewStyle, TextStyle } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { colors } from '@/constants/colors';
 
 type Props = {
   /** 0 ~ 1 사이 값 (채워질 비율) */
@@ -87,14 +86,17 @@ function LevelProgress({
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: 8 },
+  wrap: { gap: 5 },
   track: {},
   labels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 4,
   },
-  label: { color: colors.BLACK, fontSize: 12, fontFamily: 'Pretendard-Regular' },
+  label: {
+    color: 'rgb(103, 103, 103)',
+    fontSize: 11,
+    fontFamily: 'Pretendard-Regular',
+  },
 });
 
 export default memo(LevelProgress);

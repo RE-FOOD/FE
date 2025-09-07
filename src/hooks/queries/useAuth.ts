@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import {
@@ -14,7 +14,7 @@ import { queryKeys, storageKeys } from '@/constants/keys';
 import { numbers } from '@/constants/numbers';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/api';
 import { Profile } from '@/types/domain';
-import { removeEncryptStorage, setEncryptStorage } from '@/utils/encryptStorage';
+import { getEncryptStorage, removeEncryptStorage, setEncryptStorage } from '@/utils/encryptStorage';
 import { removeHeader, setHeader } from '@/utils/header';
 import { showToast } from '@/utils/toast';
 
@@ -52,22 +52,30 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
 }
 
 function useGetRefreshToken() {
-  const { data, isSuccess, isError } = useQuery({
+  const [hasToken, setHasToken] = useState<boolean | null>(null);
+  useEffect(() => {
+    (async () => {
+      const token = await getEncryptStorage(storageKeys.REFRESH_TOKEN);
+      setHasToken(!!token);
+    })();
+  }, []);
+
+  const { data, isSuccess, isError, isLoading } = useQuery({
     queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
-    enabled: true,
+    enabled: hasToken === true,
     staleTime: numbers.ACCESS_TOKEN_REFRESH_TIME,
-    refetchInterval: numbers.ACCESS_TOKEN_REFRESH_TIME,
+    refetchInterval: hasToken ? numbers.ACCESS_TOKEN_REFRESH_TIME : false,
   });
 
   useEffect(() => {
     (async () => {
-      if (isSuccess) {
-        setHeader('Authorization', `Bearer ${data?.accessToken}`);
-        await setEncryptStorage(storageKeys.REFRESH_TOKEN, data?.refreshToken);
+      if (isSuccess && data) {
+        setHeader('Authorization', `Bearer ${data.accessToken}`);
+        await setEncryptStorage(storageKeys.REFRESH_TOKEN, data.refreshToken);
       }
     })();
-  }, [isSuccess, data?.accessToken, data?.refreshToken]);
+  }, [isSuccess, data?.accessToken, data?.refreshToken, data]);
 
   useEffect(() => {
     (async () => {
@@ -78,7 +86,7 @@ function useGetRefreshToken() {
     })();
   }, [isError]);
 
-  return { isSuccess, isError };
+  return { isSuccess, isError, isLoading, hasToken };
 }
 
 function useGetProfile(queryOptions?: UseQueryCustomOptions<Profile>) {
@@ -106,11 +114,24 @@ function useAuth() {
   const sellerSignupMutation = useSellerSignup();
   const loginMutation = useLogin();
   const refreshTokenQuery = useGetRefreshToken();
-  const { data: profile, isSuccess: isLogin } = useGetProfile({
-    enabled: refreshTokenQuery.isSuccess, // 토큰 갱신 성공 시 프로필 요청
+  const { data: profile, isLoading: isProfileLoading } = useGetProfile({
+    enabled: refreshTokenQuery.isSuccess,
+  });
+
+  console.log('useAuth 상태:', {
+    refreshToken: {
+      isSuccess: refreshTokenQuery.isSuccess,
+      isError: refreshTokenQuery.isError,
+      isLoading: refreshTokenQuery.isLoading,
+    },
+    profile,
+    isProfileLoading,
   });
   const logoutMutation = useLogout();
   const isSeller = profile?.role === 'ROLE_STORE';
+
+  const isLoading = refreshTokenQuery.isLoading || isProfileLoading;
+  const isLogin = !!profile;
 
   return {
     kakaoSignupMutation,
@@ -120,6 +141,7 @@ function useAuth() {
     isSeller,
     profile,
     logoutMutation,
+    isLoading,
   };
 }
 

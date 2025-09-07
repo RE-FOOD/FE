@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import BootSplash from 'react-native-bootsplash';
 import Toast, { BaseToast, BaseToastProps, ErrorToast } from 'react-native-toast-message';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import { FirebaseMessagingTypes, getMessaging, onMessage } from '@react-native-firebase/messaging';
@@ -6,6 +7,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@/api/queryClient';
 import { colors } from '@/constants/colors';
+import useAuth from '@/hooks/queries/useAuth';
 import { NotificationProvider } from '@/hooks/useNotification';
 import RootNavigator from '@/navigations/root/RootNavigator';
 import pushNoti from '@/utils/pushNoti';
@@ -54,7 +56,15 @@ const toastConfig = {
   ),
 };
 
-function AppContent() {
+function AppContentInner() {
+  const { isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading) {
+      BootSplash.hide({ fade: true });
+    }
+  }, [isLoading]);
+
   useEffect(() => {
     async function setupNotificationChannel() {
       try {
@@ -65,7 +75,6 @@ function AppContent() {
         });
         console.log('Notification channel created:', channel);
 
-        // 채널 존재 확인
         const channels = await notifee.getChannels();
         console.log('Available channels:', channels);
       } catch (error) {
@@ -89,11 +98,17 @@ function AppContent() {
   }, []);
 
   return (
+    <NavigationContainer theme={AppTheme}>
+      <RootNavigator />
+      <Toast config={toastConfig} />
+    </NavigationContainer>
+  );
+}
+
+function AppContent() {
+  return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer theme={AppTheme}>
-        <RootNavigator />
-        <Toast config={toastConfig} />
-      </NavigationContainer>
+      <AppContentInner />
     </QueryClientProvider>
   );
 }
@@ -105,4 +120,5 @@ function App() {
     </NotificationProvider>
   );
 }
+
 export default App;

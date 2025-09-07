@@ -11,6 +11,7 @@ import {
   Platform,
   Animated,
   KeyboardAvoidingView,
+  Permission,
 } from 'react-native';
 import { launchImageLibrary, ImagePickerResponse, Asset } from 'react-native-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -72,50 +73,22 @@ const SellerMenuRegisterScreen = () => {
   };
 
   //권한 받기 (사진)
-  // 권한 받기 (사진)
   async function requestGalleryPermission() {
     if (Platform.OS !== 'android') return true;
 
-    try {
-      if (Platform.Version >= 33) {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-          {
-            title: '갤러리 접근 권한',
-            message: '이미지를 업로드하려면 갤러리 접근 권한이 필요합니다.',
-            buttonNegative: '거부',
-            buttonPositive: '허용',
-          }
-        );
+    const permission: Permission =
+      Platform.Version >= 33
+        ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+        : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('[권한체크] 권한 허용됨 ✅');
-          return true;
-        }
+    const granted = await PermissionsAndroid.request(permission, {
+      title: '갤러리 접근 권한',
+      message: '이미지를 업로드하려면 갤러리 접근 권한이 필요합니다.',
+      buttonNegative: '거부',
+      buttonPositive: '허용',
+    });
 
-        if (granted === PermissionsAndroid.RESULTS.DENIED) {
-          console.log('[권한체크] 사용자가 거부 ❌');
-          showToast('error', '갤러리 권한을 허용하지 않았습니다. 설정에서 다시 시도해주세요');
-          return false;
-        }
-
-        if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-          console.log('[권한체크] 다시 묻지 않음 🚫');
-          showToast('error', '갤러리 권한을 허용하지 않았습니다. 설정에서 다시 시도해주세요');
-          return false;
-        }
-      } else {
-        console.log('[권한체크] Android 12 이하');
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
-        );
-
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      }
-    } catch (e) {
-      console.error('권한 요청 오류:', e);
-      return false;
-    }
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
   }
 
   const pickImage = async () => {

@@ -90,8 +90,8 @@ const HorizontalSnapList = ({
                   <Text style={styles.distanceText}>{item.distance}</Text>
                 ) : (
                   <View style={styles.priceRow}>
-                    {!!item.price && <Text style={styles.priceText}>{item.price}</Text>}
-                    {!!item.salePrice && <Text style={styles.saleText}>{item.salePrice}</Text>}
+                    {!!item.price && <Text style={styles.priceText}>{item.salePrice}</Text>}
+                    {!!item.salePrice && <Text style={styles.saleText}>{item.price}</Text>}
                   </View>
                 )}
               </View>

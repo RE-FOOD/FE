@@ -154,6 +154,34 @@ const OrderScreen = () => {
         </View>
 
         <ReuseOption ecoFriendly={ecoFriendly} toggleEco={() => setEcoFriendly(!ecoFriendly)} />
+
+        <View style={styles.pickupInfo}>
+          <Text style={styles.sectionTitle}>할인 쿠폰</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(userNavigations.COUPON_BOX)}
+            style={styles.storeBox}
+          >
+            <Text style={styles.salesText}>{'-500원 할인'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.pickupInfo}>
+          <Text style={styles.sectionTitle}>결제 예정 금액</Text>
+          <View style={[styles.storeBox, { gap: 8 }]}>
+            <View style={styles.priceRow}>
+              <Text style={styles.orderPrice}>{'주문금액'}</Text>
+              <Text style={styles.orderPrice}>{'10,000원'}</Text>
+            </View>
+            <View style={styles.priceRow}>
+              <Text style={styles.salePrice}>{'쿠폰할인'}</Text>
+              <Text style={styles.salePrice}>{'-500원'}</Text>
+            </View>
+            <View style={styles.priceRow}>
+              <Text style={styles.totalPrice}>{'총 결제 금액'}</Text>
+              <Text style={styles.totalPrice}>{'9,500원'}</Text>
+            </View>
+          </View>
+        </View>
       </ScrollView>
       <CustomModal
         state="ConfirmPayment"
@@ -168,7 +196,8 @@ const OrderScreen = () => {
         onPress={() => setModalOpen(true)}
         disabled={createOrderMutation.isPending}
       >
-        <Text style={styles.payButtonText}>{order.totalCoast.toLocaleString()}원 결제하기</Text>
+        {/* <Text style={styles.payButtonText}>{order.totalCoast.toLocaleString()}원 결제하기</Text> */}
+        <Text style={styles.payButtonText}>9,500원 결제하기</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -266,6 +295,30 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
     fontSize: 19,
     fontFamily: 'Pretendard-Bold',
+  },
+  salesText: {
+    color: '#008238',
+    fontSize: 16,
+    fontFamily: 'Pretendard-Bold',
+  },
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  orderPrice: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-Light',
+    color: colors.BLACK,
+  },
+  salePrice: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-Bold',
+    color: '#008238',
+  },
+  totalPrice: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-SemiBold',
+    color: colors.BLACK,
   },
 });
 

@@ -60,9 +60,9 @@ const HistoryHomeScreen = () => {
               <View style={styles.orderInnerContainer}>
                 <View style={styles.textInnerContainer}>
                   <View style={styles.dateInnerContainer}>
-                    <Text style={styles.idText}>{order.orderId}</Text>
+                    <Text style={styles.idText}>{`주문번호: ${order.orderId}`}</Text>
                   </View>
-                  <Text style={styles.statusText}>{order.status ? '완료' : '픽업전'}</Text>
+                  <Text style={styles.statusText}>{order.status ? '픽업완료' : '픽업전'}</Text>
                 </View>
 
                 <View style={styles.horizontalLine} />
@@ -77,8 +77,10 @@ const HistoryHomeScreen = () => {
                     <View style={styles.picture} />
                   )}
                   <View style={styles.menuDetailContainer}>
-                    <Text style={styles.storeText}>{order.storeName}</Text>
-                    <Text style={styles.menuText}>{order.menuName}</Text>
+                    <View>
+                      <Text style={styles.storeText}>{order.storeName}</Text>
+                      <Text style={styles.menuText}>{order.menuName}</Text>
+                    </View>
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
                         style={styles.buttonGray}
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   searchContainer: {
-    paddingBottom: 30,
+    paddingBottom: 20,
     gap: 17,
     alignSelf: 'stretch',
     backgroundColor: colors.WHITE,
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
   },
   search: {
     marginHorizontal: 18,
-    marginTop: 30,
+    marginTop: 20,
     backgroundColor: '#F2F2F2',
     borderRadius: 10,
   },
@@ -197,9 +199,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   menuDetailContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    gap: 10,
+    flex: 1,
+    justifyContent: 'space-between',
+    gap: 12,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -216,36 +218,37 @@ const styles = StyleSheet.create({
   rectangle: {
     width: 68,
     height: 16,
-    backgroundColor: colors.GREEN,
-    borderColor: colors.GREEN,
+    backgroundColor: '#0FB758',
+    borderColor: '#0FB758',
     borderRadius: 3,
     borderWidth: 1,
     alignItems: 'center',
   },
   horizontalLine: {
     height: 1,
-    backgroundColor: colors.GREEN,
+    backgroundColor: '#0FB758',
     width: '100%',
+    marginBottom: 5,
   },
   buttonGray: {
     paddingVertical: 8,
-    paddingHorizontal: 23,
+    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.WHITE,
-    borderRadius: 5,
-    borderWidth: 1,
+    borderRadius: 8,
+    borderWidth: 0.5,
     borderColor: colors.GRAY_500,
   },
   buttonGreen: {
     paddingVertical: 8,
-    paddingHorizontal: 23,
+    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.WHITE,
-    borderRadius: 5,
+    borderRadius: 8,
     borderWidth: 0.5,
-    borderColor: colors.GREEN,
+    borderColor: '#0FB758',
   },
   searchText: {
     color: colors.GRAY_700,
@@ -263,17 +266,17 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   statusText: {
-    color: colors.GREEN,
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 13,
+    color: '#0FB758',
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 14,
   },
   storeText: {
     color: colors.BLACK,
-    fontFamily: 'Pretendard-Bold',
-    fontSize: 13,
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 15,
   },
   menuText: {
-    color: colors.GRAY_700,
+    color: '#484848',
     fontFamily: 'Pretendard-Regular',
     fontSize: 11,
   },
@@ -285,12 +288,12 @@ const styles = StyleSheet.create({
   buttonGrayText: {
     color: colors.GRAY_700,
     fontFamily: 'Pretendard-Regular',
-    fontSize: 10,
+    fontSize: 12,
   },
   buttonGreenText: {
-    color: colors.GREEN,
+    color: '#0FB758',
     fontFamily: 'Pretendard-Regular',
-    fontSize: 10,
+    fontSize: 12,
   },
   searchInput: {
     flex: 1,

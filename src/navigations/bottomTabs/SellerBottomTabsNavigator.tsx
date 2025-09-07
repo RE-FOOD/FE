@@ -51,6 +51,10 @@ function SellerBottomTabsNavigator() {
           fontFamily: 'Pretendard-Medium',
           fontSize: 12,
         },
+        headerTitleStyle: {
+          fontFamily: 'Pretendard-Medium',
+          fontSize: 17,
+        },
         popToTopOnBlur: true,
       }}
       initialRouteName={sellerNavigations.MYPAGE_HOME}

@@ -17,7 +17,8 @@ type Nav = StackNavigationProp<UserStackParamList, typeof userNavigations.ORDER_
 
 const OrderSuccessScreen = () => {
   const route = useRoute<Rt>();
-  const { level, levelCheck } = route.params || {};
+  const { level } = route.params || {};
+  // const { level, levelCheck } = route.params || {};
   const navigation = useNavigation<Nav>();
   const ripples = [useRippleAnimation(0), useRippleAnimation(600), useRippleAnimation(1200)];
   const [showPopup, setShowPopup] = useState(false);
@@ -28,12 +29,27 @@ const OrderSuccessScreen = () => {
     ? LEVEL_INFO[level as EnvironmentLevel]
     : { image: require('@/assets/images/level1.webp') };
 
+  // useEffect(() => {
+  //   if (isFocused && levelCheck) {
+  //     setShowPopup(true);
+  //     setLottieFinished(false);
+  //   }
+  // }, [isFocused, levelCheck]);
+
   useEffect(() => {
-    if (isFocused && levelCheck) {
-      setShowPopup(true);
-      setLottieFinished(false);
+    let timer: NodeJS.Timeout;
+
+    if (isFocused) {
+      timer = setTimeout(() => {
+        setShowPopup(true);
+        setLottieFinished(false);
+      }, 2000);
     }
-  }, [isFocused, levelCheck]);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isFocused]);
 
   const handleLottieAnimationFinish = () => {
     setLottieFinished(true);
@@ -81,12 +97,20 @@ const OrderSuccessScreen = () => {
 
       <LevelUpPopup
         visible={showPopup}
+        level={(level as EnvironmentLevel) ?? 'LEVEL3'} // 기본값
+        image={image ?? require('@/assets/images/level3.webp')}
+        lottieFinished={lottieFinished}
+        onClose={handlePopupClose}
+        onLottieFinish={handleLottieAnimationFinish}
+      />
+      {/* <LevelUpPopup
+        visible={showPopup}
         level={level as EnvironmentLevel}
         image={image}
         lottieFinished={lottieFinished}
         onClose={handlePopupClose}
         onLottieFinish={handleLottieAnimationFinish}
-      />
+      /> */}
     </SafeAreaView>
   );
 };

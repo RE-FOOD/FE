@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   menuInfoContainer: {
-    paddingVertical: 14,
+    paddingVertical: 20,
     paddingHorizontal: 24,
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   menuInnerContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    gap: 5,
+    gap: 4,
     alignSelf: 'stretch',
   },
   accountContainer: {
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
   menuPictureContainer: {
     alignItems: 'flex-start',
     gap: 5,
+    marginBottom: 10,
   },
   menuPictureTextContainer: {
     alignItems: 'flex-start',
@@ -224,8 +225,9 @@ const styles = StyleSheet.create({
   },
   horizontalLine: {
     height: 1,
-    backgroundColor: colors.GREEN, // 원하는 선 색상
+    backgroundColor: colors.GREEN,
     width: '100%',
+    marginVertical: 10,
   },
   picture: {
     width: 85,
@@ -236,22 +238,23 @@ const styles = StyleSheet.create({
   blackRegularText: {
     color: colors.BLACK,
     fontFamily: 'Pretendard-Regular',
-    fontSize: 11,
+    fontSize: 13,
   },
   blackBoldText_11: {
     color: colors.BLACK,
     fontFamily: 'Pretendard-Bold',
-    fontSize: 11,
+    fontSize: 14,
   },
   blackBoldText_13: {
     color: colors.BLACK,
     fontFamily: 'Pretendard-Bold',
-    fontSize: 13,
+    fontSize: 17,
+    marginBottom: 5,
   },
   grayRegularText: {
     color: colors.GRAY_700,
     fontFamily: 'Pretendard-Regular',
-    fontSize: 11,
+    fontSize: 13,
   },
   greenRegularText_11: {
     color: colors.GREEN,

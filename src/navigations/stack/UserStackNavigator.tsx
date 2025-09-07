@@ -21,6 +21,7 @@ import Private from '@/screens/mypage/PrivateScreen';
 import Review from '@/screens/mypage/ReviewScreen';
 import Rule from '@/screens/mypage/RuleScreen';
 import NotificationScreen from '@/screens/notification/NotificationScreen';
+import CouponBoxScreen from '@/screens/order/CouponBoxScreen';
 import OrderScreen from '@/screens/order/OrderScreen';
 import OrderSuccessScreen from '@/screens/order/OrderSuccessScreen';
 import TossPaymentScreen from '@/screens/order/TossPaymentScreen';
@@ -39,6 +40,7 @@ export type UserStackParamList = {
   [userNavigations.STORE_INFO]: { storeId: number; storeName: string };
   [userNavigations.MENU_DETAIL]: { storeId: number; storeName: string; menuId: number };
   [userNavigations.ORDER]: { order: Order };
+  [userNavigations.COUPON_BOX]: undefined;
   [userNavigations.TOSS_PAYMENT]: { sessionId: string; totalAmount: number };
   [userNavigations.ORDER_SUCCESS]: { level: string | undefined; levelCheck: boolean | undefined };
   [userNavigations.ORDER_DETAIL]: {
@@ -118,6 +120,11 @@ function UserStackNavigator() {
         name={userNavigations.ORDER_SUCCESS}
         component={OrderSuccessScreen}
         options={{ title: '결제 완료', headerShown: true, headerLeft: () => null }}
+      />
+      <Stack.Screen
+        name={userNavigations.COUPON_BOX}
+        component={CouponBoxScreen}
+        options={{ title: '할인 쿠폰', headerShown: true }}
       />
       <Stack.Screen
         name="OrderDetail"

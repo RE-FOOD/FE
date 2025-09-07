@@ -37,6 +37,7 @@ const MenuDetailScreen = () => {
   }, [navigation, storeName]);
 
   useEffect(() => {
+    console.log(menu?.id);
     if (menu?.imageUrl) {
       FastImage.preload([{ uri: menu.imageUrl }]);
     }
@@ -45,9 +46,6 @@ const MenuDetailScreen = () => {
   if (isLoading || !menu) {
     return <LoadingScreen />;
   }
-
-  const discountedPrice = Math.floor(menu.price * (1 - menu.dailyDiscountPercent / 100));
-  const totalPrice = discountedPrice * count;
 
   const addToCart = async () => {
     if (cartCount === 0) {
@@ -123,7 +121,7 @@ const MenuDetailScreen = () => {
                 <Text style={styles.discount}>-{menu.dailyDiscountPercent}%</Text>
               )}
               <View style={styles.priceInnerRow}>
-                <Text style={styles.price}>{discountedPrice.toLocaleString()}원</Text>
+                <Text style={styles.price}>{menu.discountPrice.toLocaleString()}원</Text>
                 {menu.dailyDiscountPercent > 0 && (
                   <Text style={styles.originalPrice}>{menu.price.toLocaleString()}원</Text>
                 )}
@@ -174,7 +172,7 @@ const MenuDetailScreen = () => {
           {menu.dailyDiscountPercent > 0 && (
             <Text style={styles.totalOriginal}>{(menu.price * count).toLocaleString()}원</Text>
           )}
-          <Text style={styles.total}>{totalPrice.toLocaleString()}원</Text>
+          <Text style={styles.total}>{menu.discountPrice.toLocaleString()}원</Text>
         </View>
         <Pressable style={styles.cartBtn} onPress={addToCart}>
           <Text style={styles.cartBtnText}>장바구니에 담기</Text>

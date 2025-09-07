@@ -15,6 +15,7 @@ const userNavigations = {
   CATEGORY_LIST: 'CategoryList',
   SEARCH_RESULT: 'SearchResult',
   ORDER: 'Order',
+  COUPON_BOX: 'CouponBox',
   TOSS_PAYMENT: 'TossPayment',
   ORDER_SUCCESS: 'OrderSuccess',
   MAP_HOME: 'MapHome',

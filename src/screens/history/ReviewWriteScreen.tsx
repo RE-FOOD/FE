@@ -4,7 +4,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import GrayStar from '@/assets/icons/star-gray.svg';
+import Star from '@/assets/icons/star.svg';
 import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
 import { userNavigations } from '@/constants/navigations';
@@ -49,11 +50,11 @@ const ReviewWriteScreen = ({ route }: ReviewWriteScreenProps) => {
           <View style={styles.starContainer}>
             {Array.from({ length: 5 }, (_, i) => i + 1).map((starId) => (
               <TouchableOpacity key={starId} onPress={() => handleStarPress(starId)}>
-                <FontAwesome
-                  name="star"
-                  size={30}
-                  color={starId <= rating ? '#FFD700' : colors.GRAY_700}
-                />
+                {starId <= rating ? (
+                  <Star width={40} height={40} />
+                ) : (
+                  <GrayStar width={40} height={40} />
+                )}
               </TouchableOpacity>
             ))}
           </View>
@@ -117,8 +118,8 @@ const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: 'column',
     marginHorizontal: 24,
-    gap: 20,
-    marginVertical: 20,
+    gap: 30,
+    marginVertical: 30,
     flexShrink: 0,
   },
   titleContainer: {
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     height: 300,
     paddingVertical: 20,
     paddingHorizontal: 24,
-    backgroundColor: colors.GRAY_200,
+    backgroundColor: '#F2F2F2',
     borderRadius: 10,
     color: colors.BLACK,
     fontFamily: 'Pretendard-Regular',
@@ -170,8 +171,8 @@ const styles = StyleSheet.create({
   },
   blackBoldText_16: {
     color: colors.BLACK,
-    fontFamily: 'Pretendard-Bold',
-    fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 17,
   },
   grayRegularText_11: {
     color: colors.GRAY_700,

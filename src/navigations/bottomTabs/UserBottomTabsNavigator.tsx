@@ -98,7 +98,6 @@ function UserBottomTabsNavigator() {
         component={HistoryHomeScreen}
         options={{
           title: '주문내역',
-          headerShown: false,
           tabBarIcon: ({ focused }) => renderTabIcon(focused, OrderActive, Order),
         }}
       />

@@ -20,8 +20,8 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { colors } from '@/constants/colors';
 import { sellerNavigations } from '@/constants/navigations';
-import { MenuItem, SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
-
+import { SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
+import { MenuItem } from '@/types/domain';
 import { showToast } from '@/utils/toast';
 
 type Navigation = StackNavigationProp<SellerStackparamList>;

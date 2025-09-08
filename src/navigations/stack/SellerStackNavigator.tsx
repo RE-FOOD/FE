@@ -1,4 +1,3 @@
-import { ImageSourcePropType } from 'react-native';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SellerBottomTabsNavigator, {
@@ -8,17 +7,7 @@ import { BackButton } from '@/components/_common/BackButton';
 import { sellerNavigations } from '@/constants/navigations';
 import SellerMenuModifyScreen from '@/screens/seller/SellerMenuModifyScreen';
 import SellerMenuRegisterScreen from '@/screens/seller/SellerMenuRegisterScreen';
-
-// 임시
-export type MenuItem = {
-  id: number;
-  name: string;
-  info: string;
-  price: number;
-  discountPrice: number;
-  quantity: number;
-  image: ImageSourcePropType;
-};
+import { MenuItem } from '@/types/domain';
 
 export type SellerStackparamList = {
   SellerTabs: NavigatorScreenParams<SellerBottomTabsParamList>;

@@ -8,7 +8,8 @@ import Pencil from '@/assets/icons/Pencil.svg';
 import Plus from '@/assets/icons/plus.svg';
 import { colors } from '@/constants/colors';
 import { sellerNavigations } from '@/constants/navigations';
-import { SellerStackparamList, MenuItem } from '@/navigations/stack/SellerStackNavigator';
+import { SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
+import { MenuItem } from '@/types/domain';
 
 type Navigation = StackNavigationProp<SellerStackparamList>;
 type MenuHomeRouteProp = RouteProp<SellerStackparamList, typeof sellerNavigations.MENU_HOME>;

@@ -81,7 +81,7 @@ const SellerMenuScreen = () => {
           style={styles.topContainer}
           onPress={() => navigation.navigate(sellerNavigations.MENU_REGISTER)}
         >
-          <Plus stroke={colors.GREEN} width={24} height={24} />
+          <Plus stroke={colors.WHITE} width={22} height={22} />
           <Text style={styles.greenRegularText_15}>메뉴등록</Text>
         </TouchableOpacity>
 
@@ -95,11 +95,11 @@ const SellerMenuScreen = () => {
               <View style={styles.infoContainer}>
                 <Image style={styles.img} source={menu.image} />
                 <View style={styles.textContainer}>
-                  <Text style={styles.blackBoldText_15}>{menu.name}</Text>
-                  <Text style={styles.grayRegularText_13}>{menu.info}</Text>
-                  <Text style={styles.grayRegularText_13}>
-                    {menu.price.toLocaleString('ko-KR')}원
-                  </Text>
+                  <View>
+                    <Text style={styles.blackBoldText_15}>{menu.name}</Text>
+                    <Text style={styles.grayRegularText_13}>{menu.info}</Text>
+                  </View>
+                  <Text style={styles.priceText}>{menu.price.toLocaleString('ko-KR')}원</Text>
                 </View>
               </View>
               <TouchableOpacity
@@ -110,8 +110,8 @@ const SellerMenuScreen = () => {
                   })
                 }
               >
-                <Pencil width={15} height={15} />
-                <Text style={styles.grayRegularText_13}>수정</Text>
+                <Text style={styles.editText}>수정</Text>
+                <Pencil width={14} height={14} />
               </TouchableOpacity>
             </View>
           ))}
@@ -129,13 +129,20 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 13,
+    paddingVertical: 18,
   },
   topContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
-    alignSelf: 'stretch',
+    alignSelf: 'flex-start',
+    paddingLeft: 6,
+    paddingRight: 9,
+    paddingVertical: 5,
+    backgroundColor: '#079500',
+    gap: 3,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#079500',
   },
   listContainer: {
     flexShrink: 0,
@@ -152,7 +159,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flexDirection: 'row',
-    gap: 5,
+    gap: 10,
   },
   img: {
     width: 80,
@@ -164,15 +171,16 @@ const styles = StyleSheet.create({
   textContainer: {
     justifyContent: 'center',
     flexDirection: 'column',
+    gap: 3,
   },
   greenRegularText_15: {
     fontSize: 15,
-    fontFamily: 'Pretendard-Regular',
-    color: colors.GREEN,
+    fontFamily: 'Pretendard-SemiBold',
+    color: colors.WHITE,
   },
   blackBoldText_15: {
-    fontSize: 15,
-    fontFamily: 'Pretendard-Bold',
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
     color: colors.BLACK,
   },
   grayRegularText_13: {
@@ -180,15 +188,27 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     color: colors.GRAY_700,
   },
+  editText: {
+    fontSize: 13,
+    fontFamily: 'Pretendard-Regular',
+    color: colors.BLACK,
+  },
+  priceText: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-SemiBold',
+    color: colors.BLACK,
+  },
   deleteButton: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 4,
-    paddingHorizontal: 6,
-    backgroundColor: colors.GRAY_200,
-    borderRadius: 10,
-    gap: 2,
+    paddingHorizontal: 10,
+    backgroundColor: colors.WHITE,
+    borderColor: '#9C9C9C',
+    borderWidth: 1,
+    borderRadius: 7,
+    gap: 4,
   },
 });
 

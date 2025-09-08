@@ -12,6 +12,12 @@ export interface MenuRegisterRequest extends Pick<Menu, 'name' | 'price' | 'dail
   imageKey: string; // S3 업로드 이미지 키
 }
 
+export type UpdateMenuRequest = Pick<Menu, 'name' | 'price' | 'discountPrice' | 'dailyQuantity'> & {
+  info: string;
+  cookingTime: string;
+  imageKey: string;
+};
+
 export const getSellerOrders = async (cursorId?: number) => {
   const { data } = await axiosInstance.get('/stores/orders', {
     params: cursorId ? { cursorId } : {},
@@ -47,6 +53,15 @@ export const registerMenu = async (
 ): Promise<ApiResponse<null>> => {
   const { data } = await axiosInstance.post<ApiResponse<null>>(`/stores/${storeId}/menus`, payload);
   return data;
+};
+
+export const updateMenu = async (
+  storeId: number,
+  menuId: number,
+  data: Partial<UpdateMenuRequest>
+) => {
+  const response = await axiosInstance.put(`/stores/${storeId}/menus/${menuId}`, data);
+  return response.data;
 };
 
 export { getStoreInsight };

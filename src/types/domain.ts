@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 interface Member {
   id: number;
   email: string;
@@ -230,6 +232,17 @@ interface Notification {
   isRead: boolean;
 }
 
+// 임시
+interface MenuItem {
+  id: number;
+  name: string;
+  info: string;
+  price: number;
+  discountPrice: number;
+  quantity: number;
+  image: ImageSourcePropType;
+}
+
 export type {
   Member,
   Profile,
@@ -259,4 +272,5 @@ export type {
   SellerOrder,
   Notification,
   StoreReview,
+  MenuItem,
 };

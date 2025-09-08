@@ -7,14 +7,16 @@ import { BackButton } from '@/components/_common/BackButton';
 import { sellerNavigations } from '@/constants/navigations';
 import SellerMenuModifyScreen from '@/screens/seller/SellerMenuModifyScreen';
 import SellerMenuRegisterScreen from '@/screens/seller/SellerMenuRegisterScreen';
+import { MenuItem } from '@/types/domain';
 
 export type SellerStackparamList = {
   SellerTabs: NavigatorScreenParams<SellerBottomTabsParamList>;
-  [sellerNavigations.MENU_HOME]: undefined;
   [sellerNavigations.ORDER_HOME]: undefined;
   [sellerNavigations.MYPAGE_HOME]: undefined;
   [sellerNavigations.MENU_REGISTER]: undefined;
-  [sellerNavigations.MENU_MODIFY]: { id: number };
+  [sellerNavigations.MENU_MODIFY]: {
+    menu: MenuItem;
+  };
 };
 
 const Stack = createStackNavigator<SellerStackparamList>();

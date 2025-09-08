@@ -37,28 +37,11 @@ const SellerMenuModifyScreen = () => {
   const [name, setName] = useState(menu.name);
   const [info, setInfo] = useState(menu.info);
   const [quantity, setQuantity] = useState<number>(menu.quantity);
-  const [price, setPrice] = useState(menu.price.toLocaleString());
-  const [discountPrice, setDiscountPrice] = useState<string>(menu.discountPrice.toString());
   const [imageUri, setImageUri] = useState<string | null>(null);
   const pan = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
 
   const increase = () => setQuantity((prev) => prev + 1);
   const decrease = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
-
-  const formatCurrency = (value: string) => {
-    const numericValue = value.replace(/[^0-9]/g, '');
-    if (!numericValue) return '';
-
-    return parseInt(numericValue, 10).toLocaleString();
-  };
-
-  const handleChange = (text: string) => {
-    setPrice(formatCurrency(text));
-  };
-
-  const handleDiscountChange = (text: string) => {
-    setDiscountPrice(formatCurrency(text));
-  };
 
   const handleQuantityChange = (text: string) => {
     const numericValue = text.replace(/[^0-9]/g, '');
@@ -140,27 +123,15 @@ const SellerMenuModifyScreen = () => {
   });
 
   const handleSave = () => {
-    if (!name || !info || !price) {
+    if (!name || !info) {
       showToast('error', '필수 필드를 입력해주세요.');
       return;
     }
-
-    const originalPrice = Number(price.replace(/,/g, ''));
-    const discount = Number(discountPrice.replace(/,/g, '')) || 0;
-
-    if (discount > originalPrice) {
-      showToast('error', '할인 금액은 원금액보다 클 수 없습니다.');
-      return;
-    }
-
-    const finalPrice = originalPrice - discount;
 
     const updatedMenu = {
       ...menu,
       name,
       info,
-      price: finalPrice,
-      discountPrice: discount,
       quantity,
       image: imageUri ? { uri: imageUri } : menu.image,
     };
@@ -202,26 +173,7 @@ const SellerMenuModifyScreen = () => {
               onChangeText={setInfo}
             />
           </View>
-          <View style={styles.listContainer}>
-            <Text style={styles.label}>가격</Text>
-            <TextInput
-              style={styles.input}
-              value={price}
-              onChangeText={handleChange}
-              keyboardType="numeric"
-              placeholderTextColor={colors.GRAY_500}
-            />
-          </View>
-          <View style={styles.listContainer}>
-            <Text style={styles.label}>할인금액</Text>
-            <TextInput
-              style={styles.input}
-              value={discountPrice}
-              onChangeText={handleDiscountChange}
-              placeholderTextColor={colors.GRAY_500}
-              keyboardType="numeric"
-            />
-          </View>
+
           <View style={styles.listContainer}>
             <Text style={styles.label}>수량</Text>
             <View style={styles.quantityBox}>

@@ -115,7 +115,7 @@ const SellerMenuModifyScreen = () => {
         showToast('error', '이미지를 불러오는 중 오류가 발생했습니다.');
       } else if (response.assets && response.assets.length > 0) {
         const asset: Asset = response.assets[0];
-        const validTypes = ['image/jpeg', 'img/png'];
+        const validTypes = ['image/jpeg', 'image/png'];
         if (!asset.type || !validTypes.includes(asset.type)) {
           showToast('error', 'jpg 또는 png 형식의 이미지만 등록할 수 있습니다.');
           return;
@@ -126,6 +126,7 @@ const SellerMenuModifyScreen = () => {
           return;
         }
         setImageUri(asset.uri || null);
+        console.log(asset.uri || null);
         pan.setValue({ x: 0, y: 0 });
       }
     });
@@ -144,13 +145,24 @@ const SellerMenuModifyScreen = () => {
       return;
     }
 
+    const originalPrice = Number(price.replace(/,/g, ''));
+    const discount = Number(discountPrice.replace(/,/g, '')) || 0;
+
+    if (discount > originalPrice) {
+      showToast('error', '할인 금액은 원금액보다 클 수 없습니다.');
+      return;
+    }
+
+    const finalPrice = originalPrice - discount;
+
     const updatedMenu = {
       ...menu,
       name,
       info,
-      price: Number(price.replace(/,/g, '')),
-      discountPrice: Number(discountPrice.replace(/,/g, '')) || 0,
+      price: finalPrice,
+      discountPrice: discount,
       quantity,
+      image: imageUri ? { uri: imageUri } : menu.image,
     };
 
     // 부모 컴포넌트의 onSave 콜백 호출

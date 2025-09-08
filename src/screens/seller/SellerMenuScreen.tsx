@@ -44,7 +44,7 @@ const dummyMenus = [
   {
     id: 4,
     name: '김치고기 고로케',
-    info: '미치는 맛 김치 고로케',
+    info: '고기가 풍부한 김치 고로케',
     price: 2500,
     discountPrice: 0,
     quantity: 1,

@@ -371,13 +371,15 @@ const styles = StyleSheet.create({
     marginLeft: 25 + 80 + 5,
     paddingVertical: 12,
     borderRadius: 6,
-    backgroundColor: colors.GRAY_200,
+    backgroundColor: colors.WHITE,
+    borderColor: colors.GREEN,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   imageButtonText: {
     fontSize: 16,
-    color: colors.BLACK,
+    color: colors.GREEN,
     fontFamily: 'Pretendard-Regular',
   },
   image: {

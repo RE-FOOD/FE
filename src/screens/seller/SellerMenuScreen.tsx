@@ -90,29 +90,30 @@ const SellerMenuScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 24 }}
         >
-          {menus.map((menu) => (
-            <View key={menu.id} style={styles.innerListContainer}>
-              <View style={styles.infoContainer}>
-                <Image style={styles.img} source={menu.image} />
-                <View style={styles.textContainer}>
-                  <View>
-                    <Text style={styles.blackBoldText_15}>{menu.name}</Text>
-                    <Text style={styles.grayRegularText_13}>{menu.info}</Text>
+          {menus.map((menu, index) => (
+            <View key={menu.id}>
+              <View style={styles.innerListContainer}>
+                <View style={styles.infoContainer}>
+                  <Image style={styles.img} source={menu.image} />
+                  <View style={styles.textContainer}>
+                    <View>
+                      <Text style={styles.blackBoldText_15}>{menu.name}</Text>
+                      <Text style={styles.grayRegularText_13}>{menu.info}</Text>
+                    </View>
+                    <Text style={styles.priceText}>{menu.price.toLocaleString('ko-KR')}원</Text>
                   </View>
-                  <Text style={styles.priceText}>{menu.price.toLocaleString('ko-KR')}원</Text>
                 </View>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => navigation.navigate(sellerNavigations.MENU_MODIFY, { menu })}
+                >
+                  <Text style={styles.editText}>수정</Text>
+                  <Pencil width={14} height={14} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() =>
-                  navigation.navigate(sellerNavigations.MENU_MODIFY, {
-                    menu,
-                  })
-                }
-              >
-                <Text style={styles.editText}>수정</Text>
-                <Pencil width={14} height={14} />
-              </TouchableOpacity>
+
+              {/* 마지막 요소가 아닐 때만 line 표시 */}
+              {index < menus.length - 1 && <View style={styles.line} />}
             </View>
           ))}
         </ScrollView>
@@ -209,6 +210,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 7,
     gap: 4,
+  },
+  line: {
+    height: 1,
+    backgroundColor: '#eaeaeaff',
   },
 });
 

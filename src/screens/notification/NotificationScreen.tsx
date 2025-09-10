@@ -20,22 +20,28 @@ const getIconByType = (type: string) => {
   }
 };
 
-// ✅ 더미데이터
 const dummyNotifications = [
   {
     id: 1,
-    type: 'ENVIRONMENT_LEVEL_UP',
-    title: '레벨업',
-    createdAt: '2분 전',
-    body: '축하합니다! 환경 레벨 3단계를 달성했어요.\n환경 쿠폰이 발급되었어요',
-  },
-  {
-    id: 2,
     type: 'ORDER_COMPLETION',
     title: '주문 완료',
     createdAt: '2분 전',
-    body: '죠죠 대학로점의 주문이 접수되었습니다!\n가게에서 곧 준비를 시작할거에요.',
+    body: '경성꽈배기의 주문이 접수되었습니다!\n가게에서 곧 준비를 시작할거에요.',
   },
+  {
+    id: 2,
+    type: 'ENVIRONMENT_LEVEL_UP',
+    title: '레벨업',
+    createdAt: '3분 전',
+    body: '축하합니다! 환경 레벨 3단계를 달성했어요.\n환경 쿠폰이 발급되었어요',
+  },
+  // {
+  //   id: 3,
+  //   type: 'ORDER_COMPLETION',
+  //   title: '주문 완료',
+  //   createdAt: '5일 전',
+  //   body: '죠죠 대학로점의 주문이 접수되었습니다!\n가게에서 곧 준비를 시작할거에요.',
+  // },
 ];
 
 const NotificationScreen = () => {

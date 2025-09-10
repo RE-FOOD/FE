@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Text, StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import EmptyOrderImage from '@/assets/images/empty-order.webp';
+import EmptyState from '@/components/_common/EmptyState';
 import CustomModal from '@/components/_modal/CustomModal';
 import { colors } from '@/constants/colors';
 import { stateMap } from '@/constants/modalStates';
@@ -25,7 +27,13 @@ const SellerOrderScreen = () => {
   const { mutate: failOrder } = useFailOrder();
 
   const renderItem = ({ item: order }: { item: SellerOrder }) => {
-    const time = order.pickupDueTime.substring(11, 16);
+    const date = new Date(order.pickupDueTime);
+    const time = date.toLocaleTimeString('ko-KR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Seoul',
+    });
     const formattedAmount = `${order.totalAmount.toLocaleString('ko-KR')}원`;
 
     return (
@@ -108,7 +116,14 @@ const SellerOrderScreen = () => {
           ListFooterComponent={
             isFetchingNextPage ? <ActivityIndicator style={{ marginVertical: 16 }} /> : null
           }
-          contentContainerStyle={{ paddingBottom: 45 }}
+          ListEmptyComponent={
+            <EmptyState
+              icon={EmptyOrderImage}
+              title="신규 주문이 없습니다"
+              subtitle="주문이 들어오면 바로 알려드릴게요"
+            />
+          }
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 45 }}
         />
       </View>
 
@@ -195,7 +210,7 @@ const styles = StyleSheet.create({
   },
   whiteRegularText_15: {
     fontSize: 15,
-    fontFamily: 'Pretendard-Regular',
+    fontFamily: 'Pretendard-SemiBold',
     color: colors.WHITE,
   },
   blackRegularText_15: {

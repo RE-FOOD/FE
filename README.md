@@ -136,56 +136,6 @@ src/
 <img width="1125" height="551" alt="image" src="https://github.com/user-attachments/assets/8e3643c6-3abb-4686-9e69-d05441293365" />
 
 
-### CQRS (Command Query Responsibility Segregation) 패턴
-- **명령과 조회 분리**: 읽기와 쓰기 작업의 최적화
-- **Command**: 데이터 변경 작업 (Create, Update, Delete)
-- **Query**: 인메모리 DB Redis를 통한 데이터 조회 작업 (Read)
-
-
-## 🚀 실행 방법
-
-### Prerequisites
-- Java 21+
-- MySQL 8.0+
-- Redis 6.0+
-- Docker (선택사항)
-
-### Local Development
-```bash
-# 1. 저장소 클론
-git clone <repository-url>
-cd BE
-
-# 2. 의존성 설치
-./gradlew build
-
-# 3. 데이터베이스 설정
-# MySQL에 refood 데이터베이스 생성
-
-# 4. Redis 실행
-redis-server
-
-# 5. 애플리케이션 실행
-./gradlew bootRun
-```
-
-### Docker 실행
-```bash
-# Docker Compose로 전체 스택 실행
-docker-compose up -d
-```
-
-## 🤝 기여하기
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📞 문의
-
-프로젝트에 대한 문의사항이 있으시면 이슈를 생성해 주세요.
 
 ---
 

@@ -37,17 +37,14 @@
 리푸드는 남는 식품 거래 플랫폼 서비스로, 합리적 소비와 환경보호를 모두 얻는 똑똑한 푸드 픽업 서비스입니다.  
 이를 통해 합리적이고 환경친화적인 식문화에 기여하자! 라는 서비스 목표를 갖고 있습니다.  
 
-
-
 ### 💰 우리 서비스의 가치
 - **경제적 가치 - 소비자** : 소비자는 근처 마감 할인을 통한 이득을 얻는 동시에, 환경 포인트 및 쿠폰 리워드를 통해 서비스 이용 동기를 얻습니다.
 - **경제적 가치 - 판매자** : 판매자는 재고에 대한 원가를 회수하고, 빠른 가게 노출을 통한 추가 매출 기회를 얻습니다.  
 - **환경 보호**: 음식물 쓰레기 감소를 통한 탄소 배출량 감축
 
 ---
-
+ 
 ## ✨ 주요 기능
-
 ### 🔐 인증 및 권한 관리
 - **JWT 기반 인증 시스템**: 안전하고 확장 가능한 토큰 기반 인증
 - **OAuth2 소셜 로그인**: 카카오 로그인 지원
@@ -148,17 +145,286 @@
 ## 📁 프로젝트 구조
 
 ```
-📦 src
- ┣ 📂api          
- ┣ 📂assets        
- ┣ 📂components    
- ┣ 📂constants     
- ┣ 📂hooks         
- ┣ 📂navigations   
- ┣ 📂screens     
- ┣ 📂types         
- ┣ 📂utils         
- ┣ 📂zustand      
+📦src
+ ┣ 📂api
+ ┃ ┣ 📜auth.ts
+ ┃ ┣ 📜axios.ts
+ ┃ ┣ 📜cart.ts
+ ┃ ┣ 📜environment.ts
+ ┃ ┣ 📜history.ts
+ ┃ ┣ 📜image.ts
+ ┃ ┣ 📜like.ts
+ ┃ ┣ 📜location.ts
+ ┃ ┣ 📜map.ts
+ ┃ ┣ 📜member.ts
+ ┃ ┣ 📜mypage.ts
+ ┃ ┣ 📜notification.ts
+ ┃ ┣ 📜order.ts
+ ┃ ┣ 📜queryClient.ts
+ ┃ ┣ 📜review.ts
+ ┃ ┣ 📜seller.ts
+ ┃ ┗ 📜store.ts
+ ┣ 📂assets
+ ┃ ┣ 📂dummy
+ ┃ ┃ ┗ 📜dummy.webp
+ ┃ ┣ 📂fonts
+ ┃ ┃ ┣ 📜Pretendard-Black.ttf
+ ┃ ┃ ┣ 📜Pretendard-Bold.ttf
+ ┃ ┃ ┣ 📜Pretendard-ExtraBold.ttf
+ ┃ ┃ ┣ 📜Pretendard-ExtraLight.ttf
+ ┃ ┃ ┣ 📜Pretendard-Light.ttf
+ ┃ ┃ ┣ 📜Pretendard-Medium.ttf
+ ┃ ┃ ┣ 📜Pretendard-Regular.ttf
+ ┃ ┃ ┣ 📜Pretendard-SemiBold.ttf
+ ┃ ┃ ┗ 📜Pretendard-Thin.ttf
+ ┃ ┣ 📂icons
+ ┃ ┃ ┣ 📜accept-active.svg
+ ┃ ┃ ┣ 📜accept.svg
+ ┃ ┃ ┣ 📜alert-off.svg
+ ┃ ┃ ┣ 📜alert-on.svg
+ ┃ ┃ ┣ 📜arrow-down-line.svg
+ ┃ ┃ ┣ 📜arrow-down.svg
+ ┃ ┃ ┣ 📜arrow-right-light.svg
+ ┃ ┃ ┣ 📜arrow-right.svg
+ ┃ ┃ ┣ 📜arrow.svg
+ ┃ ┃ ┣ 📜back.svg
+ ┃ ┃ ┣ 📜bin.svg
+ ┃ ┃ ┣ 📜cancle.svg
+ ┃ ┃ ┣ 📜cart.svg
+ ┃ ┃ ┣ 📜check-black.svg
+ ┃ ┃ ┣ 📜check.svg
+ ┃ ┃ ┣ 📜clock.svg
+ ┃ ┃ ┣ 📜delete.svg
+ ┃ ┃ ┣ 📜eco.svg
+ ┃ ┃ ┣ 📜favorite-active.svg
+ ┃ ┃ ┣ 📜favorite.svg
+ ┃ ┃ ┣ 📜home-active.svg
+ ┃ ┃ ┣ 📜home.svg
+ ┃ ┃ ┣ 📜kakao.svg
+ ┃ ┃ ┣ 📜levelup.svg
+ ┃ ┃ ┣ 📜like.svg
+ ┃ ┃ ┣ 📜list.svg
+ ┃ ┃ ┣ 📜map-active.svg
+ ┃ ┃ ┣ 📜map.svg
+ ┃ ┃ ┣ 📜menu-active.svg
+ ┃ ┃ ┣ 📜menu.svg
+ ┃ ┃ ┣ 📜minus.svg
+ ┃ ┃ ┣ 📜modal-check.svg
+ ┃ ┃ ┣ 📜modal-warn.svg
+ ┃ ┃ ┣ 📜msg-check.svg
+ ┃ ┃ ┣ 📜msg-error.svg
+ ┃ ┃ ┣ 📜my-active.svg
+ ┃ ┃ ┣ 📜my.svg
+ ┃ ┃ ┣ 📜order-active.svg
+ ┃ ┃ ┣ 📜order.svg
+ ┃ ┃ ┣ 📜Pencil.svg
+ ┃ ┃ ┣ 📜plus.svg
+ ┃ ┃ ┣ 📜region-gray.svg
+ ┃ ┃ ┣ 📜region.svg
+ ┃ ┃ ┣ 📜search-gray.svg
+ ┃ ┃ ┣ 📜search.svg
+ ┃ ┃ ┣ 📜star-gray.svg
+ ┃ ┃ ┣ 📜star.svg
+ ┃ ┃ ┣ 📜trash.svg
+ ┃ ┃ ┗ 📜unlike.svg
+ ┃ ┣ 📂images
+ ┃ ┃ ┣ 📜chinese.webp
+ ┃ ┃ ┣ 📜closedPin.png
+ ┃ ┃ ┣ 📜dessert.webp
+ ┃ ┃ ┣ 📜donuts.webp
+ ┃ ┃ ┣ 📜empty-cart.webp
+ ┃ ┃ ┣ 📜goroke.webp
+ ┃ ┃ ┣ 📜gorokeone.webp
+ ┃ ┃ ┣ 📜gwabegi.webp
+ ┃ ┃ ┣ 📜gwabegione.webp
+ ┃ ┃ ┣ 📜japanese.webp
+ ┃ ┃ ┣ 📜korean.webp
+ ┃ ┃ ┣ 📜level1.webp
+ ┃ ┃ ┣ 📜level2.webp
+ ┃ ┃ ┣ 📜level3.webp
+ ┃ ┃ ┣ 📜level4.webp
+ ┃ ┃ ┣ 📜login-img.webp
+ ┃ ┃ ┣ 📜order-success.webp
+ ┃ ┃ ┣ 📜pin.png
+ ┃ ┃ ┣ 📜refood.webp
+ ┃ ┃ ┣ 📜splash.png
+ ┃ ┃ ┣ 📜street.webp
+ ┃ ┃ ┗ 📜western.webp
+ ┃ ┗ 📂lottie
+ ┃ ┃ ┣ 📜earth.json
+ ┃ ┃ ┣ 📜levelup.json
+ ┃ ┃ ┗ 📜trees.json
+ ┣ 📂components
+ ┃ ┣ 📂cart
+ ┃ ┃ ┣ 📜CartFooter.tsx
+ ┃ ┃ ┣ 📜CartMenuItem.tsx
+ ┃ ┃ ┗ 📜CartStoreHeader.tsx
+ ┃ ┣ 📂environment
+ ┃ ┃ ┣ 📜CountUp.tsx
+ ┃ ┃ ┣ 📜KakaoButton.tsx
+ ┃ ┃ ┗ 📜MetricBox.tsx
+ ┃ ┣ 📂location
+ ┃ ┃ ┗ 📜LocationItem.tsx
+ ┃ ┣ 📂map
+ ┃ ┃ ┗ 📜HearIcon.tsx
+ ┃ ┣ 📂mypage
+ ┃ ┃ ┗ 📜LevelProgress.tsx
+ ┃ ┣ 📂order
+ ┃ ┃ ┣ 📜LevelUpPopup.tsx
+ ┃ ┃ ┣ 📜MenuItem.tsx
+ ┃ ┃ ┣ 📜ReuseOption.tsx
+ ┃ ┃ ┗ 📜RippleCircle.tsx
+ ┃ ┣ 📂seller
+ ┃ ┃ ┗ 📜MonthlySalesChart.tsx
+ ┃ ┣ 📂signup
+ ┃ ┃ ┣ 📜BusinessNumberInput.tsx
+ ┃ ┃ ┣ 📜NicknameInput.tsx
+ ┃ ┃ ┣ 📜PhoneNumberInput.tsx
+ ┃ ┃ ┣ 📜PhonePrefixDropdown.tsx
+ ┃ ┃ ┣ 📜RegionSelector.tsx
+ ┃ ┃ ┗ 📜ValidationMessage.tsx
+ ┃ ┣ 📂store
+ ┃ ┃ ┣ 📜CategoryCarousel.tsx
+ ┃ ┃ ┣ 📜CategoryHeader.tsx
+ ┃ ┃ ┣ 📜HorizontalSnapList.tsx
+ ┃ ┃ ┣ 📜LoadingFooter.tsx
+ ┃ ┃ ┣ 📜ReviewItem.tsx
+ ┃ ┃ ┣ 📜SearchSection.tsx
+ ┃ ┃ ┣ 📜StarRating.tsx
+ ┃ ┃ ┣ 📜StickyControls.tsx
+ ┃ ┃ ┣ 📜StoreCard.tsx
+ ┃ ┃ ┣ 📜StoreHeader.tsx
+ ┃ ┃ ┣ 📜StoreListCard.tsx
+ ┃ ┃ ┣ 📜StoreMap.tsx
+ ┃ ┃ ┣ 📜StoreMenuItem.tsx
+ ┃ ┃ ┗ 📜TopBar.tsx
+ ┃ ┣ 📂_common
+ ┃ ┃ ┣ 📜BackButton.tsx
+ ┃ ┃ ┣ 📜CartButton.tsx
+ ┃ ┃ ┣ 📜EmptyState.tsx
+ ┃ ┃ ┣ 📜ItemSeparator.tsx
+ ┃ ┃ ┣ 📜RestaurantList.tsx
+ ┃ ┃ ┗ 📜Sort.tsx
+ ┃ ┗ 📂_modal
+ ┃ ┃ ┗ 📜CustomModal.tsx
+ ┣ 📂constants
+ ┃ ┣ 📜categoryImages.ts
+ ┃ ┣ 📜colors.ts
+ ┃ ┣ 📜environmentLevel.ts
+ ┃ ┣ 📜keys.ts
+ ┃ ┣ 📜messages.ts
+ ┃ ┣ 📜modalStates.ts
+ ┃ ┣ 📜navigations.ts
+ ┃ ┗ 📜numbers.ts
+ ┣ 📂hooks
+ ┃ ┣ 📂queries
+ ┃ ┃ ┣ 📜useAuth.ts
+ ┃ ┃ ┣ 📜useCart.ts
+ ┃ ┃ ┣ 📜useEnvironment.ts
+ ┃ ┃ ┣ 📜useHistory.ts
+ ┃ ┃ ┣ 📜useImage.ts
+ ┃ ┃ ┣ 📜useLike.ts
+ ┃ ┃ ┣ 📜useLocation.ts
+ ┃ ┃ ┣ 📜useMap.ts
+ ┃ ┃ ┣ 📜useMember.ts
+ ┃ ┃ ┣ 📜useMyPage.ts
+ ┃ ┃ ┣ 📜useNotification.ts
+ ┃ ┃ ┣ 📜useOrder.ts
+ ┃ ┃ ┣ 📜useReview.ts
+ ┃ ┃ ┣ 📜useSeller.ts
+ ┃ ┃ ┗ 📜useStore.ts
+ ┃ ┣ 📂useAnimation
+ ┃ ┃ ┗ 📜useRippleAnimation.ts
+ ┃ ┗ 📂useNotification
+ ┃ ┃ ┣ 📜index.ts
+ ┃ ┃ ┗ 📜NotificationProvider.tsx
+ ┣ 📂navigations
+ ┃ ┣ 📂bottomTabs
+ ┃ ┃ ┣ 📜SellerBottomTabsNavigator.tsx
+ ┃ ┃ ┗ 📜UserBottomTabsNavigator.tsx
+ ┃ ┣ 📂root
+ ┃ ┃ ┗ 📜RootNavigator.tsx
+ ┃ ┗ 📂stack
+ ┃ ┃ ┣ 📜LoggedOutStackNavigator.tsx
+ ┃ ┃ ┣ 📜SellerStackNavigator.tsx
+ ┃ ┃ ┗ 📜UserStackNavigator.tsx
+ ┣ 📂screens
+ ┃ ┣ 📂auth
+ ┃ ┃ ┗ 📜LoginScreen.tsx
+ ┃ ┣ 📂cart
+ ┃ ┃ ┗ 📜CartScreen.tsx
+ ┃ ┣ 📂history
+ ┃ ┃ ┣ 📜HistoryDetailScreen.tsx
+ ┃ ┃ ┣ 📜HistoryHomeScreen.tsx
+ ┃ ┃ ┗ 📜ReviewWriteScreen.tsx
+ ┃ ┣ 📂like
+ ┃ ┃ ┗ 📜LikeHomeScreen.tsx
+ ┃ ┣ 📂location
+ ┃ ┃ ┣ 📜LocationPostcodeScreen.tsx
+ ┃ ┃ ┗ 📜LocationScreen.tsx
+ ┃ ┣ 📂map
+ ┃ ┃ ┣ 📜MapHomeScreen.tsx
+ ┃ ┃ ┗ 📜NearStoreListScreen.tsx
+ ┃ ┣ 📂mypage
+ ┃ ┃ ┣ 📜GreenReportScreen.tsx
+ ┃ ┃ ┣ 📜MypageHomeScreen.tsx
+ ┃ ┃ ┣ 📜NicknameChangeScreen.tsx
+ ┃ ┃ ┣ 📜PrivateScreen.tsx
+ ┃ ┃ ┣ 📜ReviewScreen.tsx
+ ┃ ┃ ┗ 📜RuleScreen.tsx
+ ┃ ┣ 📂notification
+ ┃ ┃ ┣ 📜InAppNotification.tsx
+ ┃ ┃ ┗ 📜NotificationScreen.tsx
+ ┃ ┣ 📂order
+ ┃ ┃ ┣ 📜CouponBoxScreen.tsx
+ ┃ ┃ ┣ 📜OrderScreen.tsx
+ ┃ ┃ ┣ 📜OrderSuccessScreen.tsx
+ ┃ ┃ ┣ 📜ProgressIndicator.tsx
+ ┃ ┃ ┗ 📜TossPaymentScreen.tsx
+ ┃ ┣ 📂seller
+ ┃ ┃ ┣ 📜SellerCreateScreen.tsx
+ ┃ ┃ ┣ 📜SellerMenuModifyScreen.tsx
+ ┃ ┃ ┣ 📜SellerMenuRegisterScreen.tsx
+ ┃ ┃ ┣ 📜SellerMenuScreen.tsx
+ ┃ ┃ ┣ 📜SellerMypageScreen.tsx
+ ┃ ┃ ┣ 📜SellerOrderScreen.tsx
+ ┃ ┃ ┗ 📜SellerStoreReigster.tsx
+ ┃ ┣ 📂signup
+ ┃ ┃ ┣ 📜DaumPostcodeScreen.tsx
+ ┃ ┃ ┣ 📜SellerSignupScreen.tsx
+ ┃ ┃ ┣ 📜SignupTypeScreen.tsx
+ ┃ ┃ ┗ 📜UserSignupScreen.tsx
+ ┃ ┣ 📂store
+ ┃ ┃ ┣ 📜CategoryListScreen.tsx
+ ┃ ┃ ┣ 📜MenuDetailScreen.tsx
+ ┃ ┃ ┣ 📜SearchResultScreen.tsx
+ ┃ ┃ ┣ 📜StoreDetailScreen.tsx
+ ┃ ┃ ┣ 📜StoreHomeScreen.tsx
+ ┃ ┃ ┣ 📜StoreInfoScreen.tsx
+ ┃ ┃ ┗ 📜StoreReviewScreen.tsx
+ ┃ ┗ 📂_common
+ ┃ ┃ ┣ 📜EmptyStateScreen.tsx
+ ┃ ┃ ┗ 📜LoadingScreen.tsx
+ ┣ 📂types
+ ┃ ┣ 📜api.ts
+ ┃ ┣ 📜domain.ts
+ ┃ ┗ 📜postcode.ts
+ ┣ 📂utils
+ ┃ ┣ 📜address.ts
+ ┃ ┣ 📜asyncStorage.ts
+ ┃ ┣ 📜date.ts
+ ┃ ┣ 📜encryptStorage.ts
+ ┃ ┣ 📜format.ts
+ ┃ ┣ 📜header.ts
+ ┃ ┣ 📜level.ts
+ ┃ ┣ 📜navigation.tsx
+ ┃ ┣ 📜notification.tsx
+ ┃ ┣ 📜pushNoti.js
+ ┃ ┗ 📜toast.ts
+ ┣ 📂zustand
+ ┃ ┣ 📜useAuthStore.ts
+ ┃ ┣ 📜useListScrollStore.ts
+ ┃ ┗ 📜useSignupStore.ts
  ┗ 📜declarations.d.ts
 
 ```

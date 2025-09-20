@@ -1,7 +1,33 @@
-# RE:FOOD
-🥇 2025 IITP 우수성과공유 컨퍼런스 최우수상
+<h1 align="center">RE:FOOD</h1>
+
+<div align="center" style="font-size:18px">
+<b>🥇2025 우수성과 공유회 컨퍼런스 최우수상🥇</b>
+<br><br>
+<b><i>환경과 함께하는 똑똑한 한 끼</i></b>
+<br><br>
+<b> 🌳RE:FOOD🌳</b>  
+</div>
 
 <img width="1062" height="599" alt="image" src="https://github.com/user-attachments/assets/b61ab463-3957-49d2-b152-948a86699d2b" />
+
+---
+
+<div align="center">
+
+## 📖 목차
+
+| 항목 |
+|------|
+| [🌳 서비스 소개](#-서비스-소개) |
+| [✨ 주요 기능](#-주요-기능) |
+| [💻 기술 스택](#-기술-스택) |
+| [🏛 시스템 아키텍처](#-시스템-아키텍처) |
+| [📁 프로젝트 구조](#-프로젝트-구조) |
+| [👥 팀원](#-팀원) |
+
+</div>
+
+---
 
 
 ## 🌳 서비스 소개
@@ -17,6 +43,8 @@
 - **경제적 가치 - 소비자** : 소비자는 근처 마감 할인을 통한 이득을 얻는 동시에, 환경 포인트 및 쿠폰 리워드를 통해 서비스 이용 동기를 얻습니다.
 - **경제적 가치 - 판매자** : 판매자는 재고에 대한 원가를 회수하고, 빠른 가게 노출을 통한 추가 매출 기회를 얻습니다.  
 - **환경 보호**: 음식물 쓰레기 감소를 통한 탄소 배출량 감축
+
+---
 
 ## ✨ 주요 기능
 
@@ -47,8 +75,9 @@
 - **환경 레벨 업 알림**: 포인트 적립 및 레벨 상승 알림
 - **가게별 알림**: 새로운 메뉴, 할인 정보 등
 
+---
 
-## 🛠️ 기술 스택
+## 💻 기술 스택
 
 <img width="907" height="464" alt="2025-09-05_10 51 55" src="https://github.com/user-attachments/assets/8672fc64-0f1b-423c-97be-e6c8fb3158c2" />
 
@@ -114,29 +143,72 @@
 - Babel (Module Resolver 포함)
 - Node.js 18+
 
+---
 
 ## 📁 프로젝트 구조
 
 ```
-src/
-├── api/          # 서버 통신 (axios, fetch 등)
-├── assets/       # 이미지, 아이콘, 폰트 등 정적 자원
-├── components/   # 재사용 가능한 UI 컴포넌트
-├── constants/    # 상수 값 (색상, 경로, 환경변수 키 등)
-├── hooks/        # 커스텀 훅
-├── navigation/   # 화면 전환 (React Navigation 구조)
-├── screens/      # 실제 화면 단위 페이지
-├── store/        # 전역 상태 관리 (zustand 등)
-├── types/        # TypeScript 타입 정의
-└── utils/        # 공용 유틸리티 함수
+📦 src
+ ┣ 📂api          
+ ┣ 📂assets        
+ ┣ 📂components    
+ ┣ 📂constants     
+ ┣ 📂hooks         
+ ┣ 📂navigations   
+ ┣ 📂screens     
+ ┣ 📂types         
+ ┣ 📂utils         
+ ┣ 📂zustand      
+ ┗ 📜declarations.d.ts
+
 ```
-
-## 🏗️ 시스템 아키텍처
-
-<img width="1125" height="551" alt="image" src="https://github.com/user-attachments/assets/8e3643c6-3abb-4686-9e69-d05441293365" />
-
-
 
 ---
 
-**Refood Team** - 환경과 함께하는 똑똑한 한 끼를 만들어갑니다 🌱
+## 🏛 시스템 아키텍처
+
+<img width="1125" height="551" alt="image" src="https://github.com/user-attachments/assets/8e3643c6-3abb-4686-9e69-d05441293365" />
+
+---
+<div align="center">
+  
+## 👥 팀원
+
+<table width="950px">
+    <thead>
+    </thead>
+    <tr>
+        <th>Picture</th>
+        <td align="center"><a href="https://github.com/chtoqur"><img src="https://avatars.githubusercontent.com/u/124266586?v=4?v=4" width="60" height="60" alt="이름1"></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="https://avatars.githubusercontent.com/u/119719994?v=4" width="60" height="60" alt="이름2"></a></td>
+        <td align="center"><a href="https://github.com/wonslee"><img src="https://avatars.githubusercontent.com/u/72124326?v=4" width="60" height="60" alt="이름3"></a></td>
+        <td align="center"><a href="https://github.com/qowl880"><img src="https://avatars.githubusercontent.com/u/82360230?v=4" width="60" height="60" alt="이름4"></a></td>
+        <td align="center"><a href="https://github.com/dongcarry96"><img src="https://avatars.githubusercontent.com/u/103975117?v=4" width="60" height="60" alt="이름5"></a></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td align="center">최이서</td>
+        <td align="center">구희원</td>
+        <td align="center">이원석</td>
+        <td align="center">배지원</td>
+        <td align="center">김동현</td>
+    </tr>
+    <tr>
+        <th>Position</th>
+        <td align="center"><b>Frontend</b>
+        <td align="center"><b>Frontend</b>
+        <td align="center"><b>Backend</b>
+        <td align="center"><b>Backend</b>
+        <td align="center"><b>Backend</b>
+    </tr>
+    <tr>
+        <th>GitHub</th>
+        <td align="center"><a href="https://github.com/chtoqur"><img src="http://img.shields.io/badge/chtoqur-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/HeHelee-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/wonslee-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/qowl880-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/dongcarry96-green?style=social&logo=github"/></a></td>
+    </tr>
+</table>
+
+</div>

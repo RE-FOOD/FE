@@ -43,36 +43,91 @@
 - **환경 보호**: 음식물 쓰레기 감소를 통한 탄소 배출량 감축
 
 ---
+<div align="center">
  
-## ✨ 주요 기능
-### 🔐 인증 및 권한 관리
-- **JWT 기반 인증 시스템**: 안전하고 확장 가능한 토큰 기반 인증
-- **OAuth2 소셜 로그인**: 카카오 로그인 지원
-- **역할별 권한 처리**: 일반 사용자, 사업자, 관리자 역할 구분
-- **환경 포인트 시스템**: 환경 친화적 활동에 대한 포인트 적립
+## 🌟 주요 기능
+### ✨주문 및 결제✨
 
-### 🏪 가게 관리
-- **사업자 등록 및 승인**: 사업자 자격 검증 시스템
-- **가게 정보 관리**: 메뉴, 영업시간, 위치 등 상세 정보 관리
-- **실시간 재고 관리**: 남는 음식 실시간 업데이트
+Redis를 활용하여 장바구니를 빠르고 안정적으로 관리할 수 있습니다. <br>
+카드, 간편 결제, 포인트 결제를 지원합니다. <br>
+주문 건당 20포인트가 적립됩니다.
 
-### 🗺️ 지도 기반 서비스
-- **위치 기반 가게 조회**: 사용자 위치 기반 근처 가게 검색
-- **거리 계산**: 사용자와 가게 간 거리 자동 계산
-- **지역별 필터링**: 원하는 지역의 가게만 조회
-
-### 🛒 주문 및 결제
-- **장바구니 시스템**: Redis 기반 실시간 장바구니 관리
-- **주문 프로세스**: 주문 생성, 확인, 취소 전체 플로우
-- **결제 시스템**: 다양한 결제 수단 지원
-- **주문 내역 관리**: 사용자별 주문 이력 조회
-
-### 🔔 알림 서비스
-- **FCM 푸시 알림**: 실시간 주문 상태 알림
-- **환경 레벨 업 알림**: 포인트 적립 및 레벨 상승 알림
-- **가게별 알림**: 새로운 메뉴, 할인 정보 등
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/bdc8a7d5-4629-487e-bf20-aceb20e5746c" alt="메뉴 상세" width="400"/>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/f62c88e4-f04a-4a3e-8e31-6554325e98b9" alt="장바구니" width="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/333d54b1-a198-49ac-91b0-d459d679db5b" alt="주문완료" width="400">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/19cc1d68-3586-4b5d-86b8-c9ba674545a6" alt="레벨업" width="400">
+    </td>
+  </tr>
+</table>
 
 ---
+
+### ✨지도 기반 서비스✨
+사용자 위치를 기반으로 5Km 반경에 있는 가게를 검색할 수 있습니다. <br>
+사용자와 가게 간 거리를 자동으로 계산합니다.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/39889247-3502-484d-902a-6a2c61ec5677" alt="지도" width="400">
+    </td>
+  </tr>
+</table>
+
+
+---
+
+### ✨알림 서비스✨
+FCM 푸시 알림으로 실시간 주문 상태를 확인할 수 있습니다. <br>
+환경 레벨 업 알림으로 포인트 적립 시 레벨 상승 소식을 받을 수 있습니다. <br>
+가게별 알림으로 관심 가게의 신메뉴와 할인 정보를 확인할 수 있습니다.
+  
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/52af7a7e-fa0b-485f-8543-8f313766e117" alt="알림" width="400">
+    </td>
+  </tr>
+</table>
+
+---
+
+### ✨가게 관리✨ 
+사업자 등록 및 승인 기능을 통해 자격을 검증할 수 있습니다. <br>
+가게 관리 기능을 통해 메뉴, 영업시간, 위치 등 다양한 정보를 관리할 수 있습니다. <br>
+매출 정보 관리 기능을 통해 일별·월별 매출 현황을 확인할 수 있습니다.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/86913578-4bfe-42e0-a704-8953d006daca" alt="사업자 승인" width="400" />
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/7148d284-bbeb-4723-8ec1-3ecb960a3492" alt="가게 메뉴 관리" width="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+    <img src="https://github.com/user-attachments/assets/8ad78d44-3e5d-4cb9-901f-23ac2878a11e" alt="주문 접수" width="400" />
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/5ea32a98-cd49-46e6-84b8-fe8518595355" alt="가게 매출" width="400"/>
+    </td>
+  </tr>
+</table>
+
+---
+</div>
+
 
 ## 💻 기술 스택
 
@@ -139,6 +194,8 @@
 - Metro Bundler (React Native 기본)
 - Babel (Module Resolver 포함)
 - Node.js 18+
+
+
 
 ---
 

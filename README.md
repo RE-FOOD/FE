@@ -1,7 +1,33 @@
-# RE:FOOD
-🥇 2025 IITP 우수성과공유 컨퍼런스 최우수상
+<h1 align="center">RE:FOOD</h1>
+
+<div align="center" style="font-size:18px">
+<b>🥇2025 우수성과 공유회 컨퍼런스 최우수상🥇</b>
+<br><br>
+<b><i>환경과 함께하는 똑똑한 한 끼</i></b>
+<br><br>
+<b> 🌳RE:FOOD🌳</b>  
+</div>
 
 <img width="1062" height="599" alt="image" src="https://github.com/user-attachments/assets/b61ab463-3957-49d2-b152-948a86699d2b" />
+
+---
+
+<div align="center">
+
+## 📖 목차
+
+| 항목 |
+|------|
+| [🌳 서비스 소개](#-서비스-소개) |
+| [✨ 주요 기능](#-주요-기능) |
+| [💻 기술 스택](#-기술-스택) |
+| [🏛 시스템 아키텍처](#-시스템-아키텍처) |
+| [📁 프로젝트 구조](#-프로젝트-구조) |
+| [👥 팀원](#-팀원) |
+
+</div>
+
+---
 
 
 ## 🌳 서비스 소개
@@ -11,44 +37,99 @@
 리푸드는 남는 식품 거래 플랫폼 서비스로, 합리적 소비와 환경보호를 모두 얻는 똑똑한 푸드 픽업 서비스입니다.  
 이를 통해 합리적이고 환경친화적인 식문화에 기여하자! 라는 서비스 목표를 갖고 있습니다.  
 
-
-
 ### 💰 우리 서비스의 가치
 - **경제적 가치 - 소비자** : 소비자는 근처 마감 할인을 통한 이득을 얻는 동시에, 환경 포인트 및 쿠폰 리워드를 통해 서비스 이용 동기를 얻습니다.
 - **경제적 가치 - 판매자** : 판매자는 재고에 대한 원가를 회수하고, 빠른 가게 노출을 통한 추가 매출 기회를 얻습니다.  
 - **환경 보호**: 음식물 쓰레기 감소를 통한 탄소 배출량 감축
 
-## ✨ 주요 기능
+---
+<div align="center">
+ 
+## 🌟 주요 기능
+### ✨주문 및 결제✨
 
-### 🔐 인증 및 권한 관리
-- **JWT 기반 인증 시스템**: 안전하고 확장 가능한 토큰 기반 인증
-- **OAuth2 소셜 로그인**: 카카오 로그인 지원
-- **역할별 권한 처리**: 일반 사용자, 사업자, 관리자 역할 구분
-- **환경 포인트 시스템**: 환경 친화적 활동에 대한 포인트 적립
+Redis를 활용하여 장바구니를 빠르고 안정적으로 관리할 수 있습니다. <br>
+카드, 간편 결제, 포인트 결제를 지원합니다. <br>
+주문 건당 20포인트가 적립됩니다.
 
-### 🏪 가게 관리
-- **사업자 등록 및 승인**: 사업자 자격 검증 시스템
-- **가게 정보 관리**: 메뉴, 영업시간, 위치 등 상세 정보 관리
-- **실시간 재고 관리**: 남는 음식 실시간 업데이트
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/bdc8a7d5-4629-487e-bf20-aceb20e5746c" alt="메뉴 상세" width="400"/>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/f62c88e4-f04a-4a3e-8e31-6554325e98b9" alt="장바구니" width="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/333d54b1-a198-49ac-91b0-d459d679db5b" alt="주문완료" width="400">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/19cc1d68-3586-4b5d-86b8-c9ba674545a6" alt="레벨업" width="400">
+    </td>
+  </tr>
+</table>
 
-### 🗺️ 지도 기반 서비스
-- **위치 기반 가게 조회**: 사용자 위치 기반 근처 가게 검색
-- **거리 계산**: 사용자와 가게 간 거리 자동 계산
-- **지역별 필터링**: 원하는 지역의 가게만 조회
+---
 
-### 🛒 주문 및 결제
-- **장바구니 시스템**: Redis 기반 실시간 장바구니 관리
-- **주문 프로세스**: 주문 생성, 확인, 취소 전체 플로우
-- **결제 시스템**: 다양한 결제 수단 지원
-- **주문 내역 관리**: 사용자별 주문 이력 조회
-
-### 🔔 알림 서비스
-- **FCM 푸시 알림**: 실시간 주문 상태 알림
-- **환경 레벨 업 알림**: 포인트 적립 및 레벨 상승 알림
-- **가게별 알림**: 새로운 메뉴, 할인 정보 등
+### ✨지도 기반 서비스✨
+사용자 위치를 기반으로 5Km 반경에 있는 가게를 검색할 수 있습니다. <br>
+사용자와 가게 간 거리를 자동으로 계산합니다.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/39889247-3502-484d-902a-6a2c61ec5677" alt="지도" width="400">
+    </td>
+  </tr>
+</table>
 
 
-## 🛠️ 기술 스택
+---
+
+### ✨알림 서비스✨
+FCM 푸시 알림으로 실시간 주문 상태를 확인할 수 있습니다. <br>
+환경 레벨 업 알림으로 포인트 적립 시 레벨 상승 소식을 받을 수 있습니다. <br>
+가게별 알림으로 관심 가게의 신메뉴와 할인 정보를 확인할 수 있습니다.
+  
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/52af7a7e-fa0b-485f-8543-8f313766e117" alt="알림" width="400">
+    </td>
+  </tr>
+</table>
+
+---
+
+### ✨가게 관리✨ 
+사업자 등록 및 승인 기능을 통해 자격을 검증할 수 있습니다. <br>
+가게 관리 기능을 통해 메뉴, 영업시간, 위치 등 다양한 정보를 관리할 수 있습니다. <br>
+매출 정보 관리 기능을 통해 일별·월별 매출 현황을 확인할 수 있습니다.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/86913578-4bfe-42e0-a704-8953d006daca" alt="사업자 승인" width="400" />
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/7148d284-bbeb-4723-8ec1-3ecb960a3492" alt="가게 메뉴 관리" width="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+    <img src="https://github.com/user-attachments/assets/8ad78d44-3e5d-4cb9-901f-23ac2878a11e" alt="주문 접수" width="400" />
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/5ea32a98-cd49-46e6-84b8-fe8518595355" alt="가게 매출" width="400"/>
+    </td>
+  </tr>
+</table>
+
+---
+</div>
+
+
+## 💻 기술 스택
 
 <img width="907" height="464" alt="2025-09-05_10 51 55" src="https://github.com/user-attachments/assets/8672fc64-0f1b-423c-97be-e6c8fb3158c2" />
 
@@ -115,28 +196,342 @@
 - Node.js 18+
 
 
-## 📁 프로젝트 구조
-
-```
-src/
-├── api/          # 서버 통신 (axios, fetch 등)
-├── assets/       # 이미지, 아이콘, 폰트 등 정적 자원
-├── components/   # 재사용 가능한 UI 컴포넌트
-├── constants/    # 상수 값 (색상, 경로, 환경변수 키 등)
-├── hooks/        # 커스텀 훅
-├── navigation/   # 화면 전환 (React Navigation 구조)
-├── screens/      # 실제 화면 단위 페이지
-├── store/        # 전역 상태 관리 (zustand 등)
-├── types/        # TypeScript 타입 정의
-└── utils/        # 공용 유틸리티 함수
-```
-
-## 🏗️ 시스템 아키텍처
-
-<img width="1125" height="551" alt="image" src="https://github.com/user-attachments/assets/8e3643c6-3abb-4686-9e69-d05441293365" />
-
-
 
 ---
 
-**Refood Team** - 환경과 함께하는 똑똑한 한 끼를 만들어갑니다 🌱
+## 📁 프로젝트 구조
+
+```
+📦src
+ ┣ 📂api
+ ┃ ┣ 📜auth.ts
+ ┃ ┣ 📜axios.ts
+ ┃ ┣ 📜cart.ts
+ ┃ ┣ 📜environment.ts
+ ┃ ┣ 📜history.ts
+ ┃ ┣ 📜image.ts
+ ┃ ┣ 📜like.ts
+ ┃ ┣ 📜location.ts
+ ┃ ┣ 📜map.ts
+ ┃ ┣ 📜member.ts
+ ┃ ┣ 📜mypage.ts
+ ┃ ┣ 📜notification.ts
+ ┃ ┣ 📜order.ts
+ ┃ ┣ 📜queryClient.ts
+ ┃ ┣ 📜review.ts
+ ┃ ┣ 📜seller.ts
+ ┃ ┗ 📜store.ts
+ ┣ 📂assets
+ ┃ ┣ 📂dummy
+ ┃ ┃ ┗ 📜dummy.webp
+ ┃ ┣ 📂fonts
+ ┃ ┃ ┣ 📜Pretendard-Black.ttf
+ ┃ ┃ ┣ 📜Pretendard-Bold.ttf
+ ┃ ┃ ┣ 📜Pretendard-ExtraBold.ttf
+ ┃ ┃ ┣ 📜Pretendard-ExtraLight.ttf
+ ┃ ┃ ┣ 📜Pretendard-Light.ttf
+ ┃ ┃ ┣ 📜Pretendard-Medium.ttf
+ ┃ ┃ ┣ 📜Pretendard-Regular.ttf
+ ┃ ┃ ┣ 📜Pretendard-SemiBold.ttf
+ ┃ ┃ ┗ 📜Pretendard-Thin.ttf
+ ┃ ┣ 📂icons
+ ┃ ┃ ┣ 📜accept-active.svg
+ ┃ ┃ ┣ 📜accept.svg
+ ┃ ┃ ┣ 📜alert-off.svg
+ ┃ ┃ ┣ 📜alert-on.svg
+ ┃ ┃ ┣ 📜arrow-down-line.svg
+ ┃ ┃ ┣ 📜arrow-down.svg
+ ┃ ┃ ┣ 📜arrow-right-light.svg
+ ┃ ┃ ┣ 📜arrow-right.svg
+ ┃ ┃ ┣ 📜arrow.svg
+ ┃ ┃ ┣ 📜back.svg
+ ┃ ┃ ┣ 📜bin.svg
+ ┃ ┃ ┣ 📜cancle.svg
+ ┃ ┃ ┣ 📜cart.svg
+ ┃ ┃ ┣ 📜check-black.svg
+ ┃ ┃ ┣ 📜check.svg
+ ┃ ┃ ┣ 📜clock.svg
+ ┃ ┃ ┣ 📜delete.svg
+ ┃ ┃ ┣ 📜eco.svg
+ ┃ ┃ ┣ 📜favorite-active.svg
+ ┃ ┃ ┣ 📜favorite.svg
+ ┃ ┃ ┣ 📜home-active.svg
+ ┃ ┃ ┣ 📜home.svg
+ ┃ ┃ ┣ 📜kakao.svg
+ ┃ ┃ ┣ 📜levelup.svg
+ ┃ ┃ ┣ 📜like.svg
+ ┃ ┃ ┣ 📜list.svg
+ ┃ ┃ ┣ 📜map-active.svg
+ ┃ ┃ ┣ 📜map.svg
+ ┃ ┃ ┣ 📜menu-active.svg
+ ┃ ┃ ┣ 📜menu.svg
+ ┃ ┃ ┣ 📜minus.svg
+ ┃ ┃ ┣ 📜modal-check.svg
+ ┃ ┃ ┣ 📜modal-warn.svg
+ ┃ ┃ ┣ 📜msg-check.svg
+ ┃ ┃ ┣ 📜msg-error.svg
+ ┃ ┃ ┣ 📜my-active.svg
+ ┃ ┃ ┣ 📜my.svg
+ ┃ ┃ ┣ 📜order-active.svg
+ ┃ ┃ ┣ 📜order.svg
+ ┃ ┃ ┣ 📜Pencil.svg
+ ┃ ┃ ┣ 📜plus.svg
+ ┃ ┃ ┣ 📜region-gray.svg
+ ┃ ┃ ┣ 📜region.svg
+ ┃ ┃ ┣ 📜search-gray.svg
+ ┃ ┃ ┣ 📜search.svg
+ ┃ ┃ ┣ 📜star-gray.svg
+ ┃ ┃ ┣ 📜star.svg
+ ┃ ┃ ┣ 📜trash.svg
+ ┃ ┃ ┗ 📜unlike.svg
+ ┃ ┣ 📂images
+ ┃ ┃ ┣ 📜chinese.webp
+ ┃ ┃ ┣ 📜closedPin.png
+ ┃ ┃ ┣ 📜dessert.webp
+ ┃ ┃ ┣ 📜donuts.webp
+ ┃ ┃ ┣ 📜empty-cart.webp
+ ┃ ┃ ┣ 📜goroke.webp
+ ┃ ┃ ┣ 📜gorokeone.webp
+ ┃ ┃ ┣ 📜gwabegi.webp
+ ┃ ┃ ┣ 📜gwabegione.webp
+ ┃ ┃ ┣ 📜japanese.webp
+ ┃ ┃ ┣ 📜korean.webp
+ ┃ ┃ ┣ 📜level1.webp
+ ┃ ┃ ┣ 📜level2.webp
+ ┃ ┃ ┣ 📜level3.webp
+ ┃ ┃ ┣ 📜level4.webp
+ ┃ ┃ ┣ 📜login-img.webp
+ ┃ ┃ ┣ 📜order-success.webp
+ ┃ ┃ ┣ 📜pin.png
+ ┃ ┃ ┣ 📜refood.webp
+ ┃ ┃ ┣ 📜splash.png
+ ┃ ┃ ┣ 📜street.webp
+ ┃ ┃ ┗ 📜western.webp
+ ┃ ┗ 📂lottie
+ ┃ ┃ ┣ 📜earth.json
+ ┃ ┃ ┣ 📜levelup.json
+ ┃ ┃ ┗ 📜trees.json
+ ┣ 📂components
+ ┃ ┣ 📂cart
+ ┃ ┃ ┣ 📜CartFooter.tsx
+ ┃ ┃ ┣ 📜CartMenuItem.tsx
+ ┃ ┃ ┗ 📜CartStoreHeader.tsx
+ ┃ ┣ 📂environment
+ ┃ ┃ ┣ 📜CountUp.tsx
+ ┃ ┃ ┣ 📜KakaoButton.tsx
+ ┃ ┃ ┗ 📜MetricBox.tsx
+ ┃ ┣ 📂location
+ ┃ ┃ ┗ 📜LocationItem.tsx
+ ┃ ┣ 📂map
+ ┃ ┃ ┗ 📜HearIcon.tsx
+ ┃ ┣ 📂mypage
+ ┃ ┃ ┗ 📜LevelProgress.tsx
+ ┃ ┣ 📂order
+ ┃ ┃ ┣ 📜LevelUpPopup.tsx
+ ┃ ┃ ┣ 📜MenuItem.tsx
+ ┃ ┃ ┣ 📜ReuseOption.tsx
+ ┃ ┃ ┗ 📜RippleCircle.tsx
+ ┃ ┣ 📂seller
+ ┃ ┃ ┗ 📜MonthlySalesChart.tsx
+ ┃ ┣ 📂signup
+ ┃ ┃ ┣ 📜BusinessNumberInput.tsx
+ ┃ ┃ ┣ 📜NicknameInput.tsx
+ ┃ ┃ ┣ 📜PhoneNumberInput.tsx
+ ┃ ┃ ┣ 📜PhonePrefixDropdown.tsx
+ ┃ ┃ ┣ 📜RegionSelector.tsx
+ ┃ ┃ ┗ 📜ValidationMessage.tsx
+ ┃ ┣ 📂store
+ ┃ ┃ ┣ 📜CategoryCarousel.tsx
+ ┃ ┃ ┣ 📜CategoryHeader.tsx
+ ┃ ┃ ┣ 📜HorizontalSnapList.tsx
+ ┃ ┃ ┣ 📜LoadingFooter.tsx
+ ┃ ┃ ┣ 📜ReviewItem.tsx
+ ┃ ┃ ┣ 📜SearchSection.tsx
+ ┃ ┃ ┣ 📜StarRating.tsx
+ ┃ ┃ ┣ 📜StickyControls.tsx
+ ┃ ┃ ┣ 📜StoreCard.tsx
+ ┃ ┃ ┣ 📜StoreHeader.tsx
+ ┃ ┃ ┣ 📜StoreListCard.tsx
+ ┃ ┃ ┣ 📜StoreMap.tsx
+ ┃ ┃ ┣ 📜StoreMenuItem.tsx
+ ┃ ┃ ┗ 📜TopBar.tsx
+ ┃ ┣ 📂_common
+ ┃ ┃ ┣ 📜BackButton.tsx
+ ┃ ┃ ┣ 📜CartButton.tsx
+ ┃ ┃ ┣ 📜EmptyState.tsx
+ ┃ ┃ ┣ 📜ItemSeparator.tsx
+ ┃ ┃ ┣ 📜RestaurantList.tsx
+ ┃ ┃ ┗ 📜Sort.tsx
+ ┃ ┗ 📂_modal
+ ┃ ┃ ┗ 📜CustomModal.tsx
+ ┣ 📂constants
+ ┃ ┣ 📜categoryImages.ts
+ ┃ ┣ 📜colors.ts
+ ┃ ┣ 📜environmentLevel.ts
+ ┃ ┣ 📜keys.ts
+ ┃ ┣ 📜messages.ts
+ ┃ ┣ 📜modalStates.ts
+ ┃ ┣ 📜navigations.ts
+ ┃ ┗ 📜numbers.ts
+ ┣ 📂hooks
+ ┃ ┣ 📂queries
+ ┃ ┃ ┣ 📜useAuth.ts
+ ┃ ┃ ┣ 📜useCart.ts
+ ┃ ┃ ┣ 📜useEnvironment.ts
+ ┃ ┃ ┣ 📜useHistory.ts
+ ┃ ┃ ┣ 📜useImage.ts
+ ┃ ┃ ┣ 📜useLike.ts
+ ┃ ┃ ┣ 📜useLocation.ts
+ ┃ ┃ ┣ 📜useMap.ts
+ ┃ ┃ ┣ 📜useMember.ts
+ ┃ ┃ ┣ 📜useMyPage.ts
+ ┃ ┃ ┣ 📜useNotification.ts
+ ┃ ┃ ┣ 📜useOrder.ts
+ ┃ ┃ ┣ 📜useReview.ts
+ ┃ ┃ ┣ 📜useSeller.ts
+ ┃ ┃ ┗ 📜useStore.ts
+ ┃ ┣ 📂useAnimation
+ ┃ ┃ ┗ 📜useRippleAnimation.ts
+ ┃ ┗ 📂useNotification
+ ┃ ┃ ┣ 📜index.ts
+ ┃ ┃ ┗ 📜NotificationProvider.tsx
+ ┣ 📂navigations
+ ┃ ┣ 📂bottomTabs
+ ┃ ┃ ┣ 📜SellerBottomTabsNavigator.tsx
+ ┃ ┃ ┗ 📜UserBottomTabsNavigator.tsx
+ ┃ ┣ 📂root
+ ┃ ┃ ┗ 📜RootNavigator.tsx
+ ┃ ┗ 📂stack
+ ┃ ┃ ┣ 📜LoggedOutStackNavigator.tsx
+ ┃ ┃ ┣ 📜SellerStackNavigator.tsx
+ ┃ ┃ ┗ 📜UserStackNavigator.tsx
+ ┣ 📂screens
+ ┃ ┣ 📂auth
+ ┃ ┃ ┗ 📜LoginScreen.tsx
+ ┃ ┣ 📂cart
+ ┃ ┃ ┗ 📜CartScreen.tsx
+ ┃ ┣ 📂history
+ ┃ ┃ ┣ 📜HistoryDetailScreen.tsx
+ ┃ ┃ ┣ 📜HistoryHomeScreen.tsx
+ ┃ ┃ ┗ 📜ReviewWriteScreen.tsx
+ ┃ ┣ 📂like
+ ┃ ┃ ┗ 📜LikeHomeScreen.tsx
+ ┃ ┣ 📂location
+ ┃ ┃ ┣ 📜LocationPostcodeScreen.tsx
+ ┃ ┃ ┗ 📜LocationScreen.tsx
+ ┃ ┣ 📂map
+ ┃ ┃ ┣ 📜MapHomeScreen.tsx
+ ┃ ┃ ┗ 📜NearStoreListScreen.tsx
+ ┃ ┣ 📂mypage
+ ┃ ┃ ┣ 📜GreenReportScreen.tsx
+ ┃ ┃ ┣ 📜MypageHomeScreen.tsx
+ ┃ ┃ ┣ 📜NicknameChangeScreen.tsx
+ ┃ ┃ ┣ 📜PrivateScreen.tsx
+ ┃ ┃ ┣ 📜ReviewScreen.tsx
+ ┃ ┃ ┗ 📜RuleScreen.tsx
+ ┃ ┣ 📂notification
+ ┃ ┃ ┣ 📜InAppNotification.tsx
+ ┃ ┃ ┗ 📜NotificationScreen.tsx
+ ┃ ┣ 📂order
+ ┃ ┃ ┣ 📜CouponBoxScreen.tsx
+ ┃ ┃ ┣ 📜OrderScreen.tsx
+ ┃ ┃ ┣ 📜OrderSuccessScreen.tsx
+ ┃ ┃ ┣ 📜ProgressIndicator.tsx
+ ┃ ┃ ┗ 📜TossPaymentScreen.tsx
+ ┃ ┣ 📂seller
+ ┃ ┃ ┣ 📜SellerCreateScreen.tsx
+ ┃ ┃ ┣ 📜SellerMenuModifyScreen.tsx
+ ┃ ┃ ┣ 📜SellerMenuRegisterScreen.tsx
+ ┃ ┃ ┣ 📜SellerMenuScreen.tsx
+ ┃ ┃ ┣ 📜SellerMypageScreen.tsx
+ ┃ ┃ ┣ 📜SellerOrderScreen.tsx
+ ┃ ┃ ┗ 📜SellerStoreReigster.tsx
+ ┃ ┣ 📂signup
+ ┃ ┃ ┣ 📜DaumPostcodeScreen.tsx
+ ┃ ┃ ┣ 📜SellerSignupScreen.tsx
+ ┃ ┃ ┣ 📜SignupTypeScreen.tsx
+ ┃ ┃ ┗ 📜UserSignupScreen.tsx
+ ┃ ┣ 📂store
+ ┃ ┃ ┣ 📜CategoryListScreen.tsx
+ ┃ ┃ ┣ 📜MenuDetailScreen.tsx
+ ┃ ┃ ┣ 📜SearchResultScreen.tsx
+ ┃ ┃ ┣ 📜StoreDetailScreen.tsx
+ ┃ ┃ ┣ 📜StoreHomeScreen.tsx
+ ┃ ┃ ┣ 📜StoreInfoScreen.tsx
+ ┃ ┃ ┗ 📜StoreReviewScreen.tsx
+ ┃ ┗ 📂_common
+ ┃ ┃ ┣ 📜EmptyStateScreen.tsx
+ ┃ ┃ ┗ 📜LoadingScreen.tsx
+ ┣ 📂types
+ ┃ ┣ 📜api.ts
+ ┃ ┣ 📜domain.ts
+ ┃ ┗ 📜postcode.ts
+ ┣ 📂utils
+ ┃ ┣ 📜address.ts
+ ┃ ┣ 📜asyncStorage.ts
+ ┃ ┣ 📜date.ts
+ ┃ ┣ 📜encryptStorage.ts
+ ┃ ┣ 📜format.ts
+ ┃ ┣ 📜header.ts
+ ┃ ┣ 📜level.ts
+ ┃ ┣ 📜navigation.tsx
+ ┃ ┣ 📜notification.tsx
+ ┃ ┣ 📜pushNoti.js
+ ┃ ┗ 📜toast.ts
+ ┣ 📂zustand
+ ┃ ┣ 📜useAuthStore.ts
+ ┃ ┣ 📜useListScrollStore.ts
+ ┃ ┗ 📜useSignupStore.ts
+ ┗ 📜declarations.d.ts
+
+```
+
+---
+
+## 🏛 시스템 아키텍처
+
+<img width="1125" height="551" alt="image" src="https://github.com/user-attachments/assets/8e3643c6-3abb-4686-9e69-d05441293365" />
+
+---
+<div align="center">
+  
+## 👥 팀원
+
+<table width="950px">
+    <thead>
+    </thead>
+    <tr>
+        <th>Picture</th>
+        <td align="center"><a href="https://github.com/chtoqur"><img src="https://avatars.githubusercontent.com/u/124266586?v=4?v=4" width="60" height="60" alt="이름1"></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="https://avatars.githubusercontent.com/u/119719994?v=4" width="60" height="60" alt="이름2"></a></td>
+        <td align="center"><a href="https://github.com/wonslee"><img src="https://avatars.githubusercontent.com/u/72124326?v=4" width="60" height="60" alt="이름3"></a></td>
+        <td align="center"><a href="https://github.com/qowl880"><img src="https://avatars.githubusercontent.com/u/82360230?v=4" width="60" height="60" alt="이름4"></a></td>
+        <td align="center"><a href="https://github.com/dongcarry96"><img src="https://avatars.githubusercontent.com/u/103975117?v=4" width="60" height="60" alt="이름5"></a></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td align="center">최이서</td>
+        <td align="center">구희원</td>
+        <td align="center">이원석</td>
+        <td align="center">배지원</td>
+        <td align="center">김동현</td>
+    </tr>
+    <tr>
+        <th>Position</th>
+        <td align="center"><b>Frontend</b>
+        <td align="center"><b>Frontend</b>
+        <td align="center"><b>Backend</b>
+        <td align="center"><b>Backend</b>
+        <td align="center"><b>Backend</b>
+    </tr>
+    <tr>
+        <th>GitHub</th>
+        <td align="center"><a href="https://github.com/chtoqur"><img src="http://img.shields.io/badge/chtoqur-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/HeHelee-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/wonslee-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/qowl880-green?style=social&logo=github"/></a></td>
+        <td align="center"><a href="https://github.com/HeHelee"><img src="http://img.shields.io/badge/dongcarry96-green?style=social&logo=github"/></a></td>
+    </tr>
+</table>
+
+</div>

@@ -172,7 +172,7 @@ const MenuDetailScreen = () => {
           {menu.dailyDiscountPercent > 0 && (
             <Text style={styles.totalOriginal}>{(menu.price * count).toLocaleString()}원</Text>
           )}
-          <Text style={styles.total}>{menu.discountPrice.toLocaleString()}원</Text>
+          <Text style={styles.total}>{(menu.discountPrice * count).toLocaleString()}원</Text>
         </View>
         <Pressable style={styles.cartBtn} onPress={addToCart}>
           <Text style={styles.cartBtnText}>장바구니에 담기</Text>

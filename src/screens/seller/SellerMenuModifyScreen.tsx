@@ -18,6 +18,8 @@ import {
 import { launchImageLibrary, ImagePickerResponse, Asset } from 'react-native-image-picker';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Minus from '@/assets/icons/minus.svg';
+import Plus from '@/assets/icons/plus.svg';
 import { colors } from '@/constants/colors';
 import { sellerNavigations } from '@/constants/navigations';
 import { SellerStackparamList } from '@/navigations/stack/SellerStackNavigator';
@@ -178,7 +180,7 @@ const SellerMenuModifyScreen = () => {
             <Text style={styles.label}>수량</Text>
             <View style={styles.quantityBox}>
               <TouchableOpacity style={styles.sideButton} onPress={decrease}>
-                <Text style={styles.buttonText}>-</Text>
+                <Minus width={22} height={22} />
               </TouchableOpacity>
               <TextInput
                 style={styles.quantityInput}
@@ -188,7 +190,7 @@ const SellerMenuModifyScreen = () => {
                 keyboardType="numeric"
               />
               <TouchableOpacity style={styles.sideButton} onPress={increase}>
-                <Text style={styles.buttonText}>+</Text>
+                <Plus width={22} height={22} />
               </TouchableOpacity>
             </View>
           </View>
@@ -236,7 +238,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: 'row',
     marginHorizontal: 25,
-    alignItems: 'center',
     gap: 5,
   },
   scrollContainer: {
@@ -246,16 +247,19 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: colors.GRAY_200,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     color: colors.BLACK,
+    fontSize: 15,
+    fontFamily: 'Pretendard-Regular',
   },
   label: {
+    marginTop: 5,
     width: 80,
-    fontSize: 16,
-    color: colors.GRAY_700,
-    fontFamily: 'Pretendard-Regular',
+    fontSize: 15,
+    color: colors.BLACK,
+    fontFamily: 'Pretendard-Medium',
   },
   controls: {
     flex: 1,
@@ -285,7 +289,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   quantityInput: {
-    width: 130,
+    flex: 1,
     height: 40,
     textAlign: 'center',
     borderWidth: 1,
@@ -320,7 +324,7 @@ const styles = StyleSheet.create({
   imageButton: {
     marginHorizontal: 25,
     marginLeft: 25 + 80 + 5,
-    paddingVertical: 12,
+    paddingVertical: 8,
     borderRadius: 6,
     backgroundColor: colors.WHITE,
     borderColor: colors.GREEN,
